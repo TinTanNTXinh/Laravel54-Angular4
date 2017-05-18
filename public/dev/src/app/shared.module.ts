@@ -20,25 +20,8 @@ import {XPaginationComponent} from './dynamic-components/xpagination/xpagination
 import {MasterDetailComponent} from './dynamic-components/master-detail/master-detail.component';
 
 // My components
-import {ProductComponent} from './components/product/product.component';
-import {ProductTypeComponent} from './components/product-type/product-type.component';
-import {CollectionComponent} from './components/collection/collection.component';
-import {DeviceComponent} from './components/device/device.component';
-import {UserCardComponent} from './components/user-card/user-card.component';
-import {ProducerComponent} from './components/producer/producer.component';
-import {ButtonProductComponent} from './components/button-product/button-product.component';
-import {ReportSupplierComponent} from './components/report-supplier/report-supplier.component';
-import {ReportDistributorComponent} from './components/report-distributor/report-distributor.component';
-import {IOCenterComponent} from './components/io-center/io-center.component';
-import {SupplierComponent} from './components/supplier/supplier.component';
-import {DistributorComponent} from './components/distributor/distributor.component';
-import {UnitComponent} from './components/unit/unit.component';
 import {PositionComponent} from './components/position/position.component';
 import {UserComponent} from './components/user/user.component';
-import {ReportStaffInputComponent} from './components/report-staff-input/report-staff-input.component';
-import {ReportStaffOutputComponent} from './components/report-staff-output/report-staff-output.component';
-import {ReportVsysComponent} from './components/report-vsys/report-vsys.component';
-import {ReportLoggingComponent} from './components/report-logging/report-logging.component';
 
 @NgModule({
     imports: [
@@ -62,25 +45,8 @@ import {ReportLoggingComponent} from './components/report-logging/report-logging
         XPaginationComponent,
         MasterDetailComponent,
 
-        ProductComponent,
-        ProductTypeComponent,
-        CollectionComponent,
-        DeviceComponent,
-        UserCardComponent,
-        ProducerComponent,
-        ButtonProductComponent,
-        ReportSupplierComponent,
-        ReportDistributorComponent,
-        IOCenterComponent,
-        SupplierComponent,
-        DistributorComponent,
-        UnitComponent,
         PositionComponent,
-        UserComponent,
-        ReportStaffInputComponent,
-        ReportStaffOutputComponent,
-        ReportVsysComponent,
-        ReportLoggingComponent,
+        UserComponent
     ],
     exports: [
         CommonModule,
@@ -102,25 +68,8 @@ import {ReportLoggingComponent} from './components/report-logging/report-logging
         XPaginationComponent,
         MasterDetailComponent,
 
-        ProductComponent,
-        ProductTypeComponent,
-        CollectionComponent,
-        DeviceComponent,
-        UserCardComponent,
-        ProducerComponent,
-        ButtonProductComponent,
-        ReportSupplierComponent,
-        ReportDistributorComponent,
-        IOCenterComponent,
-        SupplierComponent,
-        DistributorComponent,
-        UnitComponent,
         PositionComponent,
-        UserComponent,
-        ReportStaffInputComponent,
-        ReportStaffOutputComponent,
-        ReportVsysComponent,
-        ReportLoggingComponent,
+        UserComponent
     ]
 })
 export class SharedModule {
