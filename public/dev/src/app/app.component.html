@@ -1,0 +1,6 @@
+<div class="app app-header-fixed">
+    <app-header *ngIf="displayLayout()"></app-header>
+    <app-aside *ngIf="displayLayout()"></app-aside>
+    <router-outlet></router-outlet>
+    <app-footer *ngIf="displayLayout()"></app-footer>
+</div>

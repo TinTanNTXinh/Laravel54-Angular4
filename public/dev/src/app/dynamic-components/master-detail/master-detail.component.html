@@ -1,0 +1,80 @@
+<div class="table-responsive">
+  <table class="table table-striped b-t b-b" cellpadding="2"
+         cellspacing="2" *ngIf="master_data">
+    <thead>
+    <tr>
+      <th></th>
+      <th>#
+        <i class="fa fa-sort-desc" [hidden]="!isAsc" (click)="sortIndex('desc')"></i>
+        <i class="fa fa-sort-asc" [hidden]="isAsc" (click)="sortIndex('asc')"></i>
+      </th>
+      <ng-container *ngFor="let key of header_master_data | ObjNgFor">
+        <th *ngIf="visible(header_master_data[key]['visible'])">{{header_master_data[key]['title']}}</th>
+      </ng-container>
+      <!--<th *ngFor="let key of header_master_data | ObjNgFor">{{header_master_data[key]['title']}}</th>-->
+    </tr>
+    </thead>
+    <tbody *ngFor="let master of pagedItems; let i = index">
+    <tr (click)="setClickedRow(i)" [class.active]="i == selectedRow">
+      <td>
+        <button class="btn btn-sm btn-info"
+                (click)=showDetail(master.id)>
+          <i class="fa fa-plus text"></i>
+          <span class="text">More</span>
+          <i class="fa fa-minus text-active"></i>
+          <span class="text-active">Less</span>
+        </button>
+      </td>
+      <td>{{i + 1}}</td>
+      <ng-container *ngFor="let key of header_master_data | ObjNgFor">
+        <td *ngIf="visible(header_master_data[key]['visible'])" [innerHTML]="master[key] | safeHtml"></td>
+      </ng-container>
+      <!--<td *ngFor="let key of header_master_data | ObjNgFor" [innerHTML]="master[key] | safeHtml"></td>-->
+    </tr>
+    <tr *ngIf="activeRow==master.id">
+      <td colspan="6">
+        <div class="table-responsive">
+          <table class="table table-striped b-t b-b"
+                 cellpadding="2" cellspacing="2"
+                 *ngIf="detail_data">
+            <thead>
+            <tr>
+              <th style="width:20%">
+                <span class="label label-default">Chi tiết</span>
+              </th>
+              <th *ngFor="let key of header_detail_data | ObjNgFor">{{header_detail_data[key]['title']}}</th>
+            </tr>
+            </thead>
+            <tbody *ngFor="let detail of detail_data">
+            <tr class="success">
+              <td></td>
+              <td *ngFor="let key1 of header_detail_data | ObjNgFor" [innerHTML]="detail[key1] | safeHtml"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div class="text-right">
+  <!-- pager -->
+  <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+    <li [ngClass]="{disabled:pager.currentPage === 1}">
+      <a (click)="setPage(1)">Đầu</a>
+    </li>
+    <li [ngClass]="{disabled:pager.currentPage === 1}">
+      <a (click)="setPage(pager.currentPage - 1)">Trước</a>
+    </li>
+    <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+      <a (click)="setPage(page)">{{page}}</a>
+    </li>
+    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+      <a (click)="setPage(pager.currentPage + 1)">Sau</a>
+    </li>
+    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+      <a (click)="setPage(pager.totalPages)">Cuối</a>
+    </li>
+  </ul>
+</div>

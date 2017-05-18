@@ -1,0 +1,502 @@
+<!-- content -->
+<div id="content" class="app-content" role="main">
+  <div class="app-content-body ">
+    <div class="bg-light lter b-b wrapper-md">
+      <div class="row">
+        <div class="col-md-12">
+          <span class="m-n font-thin h3" style="font-size: 2em">{{title}}</span>
+          <div class="pull-right">
+            <button class="btn m-b-xs btn-rounded btn-default btn-addon"
+                    (click)="refreshData()"><i class="fa fa-refresh"></i>Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper-md">
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#home"><i
+                class="glyphicon glyphicon-th-list icon text-primary-lter"></i> Tất cả</a></li>
+            <li><a data-toggle="tab" href="#Cabinet"><i
+                class="glyphicon glyphicon-edit icon text-success-lter"></i> {{_deviceCaptionService.cabinet}}</a></li>
+            <li><a data-toggle="tab" href="#Tray"><i
+                class="glyphicon glyphicon-edit icon text-success-lter"></i> {{_deviceCaptionService.tray}}</a></li>
+            <li><a data-toggle="tab" href="#RFID"><i
+                class="glyphicon glyphicon-edit icon text-success-lter"></i> {{_deviceCaptionService.rfid}}</a></li>
+            <li><a data-toggle="tab" href="#Card"><i
+                class="glyphicon glyphicon-edit icon text-success-lter"></i> {{_deviceCaptionService.card}}</a></li>
+            <li><a data-toggle="tab" href="#CDM"><i
+                class="glyphicon glyphicon-edit icon text-success-lter"></i> {{_deviceCaptionService.cdm}}</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Điều kiện lọc
+                    </div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-2">
+                            <div class="radio" *ngFor="let rd of range_date">
+                              <label class="i-checks">
+                                <input type="radio" name="range_date" [value]="rd.value"
+                                       (change)="filtering.range = rd.value">
+                                <i></i>
+                                {{rd.name}}
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-10">
+                            <div class="row">
+                              <div class="col-md-3">
+                                <label>Từ</label>
+                                <datetime [ngModel]="datepicker_from" name="datepicker_from"
+                                          (dateChange)="clearDate($event, 'from')"
+                                          (ngModelChange)="handleDateFromChange($event)" [timepicker]="false"
+                                          [datepicker]="datepickerSettings"></datetime>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Đến</label>
+                                <datetime [(ngModel)]="datepicker_to" name="datepicker_to"
+                                          (dateChange)="clearDate($event, 'to')"
+                                          [timepicker]="false"
+                                          [datepicker]="datepickerToOpts"></datetime>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-3">
+                                <label>Loại</label>
+                                <select [(ngModel)]="filtering.collect_code" name="collect_id" class="form-control m-b">
+                                  <option *ngFor="let collection of collections" value="{{ collection.code }}">
+                                    {{ collection.name }}
+                                  </option>
+                                </select>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Bộ trung tâm</label>
+                                <autocomplete [data]="io_centers" [name]="'code'" [model_name]="'id'"
+                                              [(ngModel)]="filtering.io_center_id"></autocomplete>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Thiết bị</label>
+                                <autocomplete [data]="devices_search" [name]="'code'" [model_name]="'id'"
+                                              [(ngModel)]="filtering.device_id"></autocomplete>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Thuộc</label>
+                                <autocomplete [data]="parent_devices" [name]="'name'" [model_name]="'id'" [(ngModel)]="filtering.parent_id"></autocomplete>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <button class="btn m-b-xs w-xs btn-info btn-rounded"
+                                    type="button"
+                                    (click)="search()">Tìm kiếm
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Danh sách {{title}}
+                    </div>
+                    <div class="panel-body">
+                      <spinner-fb [isLoading]="isLoading"></spinner-fb>
+                      <xdatatable [body]="devices" [header]="header" (onClicked)="actionCrud($event)"
+                                  [action]="action_data"></xdatatable>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="Cabinet" class="tab-pane fade">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{_deviceCaptionService.cabinet}}</div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Mã</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="device.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Tên</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="device.name" name="name">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Bộ trung tâm</label>
+                              <div class="col-lg-10">
+                                <select [(ngModel)]="device.io_center_id"
+                                        name="io_center_id" class="form-control m-b">
+                                  <option *ngFor="let io_center of io_centers"
+                                          value="{{ io_center.id }}">{{ io_center.name }}
+                                  </option>
+                                </select>
+                                <button (click)="displayQuickTray()" class="pull-right text-sm btn btn-xs btn-default">Nhập nhanh {{_deviceCaptionService.tray}}</button>
+                              </div>
+                            </div>
+                            <ng-container *ngIf="isDisplayQuickTray">
+                              <div class="form-group">
+                                <label class="col-lg-2 control-label">Số {{_deviceCaptionService.tray}}</label>
+                                <div class="col-lg-10">
+                                  <input type="text" class="form-control" [(ngModel)]="device.quantum_tray" name="quantum_tray">
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-lg-2 control-label">Lượng hàng/{{_deviceCaptionService.tray}}</label>
+                                <div class="col-lg-10">
+                                  <input type="text" class="form-control" [(ngModel)]="device.quantum_product" name="quantum_product">
+                                </div>
+                              </div>
+                            </ng-container>
+                            <div class="form-group">
+                              <div class="col-lg-offset-2 col-lg-10">
+                                <button *ngIf="!myDisplayEditBtn('Cabinet')"
+                                        class="btn m-b-xs w-xs btn-primary btn-rounded"
+                                        (click)="myAddOne('Cabinet')">Thêm
+                                </button>
+                                <button *ngIf="myDisplayEditBtn('Cabinet')"
+                                        class="btn m-b-xs w-xs btn-warning btn-rounded"
+                                        (click)="myUpdateOne('Cabinet')">Cập nhật
+                                </button>
+                                <button *ngIf="myDisplayEditBtn('Cabinet')"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="clearOne()"><i
+                                    class="fa fa-ban"></i>Hủy
+                                </button>
+                                <button *ngIf="!myDisplayEditBtn('Cabinet')"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="clearOne()"><i
+                                    class="fa fa-eraser"></i>Làm mới
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="Tray" class="tab-pane fade">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{_deviceCaptionService.tray}}</div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Mã</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="device.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Tên</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="device.name" name="name">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Lượng hàng</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="device.quantum_product"
+                                       name="quantum_product">
+                                <span class="help-block m-b-none">* Không tính ngăn luôn bỏ trống.</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Bộ trung tâm</label>
+                              <div class="col-lg-10">
+                                <select [(ngModel)]="device.io_center_id"
+                                        name="io_center_id" class="form-control m-b">
+                                  <option *ngFor="let io_center of io_centers"
+                                          value="{{ io_center.id }}">{{ io_center.name }}
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Thuộc {{_deviceCaptionService.cabinet}}</label>
+                              <div class="col-lg-10">
+                                <select [(ngModel)]="device.parent_id" name="parent_id"
+                                        class="form-control m-b">
+                                  <option *ngFor="let device of belong_cabinets"
+                                          value="{{ device.id }}">{{ device.name }}
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-lg-offset-2 col-lg-10">
+                                <button *ngIf="!myDisplayEditBtn('Tray')"
+                                        class="btn m-b-xs w-xs btn-primary btn-rounded"
+                                        (click)="myAddOne('Tray')">Thêm
+                                </button>
+                                <button *ngIf="myDisplayEditBtn('Tray')"
+                                        class="btn m-b-xs w-xs btn-warning btn-rounded"
+                                        (click)="myUpdateOne('Tray')">Cập nhật
+                                </button>
+                                <button *ngIf="myDisplayEditBtn('Tray')"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="clearOne()"><i
+                                    class="fa fa-ban"></i>Hủy
+                                </button>
+                                <button *ngIf="!myDisplayEditBtn('Tray')"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="clearOne()"><i
+                                    class="fa fa-eraser"></i>Làm mới
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="RFID" class="tab-pane fade">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{_deviceCaptionService.rfid}}</div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Tên</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="device.name" name="name">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Bộ trung tâm</label>
+                              <div class="col-lg-10">
+                                <select [(ngModel)]="device.io_center_id"
+                                        name="io_center_id" class="form-control m-b">
+                                  <option *ngFor="let io_center of io_centers"
+                                          value="{{ io_center.id }}">{{ io_center.name }}
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-lg-offset-2 col-lg-10">
+                                <button *ngIf="!myDisplayEditBtn('RFID')"
+                                        class="btn m-b-xs w-xs btn-primary btn-rounded"
+                                        (click)="myAddOne('RFID')">Thêm
+                                </button>
+                                <button *ngIf="myDisplayEditBtn('RFID')"
+                                        class="btn m-b-xs w-xs btn-warning btn-rounded"
+                                        (click)="myUpdateOne('RFID')">Cập nhật
+                                </button>
+                                <button *ngIf="myDisplayEditBtn('RFID')"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="clearOne()"><i
+                                    class="fa fa-ban"></i>Hủy
+                                </button>
+                                <button *ngIf="!myDisplayEditBtn('RFID')"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="clearOne()"><i
+                                    class="fa fa-eraser"></i>Làm mới
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="Card" class="tab-pane fade">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{_deviceCaptionService.card}}</div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Mã</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="device.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Tên</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="device.name" name="name">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Bộ trung tâm</label>
+                              <div class="col-lg-10">
+                                <select [(ngModel)]="device.io_center_id"
+                                        name="io_center_id" class="form-control m-b">
+                                  <option *ngFor="let io_center of io_centers"
+                                          value="{{ io_center.id }}">{{ io_center.name }}
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Thuộc {{_deviceCaptionService.rfid}}</label>
+                              <div class="col-lg-10">
+                                <select [(ngModel)]="device.parent_id" name="parent_id"
+                                        class="form-control m-b">
+                                  <option *ngFor="let device of belong_RFIDs"
+                                          value="{{ device.id }}">{{ device.name }}
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-lg-offset-2 col-lg-10">
+                                <button *ngIf="!myDisplayEditBtn('Card')"
+                                        class="btn m-b-xs w-xs btn-primary btn-rounded"
+                                        (click)="myAddOne('Card')">Thêm
+                                </button>
+                                <button *ngIf="myDisplayEditBtn('Card')"
+                                        class="btn m-b-xs w-xs btn-warning btn-rounded"
+                                        (click)="myUpdateOne('Card')">Cập nhật
+                                </button>
+                                <button *ngIf="myDisplayEditBtn('Card')"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="clearOne()"><i
+                                    class="fa fa-ban"></i>Hủy
+                                </button>
+                                <button *ngIf="!myDisplayEditBtn('Card')"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="clearOne()"><i
+                                    class="fa fa-eraser"></i>Làm mới
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="CDM" class="tab-pane fade">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{_deviceCaptionService.cdm}}</div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Mã</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="device.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Tên</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="device.name" name="name">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Bộ trung tâm</label>
+                              <div class="col-lg-10">
+                                <select [(ngModel)]="device.io_center_id"
+                                        name="io_center_id" class="form-control m-b">
+                                  <option *ngFor="let io_center of io_centers"
+                                          value="{{ io_center.id }}">{{ io_center.name }}
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <div class="col-lg-offset-2 col-lg-10">
+                                <button *ngIf="!myDisplayEditBtn('CDM')"
+                                        class="btn m-b-xs w-xs btn-primary btn-rounded"
+                                        (click)="myAddOne('CDM')">Thêm
+                                </button>
+                                <button *ngIf="myDisplayEditBtn('CDM')"
+                                        class="btn m-b-xs w-xs btn-warning btn-rounded"
+                                        (click)="myUpdateOne('CDM')">Cập nhật
+                                </button>
+                                <button *ngIf="myDisplayEditBtn('CDM')"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="clearOne()"><i
+                                    class="fa fa-ban"></i>Hủy
+                                </button>
+                                <button *ngIf="!myDisplayEditBtn('CDM')"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="clearOne()"><i
+                                    class="fa fa-eraser"></i>Làm mới
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <modal [objectData]="modal" (onClicked)="confirmDeactivateOne($event)"></modal>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /content -->

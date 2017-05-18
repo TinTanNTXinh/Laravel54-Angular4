@@ -1,0 +1,71 @@
+[class*="box-"] {
+    height: 6px;
+    width: 400px;
+    background: #f6f7f9;
+    margin-bottom: 13px;
+    margin-right: 5px;
+}
+
+.box-loading {
+    background: #fff;
+    height: 305px;
+    width: 500px;
+    padding: 10px;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+    -o-box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+.box-thumbnail {
+    height: 40px;
+    width: 40px;
+    float: left;
+    margin-right: 20px;
+    display: inline-block;
+}
+
+.box-line-sm {
+    width: 120px;
+    margin-top: 10px;
+    margin-left: 50px;
+}
+.box-line-xs {
+    width: 80px;
+    margin-left: 50px;
+}
+.box-line-df {
+    margin-top: 30px;
+    width: 380px;
+}
+.box-line-lg {
+    width: 200px;
+}
+.box-line-lgx {
+    width: 450px;
+}
+
+[class*="box-line"],
+.box-thumbnail {
+    animation: timeline;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 800px auto;
+    background-position: 100px 0;
+}
+
+@keyframes timeline {
+    0% {
+        background-position: -350px 0;
+    }
+    100% {
+        background-position: 400px 0;
+    }
+}

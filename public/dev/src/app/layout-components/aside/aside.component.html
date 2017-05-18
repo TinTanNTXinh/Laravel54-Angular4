@@ -1,0 +1,121 @@
+<!-- aside -->
+<aside id="aside" class="app-aside hidden-xs bg-dark">
+  <div class="aside-wrap">
+    <div class="navi-wrap">
+      <!-- user -->
+      <div class="clearfix hidden-xs text-center hide" id="aside-user">
+        <div class="dropdown wrapper">
+          <a>
+            <span class="thumb-lg w-auto-folded avatar m-t-sm">
+              <img src="{{ user_image }}" class="img-full" alt="...">
+            </span>
+          </a>
+          <a data-toggle="dropdown" class="dropdown-toggle hidden-folded">
+            <span class="clear">
+                <span class="block m-t-sm">
+                  <strong class="font-bold text-lt">{{ fullname }}</strong>
+                  <b class="caret"></b>
+                </span>
+                <span class="text-muted text-xs block">{{ position_name }}</span>
+            </span>
+          </a>
+          <!-- dropdown -->
+          <ul class="dropdown-menu animated fadeInRight w hidden-folded">
+            <li>
+              <a (click)="logOut()">Đăng xuất</a>
+            </li>
+          </ul>
+          <!-- / dropdown -->
+        </div>
+        <div class="line dk hidden-folded"></div>
+      </div>
+      <!-- / user -->
+
+      <!-- nav -->
+      <nav ui-nav class="navi clearfix">
+        <ul class="nav">
+          <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+            <span>{{nav_lv0}}</span>
+          </li>
+          <li *ngFor="let role of sliceRoles(1)" routerLinkActive="active">
+            <a [routerLink]="role.router_link">
+              <i class="glyphicon {{ role.icon_name }}"></i>
+              <span>{{ role.description }}</span>
+            </a>
+          </li>
+          <li *ngIf="sliceRoles(2).length != 0">
+            <a class="auto">
+              <span class="pull-right text-muted">
+                  <i class="fa fa-fw fa-angle-right text"></i>
+                  <i class="fa fa-fw fa-angle-down text-active"></i>
+              </span>
+              <i class="glyphicon glyphicon-align-left icon"></i>
+              <span>{{nav_lv1}}</span>
+            </a>
+            <ul class="nav nav-sub dk">
+              <li class="nav-sub-header">
+                <a>
+                  <span>{{nav_lv1}}</span>
+                </a>
+              </li>
+              <li *ngFor="let role of sliceRoles(2)" routerLinkActive="active">
+                <a [routerLink]="role.router_link">
+                  <i class="glyphicon {{ role.icon_name }}"></i>
+                  <span>{{ role.description }}</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li *ngIf="sliceRoles(3).length != 0">
+            <a class="auto">
+              <span class="pull-right text-muted">
+                  <i class="fa fa-fw fa-angle-right text"></i>
+                  <i class="fa fa-fw fa-angle-down text-active"></i>
+              </span>
+              <i class="glyphicon glyphicon-cog icon"></i>
+              <span>{{nav_lv2}}</span>
+            </a>
+            <ul class="nav nav-sub dk">
+              <li class="nav-sub-header">
+                <a>
+                  <span>{{nav_lv2}}</span>
+                </a>
+              </li>
+              <li *ngFor="let role of sliceRoles(3)" routerLinkActive="active">
+                <a [routerLink]="role.router_link">
+                  <i class="glyphicon {{ role.icon_name }}"></i>
+                  <span>{{ role.description }}</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a class="auto">
+              <span class="pull-right text-muted">
+                  <i class="fa fa-fw fa-angle-right text"></i>
+                  <i class="fa fa-fw fa-angle-down text-active"></i>
+              </span>
+              <i class="glyphicon glyphicon-stats icon"></i>
+              <span>{{nav_lv3}}</span>
+            </a>
+            <ul class="nav nav-sub dk">
+              <li class="nav-sub-header">
+                <a>
+                  <span>{{nav_lv3}}</span>
+                </a>
+              </li>
+              <li *ngFor="let role of sliceRoles(4)" routerLinkActive="active">
+                <a [routerLink]="role.router_link">
+                  <i class="glyphicon {{ role.icon_name }}"></i>
+                  <span>{{ role.description }}</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <!-- nav -->
+    </div>
+  </div>
+</aside>
+<!-- / aside -->

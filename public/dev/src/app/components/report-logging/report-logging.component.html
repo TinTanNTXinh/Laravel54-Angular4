@@ -1,0 +1,97 @@
+<!-- content -->
+<div id="content" class="app-content" role="main">
+  <div class="app-content-body ">
+    <div class="bg-light lter b-b wrapper-md">
+      <div class="row">
+        <div class="col-md-12">
+          <span class="m-n font-thin h3" style="font-size: 2em">{{title}}</span>
+          <div class="pull-right">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper-md">
+      <div class="row">
+        <div class="col-sm-12">
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#home"><i
+                class="glyphicon glyphicon-th-list icon text-primary-lter"></i> Tất cả</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Điều kiện lọc
+                    </div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-2">
+                            <div class="radio" *ngFor="let rd of range_date">
+                              <label class="i-checks">
+                                <input type="radio" name="range_date" [value]="rd.value"
+                                       (change)="filtering.range = rd.value">
+                                <i></i>
+                                {{rd.name}}
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-10">
+                            <div class="row">
+                              <div class="col-md-3">
+                                <label>Từ</label>
+                                <datetime [ngModel]="datepicker_from" name="datepicker_from"
+                                          (dateChange)="clearDate($event, 'from')"
+                                          (ngModelChange)="handleDateFromChange($event)" [timepicker]="false"
+                                          [datepicker]="datepickerSettings"></datetime>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Đến</label>
+                                <datetime [(ngModel)]="datepicker_to" name="datepicker_to"
+                                          (dateChange)="clearDate($event, 'to')"
+                                          [timepicker]="false"
+                                          [datepicker]="datepickerToOpts"></datetime>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <button class="btn m-b-xs w-xs btn-info btn-rounded"
+                                    type="button"
+                                    (click)="search()">Tìm kiếm
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Danh sách {{title}}
+                    </div>
+                    <div class="panel-body">
+                      <spinner-fb [isLoading]="isLoading"></spinner-fb>
+                      <xdatatable [body]="report_loggings" [header]="header" [action]="action_data"></xdatatable>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /content -->
+
+
+

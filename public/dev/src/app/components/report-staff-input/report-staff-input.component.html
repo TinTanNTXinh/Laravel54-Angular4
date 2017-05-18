@@ -1,0 +1,198 @@
+<!-- content -->
+<div id="content" class="app-content" role="main">
+  <div class="app-content-body ">
+    <div class="bg-light lter b-b wrapper-md">
+      <div class="row">
+        <div class="col-md-12">
+          <span class="m-n font-thin h3" style="font-size: 2em">{{title}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper-md">
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#home"><i
+                class="glyphicon glyphicon-import icon text-primary-lter"></i> Nhập hàng</a></li>
+            <li><a data-toggle="tab" href="#menu2"><i class="glyphicon glyphicon-inbox icon text-info-lter"></i> Tồn
+              hàng</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Điều kiện lọc
+                    </div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-2">
+                            <div class="radio" *ngFor="let rd of range_date">
+                              <label class="i-checks">
+                                <input type="radio" name="range_date" [value]="rd.value"
+                                       (change)="filter_ReportInput.range = rd.value">
+                                <i></i>
+                                {{rd.name}}
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-10">
+                            <div class="row">
+                              <div class="col-md-3">
+                                <label>Từ</label>
+                                <datetime [ngModel]="datepicker_from_input" name="datepicker_from_input"
+                                          (dateChange)="myClearDate($event, 'input', 'from')"
+                                          (ngModelChange)="myHandleDateFromChange($event, 'input')" [timepicker]="false"
+                                          [datepicker]="datepickerSettings"></datetime>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Đến</label>
+                                <datetime [(ngModel)]="datepicker_to_input" name="datepicker_to_input"
+                                          (dateChange)="myClearDate($event, 'input', 'to')"
+                                          [timepicker]="false"
+                                          [datepicker]="datepickerToOpts_input"></datetime>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Sản phẩm</label>
+                                <autocomplete [data]="products" [name]="'name'" [model_name]="'id'"
+                                              [(ngModel)]="filter_ReportInput.product_id"></autocomplete>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Đơn vị tính</label>
+                                <autocomplete [data]="units" [name]="'name'" [model_name]="'id'"
+                                              [(ngModel)]="filter_ReportInput.unit_id"></autocomplete>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-3">
+                                <label>Đại lý</label>
+                                <autocomplete [data]="distributors" [name]="'name'" [model_name]="'id'"
+                                              [(ngModel)]="filter_ReportInput.distributor_id"></autocomplete>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Nhân viên nhập</label>
+                                <autocomplete [data]="staffs" [name]="'fullname'" [model_name]="'id'"
+                                              [(ngModel)]="filter_ReportInput.staff_input_id"></autocomplete>
+                              </div>
+                              <div class="col-md-3">
+                                <label>{{_deviceCaptionService.cabinet}}</label>
+                                <autocomplete [data]="cabinets" [name]="'name'" [model_name]="'id'"
+                                              [(ngModel)]="filter_ReportInput.cabinet_id"></autocomplete>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Nhân viên điều chỉnh số lượng</label>
+                                <autocomplete [data]="staffs" [name]="'fullname'" [model_name]="'id'"
+                                              [(ngModel)]="filter_ReportInput.adjust_by"></autocomplete>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <button class="btn m-b-xs w-xs btn-info btn-rounded"
+                                    (click)="search_ReportInput()">Tìm kiếm
+                            </button>
+                            <button class="btn m-b-xs w-xs btn-success btn-rounded"
+                                    (click)="downloadFile('input')">Xuất file
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Báo cáo nhập hàng
+                    </div>
+                    <div class="panel-body">
+                      <spinner-fb [isLoading]="isLoading_Input"></spinner-fb>
+                      <xdatatable [action]="action_data" [body]="report_inputs" [header]="header_input"></xdatatable>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="menu2" class="tab-pane fade">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Điều kiện lọc
+                    </div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-3">
+                            <label>Tháng</label>
+                            <month-picker (change)="onMonthChange($event)"></month-picker>
+                          </div>
+                          <div class="col-md-3">
+                            <label>Năm</label>
+                            <year-picker (change)="onYearChange($event)"></year-picker>
+                          </div>
+                          <div class="col-md-3">
+                            <label>Sản phẩm</label>
+                            <autocomplete [name]="'name'" [data]="products" [model_name]="'id'"
+                                          [(ngModel)]="filter_ReportStock.product_id"></autocomplete>
+                          </div>
+                          <div class="col-md-3">
+                            <label>Đơn vị tính</label>
+                            <autocomplete [name]="'name'" [data]="units" [model_name]="'id'"
+                                          [(ngModel)]="filter_ReportStock.unit_id"></autocomplete>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-3">
+                            <label>Đại lý</label>
+                            <autocomplete [name]="'name'" [data]="distributors" [model_name]="'id'"
+                                          [(ngModel)]="filter_ReportStock.distributor_id"></autocomplete>
+                          </div>
+                          <div class="col-md-3">
+                            <label>{{_deviceCaptionService.cabinet}}</label>
+                            <autocomplete [name]="'name'" [data]="cabinets" [model_name]="'id'"
+                                          [(ngModel)]="filter_ReportStock.cabinet_id"></autocomplete>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <button type="button" class="btn m-b-xs w-xs btn-info btn-rounded"
+                                    (click)="search_ReportStock()">Tìm kiếm
+                            </button>
+                            <button class="btn m-b-xs w-xs btn-success btn-rounded"
+                                    (click)="downloadFile('stock')">Xuất file
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Báo cáo tồn hàng
+                    </div>
+                    <div class="panel-body">
+                      <spinner-fb [isLoading]="isLoading_Stock"></spinner-fb>
+                      <xdatatable [action]="action_data" [body]="report_stocks" [header]="header_stock"></xdatatable>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /content -->

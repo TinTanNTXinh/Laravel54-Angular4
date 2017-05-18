@@ -1,0 +1,208 @@
+<!-- content -->
+<div id="content" class="app-content" role="main">
+  <div class="app-content-body ">
+    <div class="bg-light lter b-b wrapper-md">
+      <div class="row">
+        <div class="col-md-12">
+          <span class="m-n font-thin h3" style="font-size: 2em">{{title}}</span>
+          <div class="pull-right">
+            <button class="btn m-b-xs btn-rounded btn-default btn-addon"
+                    (click)="refreshData()"><i class="fa fa-refresh"></i>Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper-md">
+      <div class="row">
+        <div class="col-sm-12">
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a data-toggle="tab" href="#home">
+                <i class="glyphicon glyphicon-th-list icon text-primary-lter"></i> Tất cả
+              </a>
+            </li>
+            <li>
+              <a data-toggle="tab" href="#menu2">
+                <i class="glyphicon glyphicon-edit icon text-success-lter"></i> Thêm/Cập nhật
+              </a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Điều kiện lọc
+                    </div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-2">
+                            <div class="radio" *ngFor="let rd of range_date">
+                              <label class="i-checks">
+                                <input type="radio" name="range_date" [value]="rd.value"
+                                       (change)="filtering.range = rd.value">
+                                <i></i>
+                                {{rd.name}}
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-10">
+                            <div class="row">
+                              <div class="col-md-3">
+                                <label>Từ</label>
+                                <datetime [ngModel]="datepicker_from" name="datepicker_from"
+                                          (dateChange)="clearDate($event, 'from')"
+                                          (ngModelChange)="handleDateFromChange($event)" [timepicker]="false"
+                                          [datepicker]="datepickerSettings"></datetime>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Đến</label>
+                                <datetime [(ngModel)]="datepicker_to" name="datepicker_to"
+                                          (dateChange)="clearDate($event, 'to')"
+                                          [timepicker]="false"
+                                          [datepicker]="datepickerToOpts"></datetime>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-3">
+                                <label>Tên</label>
+                                <autocomplete [data]="producers_search" [name]="'name'" [model_name]="'id'" [(ngModel)]="filtering.producer_id"></autocomplete>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <button class="btn m-b-xs w-xs btn-info btn-rounded"
+                                    type="button"
+                                    (click)="search()">Tìm kiếm
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Danh sách {{title}}
+                    </div>
+                    <div class="panel-body">
+                      <spinner-fb [isLoading]="isLoading"></spinner-fb>
+                      <xdatatable [body]="producers" [header]="header" (onClicked)="actionCrud($event)"></xdatatable>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div role="tabpanel" id="menu2" class="tab-pane fade">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{title}}</div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Mã</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="producer.code" name="code" [placeholder]="placeholder_code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Tên</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="producer.name" name="name">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Địa chỉ</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="producer.address" name="address">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Điện thoại</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="producer.phone" name="phone">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Email</label>
+                              <div class="col-lg-10">
+                                <input type="email" class="form-control"
+                                       [(ngModel)]="producer.email" name="email">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Fax</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="producer.fax" name="fax">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Ghi chú</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="producer.note" name="note">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-lg-offset-2 col-lg-10">
+                                <button *ngIf="!isEdit" type="submit"
+                                        class="btn m-b-xs w-xs btn-primary btn-rounded"
+                                        (click)="addOne()">Thêm
+                                </button>
+                                <button *ngIf="isEdit"
+                                        class="btn m-b-xs w-xs btn-warning btn-rounded"
+                                        (click)="updateOne()">Cập nhật
+                                </button>
+                                <button *ngIf="isEdit"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="displayEditBtn(false)"><i
+                                    class="fa fa-ban"></i>Hủy
+                                </button>
+                                <button *ngIf="!isEdit" class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="clearOne()"><i
+                                    class="fa fa-eraser"></i>Làm mới
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <modal [objectData]="modal" (onClicked)="confirmDeactivateOne($event)"></modal>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /content -->
+
+
+

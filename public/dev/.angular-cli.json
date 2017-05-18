@@ -1,0 +1,80 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "project": {
+    "name": "angular-limitless"
+  },
+  "apps": [
+    {
+      "root": "src",
+      "outDir": "dist",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "app",
+      "styles": [
+        "assets/animate.css/animate.css",
+        "assets/font-awesome/css/font-awesome.min.css",
+        "assets/simple-line-icons/css/simple-line-icons.css",
+        "assets/jquery/bootstrap/dist/css/bootstrap.css",
+        "assets/css/font.css",
+        "assets/css/app.css",
+        "../node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css",
+        "../node_modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css",
+        "../node_modules/toastr/build/toastr.min.css",
+        "styles.css"
+      ],
+      "scripts": [
+        "assets/jquery/jquery/dist/jquery.js",
+        "assets/jquery/bootstrap/dist/js/bootstrap.js",
+        "assets/js/ui-load.js",
+        "assets/js/ui-jp.config.js",
+        "assets/js/ui-jp.js",
+        "assets/js/ui-nav.js",
+        "assets/js/ui-toggle.js",
+        "assets/js/ui-client.js",
+        "../node_modules/moment/moment.js",
+        "../node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
+        "../node_modules/bootstrap-timepicker/js/bootstrap-timepicker.js",
+        "../node_modules/toastr/build/toastr.min.js",
+        "global.js"
+      ],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    }
+  ],
+  "e2e": {
+    "protractor": {
+      "config": "./protractor.conf.js"
+    }
+  },
+  "lint": [
+    {
+      "project": "src/tsconfig.app.json"
+    },
+    {
+      "project": "src/tsconfig.spec.json"
+    },
+    {
+      "project": "e2e/tsconfig.e2e.json"
+    }
+  ],
+  "test": {
+    "karma": {
+      "config": "./karma.conf.js"
+    }
+  },
+  "defaults": {
+    "styleExt": "css",
+    "component": {}
+  }
+}
