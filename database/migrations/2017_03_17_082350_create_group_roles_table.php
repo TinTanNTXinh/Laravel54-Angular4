@@ -18,6 +18,8 @@ class CreateGroupRolesTable extends Migration
             $table->string('code')->unique()->comment('Mã');
             $table->string('name', 100)->comment('Tên');
             $table->text('description')->nullable()->comment('Mô tả');
+            $table->string('icon_name', 100)->comment('icon cho aside');
+            $table->integer('index')->default(1)->comment('vị trí thứ tự');
             $table->boolean('active')->default(false)->comment('Kích hoạt');
             $table->timestamps();
         });

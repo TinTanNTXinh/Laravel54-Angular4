@@ -187,6 +187,8 @@ namespace App{
  * @property string $code Mã
  * @property string $name Tên
  * @property string $description Mô tả
+ * @property string $icon_name icon cho aside
+ * @property int $index vị trí thứ tự
  * @property bool $active Kích hoạt
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -194,7 +196,9 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereCode($value)
  * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereIconName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereIndex($value)
  * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereUpdatedAt($value)
  */
