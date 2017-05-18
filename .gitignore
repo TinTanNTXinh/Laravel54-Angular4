@@ -13,9 +13,9 @@ npm-debug.log
 /public/dev/node_modules
 /public/dev/.vscode
 /public/home
-/documents/hoangnguyen.vux
-/documents/.hoangnguyen.vpp.lck
-/documents/hoangnguyen.vpp.bak*
+/documents/hoangnguyen-uml.vux
+/documents/.hoangnguyen-uml.vpp.lck
+/documents/hoangnguyen-uml.vpp.bak*
 /documents/.~lock*
 .phpstorm.meta.php
 _ide_helper.php
