@@ -15,21 +15,15 @@ class PositionsTableSeeder extends Seeder
     public function run()
     {
         $array_name = [
-            'System Admin',
-            'Super Admin',
-        	'Quản trị viên',
-        	'Nhân viên nhập hàng',
-        	'Nhân viên xuất hàng',
-            'Khách vãng lai'
-        ];
-
-        $array_code = [
-            'SA',
-            'SV',
-        	'QTV',
-        	'NVNH',
-        	'NVXH',
-            'KVL'
+            'Nhân viên giao nhận chứng từ',
+            'Kế toán trưởng',
+            'Thủ quỷ',
+            'Điều vận',
+            'Đối chiếu bảng kê',
+            'Nhận chứng từ',
+            'Kế toán',
+            'Chi phí xe',
+            'Giao nhận'
         ];
 
         foreach($array_name as $key => $name){

@@ -50,6 +50,13 @@ export class HttpClientService {
                                 authenticationService.authenticateRole.push(array_role[i]);
                             }
 
+                            /* SAVE GROUP ROLE */
+                            let array_group_role = success['group_roles'];
+                            authenticationService.authenticateGroupRole = [];
+                            for (let i = 0; i < array_group_role.length; i++) {
+                                authenticationService.authenticateGroupRole.push(array_group_role[i]);
+                            }
+
                             /* SAVE AUTH */
                             authenticationService.createAuthLocalStorage();
                             // this.authenticationService.notifyAuthenticate(true);

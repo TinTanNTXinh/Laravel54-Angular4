@@ -34,10 +34,7 @@ class AdminsTableSeeder extends Seeder
             'updated_by'    => 1,
             'created_date'  => date('Y-m-d H:i:s'),
             'updated_date'  => date('Y-m-d H:i:s'),
-            'active'        => true,
-            'position_id'   => 1,
-            'dis_or_sup'    => 'system',
-            'dis_or_sup_id' => 0
+            'active'        => true
         ]);
         // 2
         \App\User::create([
@@ -55,31 +52,7 @@ class AdminsTableSeeder extends Seeder
             'updated_by'    => 1,
             'created_date'  => date('Y-m-d H:i:s'),
             'updated_date'  => date('Y-m-d H:i:s'),
-            'active'        => true,
-            'position_id'   => 2,
-            'dis_or_sup'    => 'system',
-            'dis_or_sup_id' => 0
-        ]);
-        // 3
-        \App\User::create([
-            'code'          => $this->generateCode($class_name, $prefix),
-            'fullname'      => 'Khách vãng lai',
-            'username'      => 'khachvanglai',
-            'password'      => Hash::make('123456'),
-            'address'       => null,
-            'phone'         => null,
-            'birthday'      => date('Y-m-d'),
-            'sex'           => 'Nam',
-            'email'         => null,
-            'note'          => null,
-            'created_by'    => 1,
-            'updated_by'    => 1,
-            'created_date'  => date('Y-m-d H:i:s'),
-            'updated_date'  => date('Y-m-d H:i:s'),
-            'active'        => false,
-            'position_id'   => 6,
-            'dis_or_sup'    => 'dis',
-            'dis_or_sup_id' => 0
+            'active'        => true
         ]);
     }
 }

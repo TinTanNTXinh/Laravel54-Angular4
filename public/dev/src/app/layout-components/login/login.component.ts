@@ -57,6 +57,13 @@ export class LoginComponent implements OnInit {
                     this.authenticationService.authenticateRole.push(array_role[i]);
                 }
 
+                /* SAVE GROUP ROLE */
+                let array_group_role = success['group_roles'];
+                this.authenticationService.authenticateGroupRole = [];
+                for (let i = 0; i < array_group_role.length; i++) {
+                    this.authenticationService.authenticateGroupRole.push(array_group_role[i]);
+                }
+
                 this.loggingService.consoleLog("%c LoginComponent", "color: purple");
                 this.loggingService.consoleLog("%c Role", "color: purple");
                 this.loggingService.consoleTable(this.authenticationService.authenticateRole);

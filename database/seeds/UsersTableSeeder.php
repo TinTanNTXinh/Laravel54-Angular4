@@ -17,107 +17,60 @@ class UsersTableSeeder extends Seeder
         $class_name = \App\User::class;
         $prefix = 'USER';
 
-        /*
-         * IOCenter 1
-         * */
+        $array_name = [
+            'Trần Thị Mỹ Nhi',
+            'Nguyễn Đình Trường',
+            'Trần Thị Thùy Trang',
+            'Lê Bảo Khánh',
+            'Đồng Thụy Mỹ Phương',
+            'Nguyễn Thị Tường Ánh',
+            'Hà Cẩm Quyên',
+            'Võ Tấn Trường',
+            'Lê Thị Xuân Nở',
+            'Nguyễn Thế Anh',
+            'Nguyễn Trần Hoàng Ngân',
+            'Trần Nguyễn Thiện Lâm',
+            'Nguyễn Hoàng Nam',
+            'Huỳnh Tấn Đoàn',
+            'Nguyễn Trung Nam'
+        ];
 
-        # USER SUPPLIER
-        // Quan tri vien
-        // 4
-        \App\User::create([
-            'code'          => $this->generateCode($class_name, $prefix),
-            'fullname'      => 'Khách hàng 1',
-            'username'      => 'khachhang1',
-            'password'      => Hash::make('123456'),
-            'address'       => 'Thuốc Việt Admin',
-            'phone'         => '0987654321',
-            'birthday'      => date('Y-m-d'),
-            'sex'           => 'Nam',
-            'email'         => 'thuocvietadmin@vsys.com',
-            'note'          => 'thuocvietadmin',
-            'created_by'    => 1,
-            'updated_by'    => 1,
-            'created_date'  => date('Y-m-d H:i:s'),
-            'updated_date'  => date('Y-m-d H:i:s'),
-            'active'        => true
-        ]);
-        // NV Nhap hang 1
-        // 5
-        \App\User::create([
-            'code'          => $this->generateCode($class_name, $prefix),
-            'fullname'      => 'NV Nhập xuất 1',
-            'username'      => 'nvnhapxuat1',
-            'password'      => Hash::make('123456'),
-            'address'       => 'Thuốc Việt Input',
-            'phone'         => '0987654321',
-            'birthday'      => date('Y-m-d'),
-            'sex'           => 'Nam',
-            'email'         => 'thuocvietinput@vsys.com',
-            'note'          => 'thuocvietinput',
-            'created_by'    => 1,
-            'updated_by'    => 1,
-            'created_date'  => date('Y-m-d H:i:s'),
-            'updated_date'  => date('Y-m-d H:i:s'),
-            'active'        => true
-        ]);
-        // NV Nhap hang 2
-        // 6
-        \App\User::create([
-            'code'          => $this->generateCode($class_name, $prefix),
-            'fullname'      => 'NV Nhập xuất 2',
-            'username'      => 'nvnhapxuat2',
-            'password'      => Hash::make('123456'),
-            'address'       => 'Thuốc Việt Input',
-            'phone'         => '0987654321',
-            'birthday'      => date('Y-m-d'),
-            'sex'           => 'Nam',
-            'email'         => 'thuocvietinput@vsys.com',
-            'note'          => 'thuocvietinput',
-            'created_by'    => 1,
-            'updated_by'    => 1,
-            'created_date'  => date('Y-m-d H:i:s'),
-            'updated_date'  => date('Y-m-d H:i:s'),
-            'active'        => true
-        ]);
+        $array_code = [
+            'tranthimynhi',
+            'nguyendinhtruong',
+            'tranthithuytrang',
+            'lebaokhanh',
+            'dongthumyphuong',
+            'nguyenthituonganh',
+            'hacamquyen',
+            'votantruong',
+            'lethixuanno',
+            'nguyentheanh',
+            'nguyentranhoangngan',
+            'trannguyenthienlam',
+            'nguyenhoangnam',
+            'huynhtandoan',
+            'nguyentrungnam'
+        ];
 
-        # USER DISTRIBUTOR
-        // Quan tri vien
-        // 7
-        \App\User::create([
-            'code'          => $this->generateCode($class_name, $prefix),
-            'fullname'      => 'Đại lý 1',
-            'username'      => 'daily1',
-            'password'      => Hash::make('123456'),
-            'address'       => 'Nhân Ái Admin',
-            'phone'         => '0987654321',
-            'birthday'      => date('Y-m-d'),
-            'sex'           => 'Nam',
-            'email'         => 'nhanaiadmin@vsys.com',
-            'note'          => 'nhanaiadmin',
-            'created_by'    => 1,
-            'updated_by'    => 1,
-            'created_date'  => date('Y-m-d H:i:s'),
-            'updated_date'  => date('Y-m-d H:i:s'),
-            'active'        => true
-        ]);
-        // NV xuat hang 1
-        // 8
-        \App\User::create([
-            'code'          => $this->generateCode($class_name, $prefix),
-            'fullname'      => 'Đại lý 2',
-            'username'      => 'daily2',
-            'password'      => Hash::make('123456'),
-            'address'       => 'Nhân Ái Output',
-            'phone'         => '0987654321',
-            'birthday'      => date('Y-m-d'),
-            'sex'           => 'Nam',
-            'email'         => 'nhanaioutput@vsys.com',
-            'note'          => 'nhanaioutput',
-            'created_by'    => 1,
-            'updated_by'    => 1,
-            'created_date'  => date('Y-m-d H:i:s'),
-            'updated_date'  => date('Y-m-d H:i:s'),
-            'active'        => true
-        ]);
+        foreach($array_name as $key => $name) {
+            \App\User::create([
+                'code'          => $this->generateCode($class_name, $prefix),
+                'fullname'      => $name,
+                'username'      => $array_code[$key],
+                'password'      => Hash::make('123456'),
+                'address'       => '',
+                'phone'         => '',
+                'birthday'      => date('Y-m-d'),
+                'sex'           => 'Nam',
+                'email'         => '',
+                'note'          => '',
+                'created_by'    => 1,
+                'updated_by'    => 0,
+                'created_date'  => date('Y-m-d H:i:s'),
+                'updated_date'  => date('Y-m-d H:i:s'),
+                'active'        => true
+            ]);
+        }
     }
 }

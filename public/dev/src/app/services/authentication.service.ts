@@ -8,6 +8,7 @@ export class AuthenticationService {
     public authenticate = new BehaviorSubject<Boolean>(false);
     public authenticate$ = this.authenticate.asObservable();
     public authenticateRole: any[] = [];
+    public authenticateGroupRole: any[] = [];
     public authenticateUser: any = null;
     public authenticateToken: string;
 

@@ -13,15 +13,13 @@ import {LoggingService} from '../../services/logging.service';
 export class AsideComponent implements OnInit {
 
     private roles: any = [];
+    private group_roles: any = [];
     public fullname: string = '';
     public position_name: string = '';
     private _httpClientSubscription: Subscription;
     public user_image: string = '';
 
     public nav_lv0: string = 'Danh mục';
-    public nav_lv1: string = 'Dữ liệu ban đầu';
-    public nav_lv2: string = 'Cài đặt thiết bị';
-    public nav_lv3: string = 'Báo cáo';
 
     constructor(private httpClientService: HttpClientService, private authenticationService: AuthenticationService, private router: Router, private loggingService: LoggingService) {
         this._httpClientSubscription = this.httpClientService.httpClient$.subscribe(
@@ -31,11 +29,13 @@ export class AsideComponent implements OnInit {
 
                 if (status) {
                     this.roles = this.authenticationService.authenticateRole;
+                    this.group_roles = this.authenticationService.authenticateGroupRole;
                     this.fullname = this.authenticationService.authenticateUser.fullname;
                     this.position_name = this.authenticationService.authenticateUser.position_name;
                     this.user_image = this.authenticationService.authenticateUser.file_path;
                 } else {
                     this.roles = [];
+                    this.group_roles = [];
                     this.fullname = '';
                     this.position_name = '';
                     this.user_image = '';

@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             $this->call(AdminFilesTableSeeder::class);
 
             # Nhóm khách hàng
+
         } else {
             /*
              * ===========================================
@@ -37,5 +38,8 @@ class DatabaseSeeder extends Seeder
             ### DEVELOP
 
         }
+
+        $this->call(UserRolesTableSeeder::class);
+        $this->call(UserPositionsTableSeeder::class);
     }
 }
