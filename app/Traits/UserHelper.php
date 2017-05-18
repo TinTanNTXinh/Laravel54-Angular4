@@ -54,10 +54,7 @@ trait UserHelper
 
     public function getInfoCurrentUser($user)
     {
-        $user = User::where([['users.id', $user->id], ['users.active', true], ['files.table_name', 'users']])
-            ->leftJoin('files', 'files.table_id', '=', 'users.id')
-            ->select('users.*', 'files.path as file_path')
-            ->first();
+        $user = User::find($user->id);
         if (!$user)
             return [
                 'status'           => false,

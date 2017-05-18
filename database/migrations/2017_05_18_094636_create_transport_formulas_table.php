@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGroupRolesTable extends Migration
+class CreateTransportFormulasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateGroupRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('group_roles', function (Blueprint $table) {
+        Schema::create('transport_formulas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code')->unique()->comment('Mã');
-            $table->string('name')->comment('Tên');
-            $table->text('description')->nullable()->comment('Mô tả');
-            $table->string('icon_name', 100)->comment('icon cho aside');
-            $table->integer('index')->default(1)->comment('vị trí thứ tự');
+            $table->enum('rule', ['S', 'R', 'P', 'O', 'PC']);
+            $table->string('name');
+            $table->string('value');
+            $table->string('from_place');
+            $table->string('to_place');
             $table->boolean('active')->default(false)->comment('Kích hoạt');
+            $table->integer('transport_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class CreateGroupRolesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('group_roles');
+        Schema::dropIfExists('transport_formulas');
     }
 }

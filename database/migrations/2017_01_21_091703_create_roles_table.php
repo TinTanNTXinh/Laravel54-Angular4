@@ -16,7 +16,7 @@ class CreateRolesTable extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->unique()->comment('Mã');
-            $table->string('name', 100)->comment('Tên');
+            $table->string('name')->comment('Tên');
             $table->text('description')->nullable()->comment('Mô tả');
             $table->string('router_link', 100)->comment('router link cho angular');
             $table->string('icon_name', 100)->comment('icon cho aside');
