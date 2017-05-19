@@ -13,7 +13,7 @@ import {LoggingService} from '../../services/logging.service';
 export class AsideComponent implements OnInit {
 
     private roles: any = [];
-    private group_roles: any = [];
+    public group_roles: any = [];
     public fullname: string = '';
     public position_name: string = '';
     private _httpClientSubscription: Subscription;

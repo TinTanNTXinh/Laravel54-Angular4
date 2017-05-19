@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\GroupRole;
 use App\User;
 use App\Role;
 use App\UserRole;
+use App\GroupRole;
 use Hash;
 use Illuminate\Http\Request;
 use JWTAuth;

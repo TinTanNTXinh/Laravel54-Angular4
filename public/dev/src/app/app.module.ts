@@ -1,7 +1,7 @@
 // Default
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -38,6 +38,8 @@ import {AppComponent} from './app.component';
 // My share modules
 import { SharedModule } from './shared.module';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,6 +54,7 @@ import { SharedModule } from './shared.module';
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     JsonpModule,
     BrowserAnimationsModule,

@@ -22,6 +22,12 @@ import {MasterDetailComponent} from './dynamic-components/master-detail/master-d
 // My components
 import {PositionComponent} from './components/position/position.component';
 import {UserComponent} from './components/user/user.component';
+import {PostageComponent} from './components/postage/postage.component';
+import {TransportComponent} from './components/transport/transport.component';
+
+// My dynamic form
+import { DynamicFormComponent }         from './dynamic-form/dynamic-form.component';
+import { DynamicFormQuestionComponent } from './dynamic-form/dynamic-form-question.component';
 
 @NgModule({
     imports: [
@@ -46,7 +52,11 @@ import {UserComponent} from './components/user/user.component';
         MasterDetailComponent,
 
         PositionComponent,
-        UserComponent
+        UserComponent,
+        PostageComponent,
+        TransportComponent,
+        DynamicFormComponent,
+        DynamicFormQuestionComponent
     ],
     exports: [
         CommonModule,
@@ -69,7 +79,11 @@ import {UserComponent} from './components/user/user.component';
         MasterDetailComponent,
 
         PositionComponent,
-        UserComponent
+        UserComponent,
+        PostageComponent,
+        TransportComponent,
+        DynamicFormComponent,
+        DynamicFormQuestionComponent
     ]
 })
 export class SharedModule {

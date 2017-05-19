@@ -62,6 +62,26 @@ Route::group(['prefix' => 'v1'], function() {
             Route::patch('/', 'PositionController@patchDeactivateOne');
             Route::delete('/{id}', 'PositionController@deleteDeleteOne');
         });
+
+        Route::group(['middleware' => 'postage', 'prefix' => 'postages'], function () {
+            Route::get('/', 'PostageController@getReadAll');
+            Route::get('/search', 'PostageController@getSearchOne');
+            Route::get('/{id}', 'PostageController@getReadOne');
+            Route::post('/', 'PostageController@postCreateOne');
+            Route::put('/', 'PostageController@putUpdateOne');
+            Route::patch('/', 'PostageController@patchDeactivateOne');
+            Route::delete('/{id}', 'PostageController@deleteDeleteOne');
+        });
+
+        Route::group(['middleware' => 'transport', 'prefix' => 'transports'], function () {
+            Route::get('/', 'TransportController@getReadAll');
+            Route::get('/search', 'TransportController@getSearchOne');
+            Route::get('/{id}', 'TransportController@getReadOne');
+            Route::post('/', 'TransportController@postCreateOne');
+            Route::put('/', 'TransportController@putUpdateOne');
+            Route::patch('/', 'TransportController@patchDeactivateOne');
+            Route::delete('/{id}', 'TransportController@deleteDeleteOne');
+        });
     });
 });
 

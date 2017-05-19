@@ -1,0 +1,302 @@
+<!-- content -->
+<div id="content" class="app-content" role="main">
+  <div class="app-content-body ">
+    <div class="bg-light lter b-b wrapper-md">
+      <div class="row">
+        <div class="col-md-12">
+          <span class="m-n font-thin h3" style="font-size: 2em">{{title}}</span>
+          <div class="pull-right">
+            <button class="btn m-b-xs btn-rounded btn-default btn-addon"
+                    (click)="refreshData()"><i class="fa fa-refresh"></i>Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper-md">
+      <div class="row">
+        <div class="col-sm-12">
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#home"><i
+                class="glyphicon glyphicon-th-list icon text-primary-lter"></i> Tất cả</a></li>
+            <li><a data-toggle="tab" href="#menu2"><i
+                class="glyphicon glyphicon-edit icon text-success-lter"></i> Thêm/Cập nhật</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Điều kiện lọc
+                    </div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-2">
+                            <div class="radio" *ngFor="let rd of range_date">
+                              <label class="i-checks">
+                                <input type="radio" name="range_date" [value]="rd.value"
+                                       (change)="filtering.range = rd.value">
+                                <i></i>
+                                {{rd.name}}
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-10">
+                            <div class="row">
+                              <div class="col-md-3">
+                                <label>Từ</label>
+                                <datetime [ngModel]="datepicker_from" name="datepicker_from"
+                                          (dateChange)="clearDate($event, 'from')"
+                                          (ngModelChange)="handleDateFromChange($event)" [timepicker]="false"
+                                          [datepicker]="datepickerSettings"></datetime>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Đến</label>
+                                <datetime [(ngModel)]="datepicker_to" name="datepicker_to"
+                                          (dateChange)="clearDate($event, 'to')"
+                                          [timepicker]="false"
+                                          [datepicker]="datepickerToOpts"></datetime>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <button class="btn m-b-xs w-xs btn-info btn-rounded"
+                                    type="button"
+                                    (click)="search()">Tìm kiếm
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Danh sách {{title}}
+                    </div>
+                    <div class="panel-body">
+                      <spinner-fb [isLoading]="isLoading"></spinner-fb>
+                      <xdatatable [body]="transports" [header]="header"
+                                  (onClicked)="actionCrud($event)"></xdatatable>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div role="tabpanel" id="menu2" class="tab-pane fade">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{title}}</div>
+                    <div class="panel-body">
+                      <form class="bs-example form-horizontal">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Khách hàng</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <!--Reactive form-->
+                            <dynamic-form [questions]="questions"></dynamic-form>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Xe</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Ngày vận chuyển</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Nơi nhận</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Nơi giao</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Hàng</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Mã hàng</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Lượng hàng</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Đơn giá</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Bốc xếp</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Neo đêm</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Công an</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Phí tăng bo</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Thêm điểm</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Doanh thu</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Nhận</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Người nhận</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Số chứng từ</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Số hàng chứng từ</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Số chứng từ nhận</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Ghi chú</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="transport.code" name="code">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <div class="form-group">
+                              <div class="col-lg-offset-2 col-lg-10">
+                                <button *ngIf="!isEdit" type="button"
+                                        class="btn m-b-xs w-xs btn-primary btn-rounded"
+                                        (click)="addOne()">Thêm
+                                </button>
+                                <button *ngIf="isEdit" type="button"
+                                        class="btn m-b-xs w-xs btn-warning btn-rounded"
+                                        (click)="updateOne()">Cập nhật
+                                </button>
+                                <button *ngIf="isEdit" type="button"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="displayEditBtn(false)"><i
+                                    class="fa fa-ban"></i>Hủy
+                                </button>
+                                <button *ngIf="!isEdit" type="button"
+                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                        (click)="clearOne()"><i
+                                    class="fa fa-eraser"></i>Làm mới
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <modal [objectData]="modal" (onClicked)="confirmDeactivateOne($event)"></modal>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /content -->
+
+
+
