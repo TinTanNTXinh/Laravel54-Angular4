@@ -161,9 +161,13 @@ class OilController extends Controller implements ICrud, IValidate
             }
 
             $fuel_customers = FuelCustomer::whereActive(true)->get();
-            foreach($fuel_customers as $fuel_customer) {
+            foreach ($fuel_customers as $fuel_customer) {
                 # Find Customer
                 $customer = Customer::find($fuel_customer->customer_id);
+
+                # Nếu i_apply_date > KH.finish_date -> Bỏ qua
+                $compare = $this->compareDateTime($data['apply_date'], '', $customer->finish_date, 'Y-m-d H:i:s');
+                if($compare == 1) continue;
 
                 # Find current Fuel of Customer
                 $current_oil_of_customer = Fuel::find($fuel_customer->fuel_id);
@@ -175,32 +179,108 @@ class OilController extends Controller implements ICrud, IValidate
                 if ($customer->limit_oil > abs($change_percent)) continue;
 
                 $postages = Postage::whereActive(true)
-                    ->where('customer_id', $customer->id)
-                    ->get();
+                    ->where('customer_id', $customer->id);
                 # Nếu KH chưa có cước phí -> bỏ qua
-                if($postages->count() == 0) continue;
+                if ($postages->get()->count() == 0) continue;
 
-                $check_null = $postages->where('apply_date', '=', null)->get();
-                if($check_null->count() > 0)
+                # Nếu cước phí chưa được cập nhật apply_date -> Báo lỗi
+                $check_null = $postages->whereNull('apply_date')->get();
+                if ($check_null->count() > 0) {
+                    DB::rollback();
+                    return false;
+                }
 
-                foreach($postages as $postage) {
+                $max_date = $postages->where('apply_date', '<=', $one->apply_date)->max('apply_date');
+                $postages = $postages->where('apply_date', $max_date)->get();
+                foreach ($postages as $postage) {
                     $formulas = Formula::whereActive(true)
-                        ->where('postage_id', $postage->id)
-                        ->get();
+                        ->where('postage_id', $postage->id);
 
                     # Nếu trong công thức có Giá dầu -> bỏ qua
-                    $check_oil = $formulas->when('rule', 'O')->get();
-                    if(count($check_oil) > 0) continue;
+                    $check_oil = $formulas->where('rule', 'O')->get();
+                    if (count($check_oil) > 0) continue;
 
-                    if($postage->apply_date == null) {
+                    # Insert Postage (apply_date = null)
+                    $unit_price = $postage->unit_price * abs($change_percent) * $customer->limit_oil / 10000;
+                    if ($change_percent > 0) {
+                        $unit_price = $postage->unit_price + $unit_price;
+                        $word       = 'Tăng';
+                    } else {
+                        $unit_price = $postage->unit_price - $unit_price;
+                        $word       = 'Giảm';
+                    }
+
+                    $postage_new                   = new Postage();
+                    $postage_new->code             = $this->generateCode(Postage::class, 'POSTAGE');
+                    $postage_new->unit_price       = $unit_price;
+                    $postage_new->delivery_percent = $postage->delivery_percent;
+                    $postage_new->apply_date       = null;
+                    $postage_new->change_by_fuel   = true;
+                    $postage_new->note             = "{$word} cước vận chuyển và giao xe do giá dầu ${$word} từ " . number_format($current_oil_of_customer->price) . " đến " . number_format($one->price);
+                    $postage_new->created_by       = $one->created_by;
+                    $postage_new->updated_by       = 0;
+                    $postage_new->created_date     = $one->created_date;
+                    $postage_new->updated_date     = null;
+                    $postage_new->active           = true;
+                    $postage_new->customer_id      = $customer->id;
+                    $postage_new->unit_id          = $postage->unit_id;
+                    $postage_new->fuel_id          = $one->id;
+                    if (!$postage_new->save()) {
                         DB::rollback();
                         return false;
                     }
 
+                    # Insert Formulas
+                    foreach ($formulas->get() as $key => $formula) {
+                        $formula_new               = new Formula();
+                        $formula_new->code         = $this->generateCode(Formula::class, 'FORMULA');
+                        $formula_new->rule         = $formula->rule;
+                        $formula_new->name         = $formula->name;
+                        $formula_new->from         = $formula->from;
+                        $formula_new->to           = $formula->to;
+                        $formula_new->from_place   = $formula->from_place;
+                        $formula_new->to_place     = $formula->to_place;
+                        $formula_new->value        = $formula->value;
+                        $formula_new->index        = ++$key;
+                        $formula_new->created_by   = $one->created_by;
+                        $formula_new->updated_by   = 0;
+                        $formula_new->created_date = $one->created_date;
+                        $formula_new->updated_date = null;
+                        $formula_new->active       = true;
+                        $formula_new->postage_id   = $postage_new->id;
+                        if (!$formula_new->save()) {
+                            DB::rollback();
+                            return false;
+                        }
+                    } // END FOREACH Formula
+
+                } // END FOREACH Postage
+
+                # Deactivation Fuel Customer
+                $fuel_customer->active = false;
+                if (!$fuel_customer->update()) {
+                    DB::rollback();
+                    return false;
                 }
 
+                # Insert Fuel Customer
+                $fuel_customer_new               = new FuelCustomer();
+                $fuel_customer_new->fuel_id      = $one->id;
+                $fuel_customer_new->customer_id  = $customer->id;
+                $fuel_customer_new->price        = $one->price;
+                $fuel_customer_new->type         = 'oil';
+                $fuel_customer_new->apply_date   = $one->apply_date;
+                $fuel_customer_new->note         = '';
+                $fuel_customer_new->created_by   = $one->created_by;
+                $fuel_customer_new->updated_by   = 0;
+                $fuel_customer_new->created_date = $one->created_date;
+                $fuel_customer_new->updated_date = null;
+                if (!$fuel_customer_new->save()) {
+                    DB::rollback();
+                    return false;
+                }
 
-            }
+            } // END FOREACH Fuel Customer
 
             DB::commit();
             return true;
@@ -310,16 +390,17 @@ class OilController extends Controller implements ICrud, IValidate
         if ($this->checkExistData(Fuel::class, 'code', $data['code'], $skip_id))
             array_push($msg_error, 'Mã nhiên liệu đã tồn tại.');
 
-        $oil = $this->currentFuel('oil')['oil'];
+        $oil    = $this->currentFuel('oil')['oil'];
         $result = $this->compareDateTime($data['apply_date'], '', $oil->apply_date, 'Y-m-d H:i:s');
         switch ($result) {
             case -1:
             case 0:
-            array_push($msg_error, 'Ngày áp dụng không được nhỏ hơn hoặc bằng ngày áp dụng của giá dầu hiện tại.');
+                array_push($msg_error, 'Ngày áp dụng không được nhỏ hơn hoặc bằng ngày áp dụng của giá dầu hiện tại.');
                 break;
             case 1:
                 break;
-            default: break;
+            default:
+                break;
         }
 
         return [

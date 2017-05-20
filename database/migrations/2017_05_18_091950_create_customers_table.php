@@ -23,6 +23,7 @@ class CreateCustomersTable extends Migration
             $table->string('email')->nullable()->comment('Email');
             $table->decimal('limit_oil')->default(0)->comment('Số phần trăm khi giá dầu đạt mức này sẽ đổi cước phí');
             $table->decimal('oil_per_postage')->default(0)->comment('Số phần trăm giá dầu/cước phí');
+            $table->dateTime('finish_date')->comment('Ngày kết thúc');
             $table->text('note')->nullable()->comment('Ghi chú');
             $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');
             $table->integer('updated_by')->default(0)->unsigned()->comment('Người sửa');

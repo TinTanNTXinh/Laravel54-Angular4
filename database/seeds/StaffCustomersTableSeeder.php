@@ -30,11 +30,6 @@ class StaffCustomersTableSeeder extends Seeder
                 'sex'          => 'Nam',
                 'email'        => 'myemail@email.com',
                 'position'     => 'Kế toán',
-                'note'         => '',
-                'created_by'   => 1,
-                'updated_by'   => 0,
-                'created_date' => date('Y-m-d'),
-                'updated_date' => null,
                 'active'       => true,
                 'customer_id'  => ++$key
             ]);

@@ -35,6 +35,7 @@ class CustomersTableSeeder extends Seeder
                 'email'            => 'mycompany@company.com',
                 'limit_oil'        => 10,
                 'oil_per_postage'  => 10,
+                'finish_date'      => date('Y-m-d'),
                 'note'             => '',
                 'created_by'       => 1,
                 'updated_by'       => 0,

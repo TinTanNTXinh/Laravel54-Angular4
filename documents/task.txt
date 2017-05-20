@@ -23,6 +23,7 @@ POSTAGE vs FORMULA
 FUEL
 * Thêm dầu
 - Validate: i_apply_date > apply_date.
+- Nếu i_apply_date < customers.apply_date -> Bỏ qua
 - Kiểm tra oil_limit của từng khách hàng.
 - Khách hàng nào vượt mốc:
   + Nếu không vượt mốc -> bỏ qua.
@@ -52,6 +53,7 @@ COST
 
 INVOICE
 * Thêm HĐ, PTT
+- INPUT: transport_ids, type
 
 * Sửa/xóa HĐ, PTT
 - Không thể sửa/xóa HĐ, PTT đã trả đủ.
