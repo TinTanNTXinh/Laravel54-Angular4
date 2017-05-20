@@ -7,11 +7,18 @@ TRANSPORT
 - INPUT: formulas, transport_date, customer_id
 - OUTPUT: postage
 
+* Sửa/xóa đơn hàng
+- Không thể sửa/xóa đơn hàng đã xuất hóa đơn, hoặc phiếu thanh toán.
+Mẹo: xóa HĐ hoặc PTT rồi sửa/xóa.
 
 POSTAGE vs FORMULA
 * Lấy mẫu công thức (Nếu có):
 - INPUT: customer_id, transport_date (Lấy ngày hiện tại)
 - OUTPUT: formulas
+
+* Sửa/xóa
+- Không thể sửa/xóa Cước phí và công thức đã có đơn hàng sử dụng.
+- Mẹo: xóa đơn hàng sử dụng Cước phí và công thức rồi sửa/xóa.
 
 FUEL
 * Thêm dầu
@@ -24,7 +31,27 @@ FUEL
   + Lọc ra các cước phí có apply_date <= i_apply_date
   + Lọc ra các cước phí có apply_date = max(apply_date) của list trên
   + Nếu công thức chứa giá dầu -> bỏ qua.
-  + Thêm Postage
+  + Thêm Postage với apply_date = null
   + Thêm Formulas
   + Vô hiệu hóa FuelCustomer
   + Thêm FuelCustomer
+
+* Sửa dầu
+- Không cho sửa, chỉ cho thêm mới
+- Mẹo: Có thể thêm mới và cho cùng ngày nhưng khác số phút.
+
+* Xóa dầu:
+- Không thể xóa dầu
+
+COST
+* Thêm chi phí
+
+* Sửa/xóa chi phí
+- Không thể sửa/xóa chi phí đã tính vào PTT
+- Mẹo: Xóa PTT rồi sửa/xóa chi phí
+
+INVOICE
+* Thêm HĐ, PTT
+
+* Sửa/xóa HĐ, PTT
+- Không thể sửa/xóa HĐ, PTT đã trả đủ.
