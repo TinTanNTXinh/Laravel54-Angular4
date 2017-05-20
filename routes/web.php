@@ -18,7 +18,7 @@ Route::group(['middleware' => []], function () {
     });
 
     Route::group(['prefix' => 'test'], function () {
-        Route::get('test', 'TestController@getTest');
+        Route::get('test', 'TestController@index');
     });
 
      Route::any('/{slug}', function () {

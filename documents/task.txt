@@ -1,0 +1,14 @@
+TRANSPORT
+* Lấy mẫu công thức:
+- INPUT: customer_id, transport_date
+- OUTPUT: formulas
+
+* Tìm cước phí:
+- INPUT: formulas, transport_date, customer_id
+- OUTPUT: postage
+
+
+POSTAGE vs FORMULA
+* Lấy mẫu công thức (Nếu có):
+- INPUT: customer_id
+- OUTPUT: formulas

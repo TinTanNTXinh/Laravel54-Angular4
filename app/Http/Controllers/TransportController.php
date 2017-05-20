@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Formula;
+use App\Postage;
 use Illuminate\Http\Request;
 use League\Flysystem\Exception;
 use Route;
@@ -10,11 +12,13 @@ use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
+use App\Traits\FormulaHelper;
+use App\Traits\PostageHelper;
 use App\Transport;
 
 class TransportController extends Controller implements ICrud, IValidate
 {
-    use UserHelper, DBHelper;
+    use UserHelper, DBHelper, FormulaHelper, PostageHelper;
 
     private $first_day, $last_day, $today;
     private $user;
@@ -130,13 +134,13 @@ class TransportController extends Controller implements ICrud, IValidate
     /** LOGIC METHOD */
     public function readAll()
     {
-        $transports   = $this->skeleton->get();
+        $transports = $this->skeleton->get();
 
         return [
-            'transports'   => $transports,
-            'first_day'    => $this->first_day,
-            'last_day'     => $this->last_day,
-            'today'        => $this->today
+            'transports' => $transports,
+            'first_day'  => $this->first_day,
+            'last_day'   => $this->last_day,
+            'today'      => $this->today
         ];
     }
 
@@ -150,8 +154,8 @@ class TransportController extends Controller implements ICrud, IValidate
     {
         try {
             DB::beginTransaction();
-            $one               = new Transport();
-            $one->code         = $this->generateCode(Transport::class, 'TRANSPORT');
+            $one       = new Transport();
+            $one->code = $this->generateCode(Transport::class, 'TRANSPORT');
 
             $one->created_date = date('Y-m-d H:i:s');
             $one->updated_date = null;
@@ -173,8 +177,8 @@ class TransportController extends Controller implements ICrud, IValidate
     {
         try {
             DB::beginTransaction();
-            $one               = Transport::find($data['id']);
-            $one->code         = $data['code'];
+            $one       = Transport::find($data['id']);
+            $one->code = $data['code'];
 
             $one->updated_date = date('Y-m-d H:i:s');
             $one->active       = true;
@@ -230,9 +234,9 @@ class TransportController extends Controller implements ICrud, IValidate
 
     public function searchOne($filter)
     {
-        $from_date      = $filter['from_date'];
-        $to_date        = $filter['to_date'];
-        $range          = $filter['range'];
+        $from_date = $filter['from_date'];
+        $to_date   = $filter['to_date'];
+        $range     = $filter['range'];
 
         $transports = $this->skeleton;
 
@@ -273,5 +277,41 @@ class TransportController extends Controller implements ICrud, IValidate
             'status' => count($msg_error) > 0 ? false : true,
             'errors' => $msg_error
         ];
+    }
+
+    /** MY FUNCTION */
+    public function getReadFormulas()
+    {
+        $filter    = (array)json_decode($_GET['query']);
+        $arr_datas = $this->readFormulas($filter);
+        return response()->json($arr_datas, 200);
+    }
+
+    public function readFormulas($data)
+    {
+        $customer_id    = $data['customer_id'];
+        $transport_date = $data['transport_date'];
+
+        $formulas = $this->findFormulas($customer_id, $transport_date);
+
+        return $formulas;
+    }
+
+    public function getReadPostage()
+    {
+        $filter    = (array)json_decode($_GET['query']);
+        $arr_datas = $this->readPostage($filter);
+        return response()->json($arr_datas, 200);
+    }
+
+    public function readPostage($data)
+    {
+        $i_customer_id    = $data['customer_id'];
+        $i_transport_date = $data['transport_date'];
+        $i_formulas       = $data['formulas'];
+
+        $postage = $this->findPostage($i_formulas, $i_customer_id, $i_transport_date);
+
+        return $postage;
     }
 }
