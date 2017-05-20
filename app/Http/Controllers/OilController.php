@@ -180,6 +180,9 @@ class OilController extends Controller implements ICrud, IValidate
                 # Nếu KH chưa có cước phí -> bỏ qua
                 if($postages->count() == 0) continue;
 
+                $check_null = $postages->where('apply_date', '=', null)->get();
+                if($check_null->count() > 0)
+
                 foreach($postages as $postage) {
                     $formulas = Formula::whereActive(true)
                         ->where('postage_id', $postage->id)

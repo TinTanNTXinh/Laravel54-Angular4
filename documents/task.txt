@@ -26,11 +26,11 @@ FUEL
 - Kiểm tra oil_limit của từng khách hàng.
 - Khách hàng nào vượt mốc:
   + Nếu không vượt mốc -> bỏ qua.
-  + Nếu chưa có công thức -> bỏ qua.
-  + Nếu công thức có apply_date = null, rollback báo lỗi
+  + Nếu chưa có cước phí -> bỏ qua.
+  + Nếu cước phí có apply_date = null, rollback báo lỗi
   + Lọc ra các cước phí có apply_date <= i_apply_date
   + Lọc ra các cước phí có apply_date = max(apply_date) của list trên
-  + Nếu công thức chứa giá dầu -> bỏ qua.
+  + Nếu cước phí có công thức chứa giá dầu -> bỏ qua.
   + Thêm Postage với apply_date = null
   + Thêm Formulas
   + Vô hiệu hóa FuelCustomer
