@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace App\Traits\Domain;
 
 use App\Formula;
 use App\Postage;

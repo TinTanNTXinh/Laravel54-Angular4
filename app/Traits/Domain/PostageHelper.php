@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace App\Traits\Domain;
 
 use App\Formula;
 use App\Postage;
@@ -27,7 +27,6 @@ trait PostageHelper
             $found = null;
             switch ($i_formula['rule']) {
                 case 'S':
-                case 'PC':
                     $found = $formulas
                         ->where('rule', $i_formula['rule'])
                         ->where('name', $i_formula['name'])

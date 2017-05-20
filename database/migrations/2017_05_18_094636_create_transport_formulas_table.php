@@ -15,7 +15,7 @@ class CreateTransportFormulasTable extends Migration
     {
         Schema::create('transport_formulas', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('rule', ['S', 'R', 'P', 'O', 'PC']);
+            $table->enum('rule', ['S', 'R', 'P', 'O']);
             $table->string('name');
             $table->string('value')->nullable();
             $table->string('from_place')->nullable();

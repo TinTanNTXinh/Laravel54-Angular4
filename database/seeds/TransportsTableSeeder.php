@@ -38,9 +38,6 @@ class TransportsTableSeeder extends Seeder
             'voucher_number'             => 'A911',
             'quantum_product_on_voucher' => 100,
             'receiver'                   => 'Tâm',
-            'receive_place'              => 'A',
-            'delivery_place'             => 'B',
-            'product_code'               => 'M',
 
             'note'         => '',
             'created_by'   => 1,
@@ -78,9 +75,6 @@ class TransportsTableSeeder extends Seeder
             'voucher_number'             => 'A922',
             'quantum_product_on_voucher' => 200,
             'receiver'                   => 'Tâm2',
-            'receive_place'              => 'A',
-            'delivery_place'             => 'B',
-            'product_code'               => 'M',
 
             'note'         => '',
             'created_by'   => 1,
@@ -119,9 +113,6 @@ class TransportsTableSeeder extends Seeder
             'voucher_number'             => 'A933',
             'quantum_product_on_voucher' => 5000,
             'receiver'                   => 'Tâm3',
-            'receive_place'              => 'A',
-            'delivery_place'             => 'B',
-            'product_code'               => 'M',
 
             'note'         => '',
             'created_by'   => 1,

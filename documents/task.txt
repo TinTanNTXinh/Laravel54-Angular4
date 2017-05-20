@@ -10,5 +10,21 @@ TRANSPORT
 
 POSTAGE vs FORMULA
 * Lấy mẫu công thức (Nếu có):
-- INPUT: customer_id
+- INPUT: customer_id, transport_date (Lấy ngày hiện tại)
 - OUTPUT: formulas
+
+FUEL
+* Thêm dầu
+- Validate: i_apply_date > apply_date.
+- Kiểm tra oil_limit của từng khách hàng.
+- Khách hàng nào vượt mốc:
+  + Nếu không vượt mốc -> bỏ qua.
+  + Nếu chưa có công thức -> bỏ qua.
+  + Nếu công thức có apply_date = null, rollback báo lỗi
+  + Lọc ra các cước phí có apply_date <= i_apply_date
+  + Lọc ra các cước phí có apply_date = max(apply_date) của list trên
+  + Nếu công thức chứa giá dầu -> bỏ qua.
+  + Thêm Postage
+  + Thêm Formulas
+  + Vô hiệu hóa FuelCustomer
+  + Thêm FuelCustomer

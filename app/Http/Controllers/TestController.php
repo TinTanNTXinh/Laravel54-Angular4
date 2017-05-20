@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\FormulaHelper;
-use App\Traits\PostageHelper;
+use App\Traits\Domain\FormulaHelper;
+use App\Traits\Domain\PostageHelper;
 use Illuminate\Http\Request;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;

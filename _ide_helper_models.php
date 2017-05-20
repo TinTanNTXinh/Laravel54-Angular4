@@ -337,9 +337,6 @@ namespace App{
  * @property string $voucher_number Số chứng từ
  * @property string $quantum_product_on_voucher Số lượng sản phẩm trên chứng từ
  * @property string $receiver Người nhận
- * @property string $receive_place Nơi nhận
- * @property string $delivery_place Nơi giao
- * @property string $product_code
  * @property string $note Ghi chú
  * @property int $created_by Người tạo
  * @property int $updated_by Người sửa
@@ -363,7 +360,6 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereCreatedDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereCustomerId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereDelivery($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Transport whereDeliveryPlace($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereDeliveryReal($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereFine($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereFineReal($value)
@@ -374,13 +370,11 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Transport wherePhiTangBo($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport wherePhiTangBoReal($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport wherePostageId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Transport whereProductCode($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereProductId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereProfit($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereQuantumProduct($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereQuantumProductOnVoucher($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereReceive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Transport whereReceivePlace($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereReceiver($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereRevenue($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereTransportDate($value)

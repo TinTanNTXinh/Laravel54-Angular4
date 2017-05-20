@@ -156,4 +156,16 @@ trait DBHelper
             return $query->where($field_name, $operator, $value);
         return $query;
     }
+
+    private function compareDateTime($d1, $fd1, $d2, $fd2)
+    {
+        $a = Carbon::createFromFormat($fd1, $d1);
+        $b = Carbon::createFromFormat($fd2, $d2);
+        if ($a->diffInMinutes($b, false) == 0)
+            return 0; // a = b
+        else if ($a->diffInMinutes($b, false) > 0)
+            return 1; // a > b
+        else
+            return -1; // a < b
+    }
 }

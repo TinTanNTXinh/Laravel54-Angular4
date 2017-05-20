@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Formula;
-use App\Postage;
 use Illuminate\Http\Request;
 use League\Flysystem\Exception;
 use Route;
@@ -12,8 +10,8 @@ use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
-use App\Traits\FormulaHelper;
-use App\Traits\PostageHelper;
+use App\Traits\Domain\FormulaHelper;
+use App\Traits\Domain\PostageHelper;
 use App\Transport;
 
 class TransportController extends Controller implements ICrud, IValidate
