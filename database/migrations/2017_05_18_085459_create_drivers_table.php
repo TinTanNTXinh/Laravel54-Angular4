@@ -27,11 +27,12 @@ class CreateDriversTable extends Migration
             $table->text('so_chung_minh')->nullable();
             $table->text('ngay_cap_chung_minh')->nullable();
             $table->text('loai_bang_lai')->nullable();
+            $table->text('so_bang_lai')->nullable();
             $table->text('ngay_cap_bang_lai')->nullable();
             $table->text('ngay_het_han_bang_lai')->nullable();
 
-            $table->dateTime('date_start')->default(date('Y-m-d H:i:s'))->comment('Ngày vào làm');
-            $table->dateTime('date_finish')->nullable()->comment('Ngày nghĩ việc');
+            $table->dateTime('start_date')->default(date('Y-m-d H:i:s'))->comment('Ngày vào làm');
+            $table->dateTime('finish_date')->nullable()->comment('Ngày nghĩ việc');
             $table->text('note')->nullable()->comment('Ghi chú');
             $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');
             $table->integer('updated_by')->default(0)->unsigned()->comment('Người sửa');

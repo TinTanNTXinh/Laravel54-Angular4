@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 
 class ProductsTableSeeder extends Seeder
 {
+    use \App\Traits\DBHelper;
+
     /**
      * Run the database seeds.
      *
@@ -11,6 +13,24 @@ class ProductsTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $array_name = [
+            'Sợi',
+            'Bông',
+            'Bao vitamin',
+            'Phuy hóa chất',
+            'Kiện',
+            'Bao',
+            'Thùng'
+        ];
+
+        foreach ($array_name as $key => $name) {
+            \App\Product::create([
+                'code'            => $this->generateCode(\App\Product::class, 'PRODUCT'),
+                'name'            => $name,
+                'description'     => '',
+                'active'          => true,
+                'product_type_id' => 1
+            ]);
+        }
     }
 }

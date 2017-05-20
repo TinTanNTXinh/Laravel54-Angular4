@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class UserRolesTableSeeder extends Seeder
+class AdminFieldsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,6 @@ class UserRolesTableSeeder extends Seeder
      */
     public function run()
     {
-
+        //
     }
 }

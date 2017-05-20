@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Traits\DBHelper;
 
 class CustomerTypesTableSeeder extends Seeder
 {
+    use DBHelper;
+
     /**
      * Run the database seeds.
      *
@@ -11,6 +14,17 @@ class CustomerTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\CustomerType::create([
+            'code'        => $this->generateCode(\App\CustomerType::class, 'CUSTOMERTYPE'),
+            'name'        => 'Công ty',
+            'description' => '',
+            'active'      => true
+        ]);
+        \App\CustomerType::create([
+            'code'        => $this->generateCode(\App\CustomerType::class, 'CUSTOMERTYPE'),
+            'name'        => 'Cá nhân',
+            'description' => '',
+            'active'      => true
+        ]);
     }
 }

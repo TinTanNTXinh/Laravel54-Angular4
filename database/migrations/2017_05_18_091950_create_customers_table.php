@@ -16,6 +16,7 @@ class CreateCustomersTable extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->unique()->comment('Mã');
+            $table->string('tax_code')->comment('Mã số thuế');
             $table->string('fullname')->comment('Họ tên');
             $table->string('address')->nullable()->comment('Địa chỉ');
             $table->string('phone')->nullable()->comment('Điện thoại');

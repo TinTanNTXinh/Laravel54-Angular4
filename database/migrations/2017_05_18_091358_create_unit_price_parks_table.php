@@ -16,7 +16,7 @@ class CreateUnitPriceParksTable extends Migration
         Schema::create('unit_price_parks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->unique()->comment('Mã');
-            $table->decimal('money', 18, 0)->default(0)->comment('Đơn giá cho loại xe');
+            $table->decimal('price', 18, 0)->default(0)->comment('Đơn giá cho loại xe');
             $table->text('note')->nullable()->comment('Ghi chú');
             $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');
             $table->integer('updated_by')->default(0)->unsigned()->comment('Người sửa');

@@ -15,14 +15,13 @@ class UnitsTableSeeder extends Seeder
     public function run()
     {
         $array_name = [
-            'Thùng',
-            'Hộp',
-            'Cái',
-            'Đôi',
-            'Chiếc',
-            'Lon',
-            'Chai',
-            'Dây'
+            'VNĐ/Kg',
+            'VNĐ/Tấn',
+            'VNĐ/Chuyến',
+            'VNĐ/Pallet',
+            'VNĐ/Khối',
+            'VNĐ/Thùng',
+            'VNĐ/Cây'
         ];
 
         foreach ($array_name as $name) {

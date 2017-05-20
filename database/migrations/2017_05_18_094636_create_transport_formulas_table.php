@@ -17,9 +17,9 @@ class CreateTransportFormulasTable extends Migration
             $table->increments('id');
             $table->enum('rule', ['S', 'R', 'P', 'O', 'PC']);
             $table->string('name');
-            $table->string('value');
-            $table->string('from_place');
-            $table->string('to_place');
+            $table->string('value')->nullable();
+            $table->string('from_place')->nullable();
+            $table->string('to_place')->nullable();
             $table->boolean('active')->default(false)->comment('Kích hoạt');
             $table->integer('transport_id')->unsigned();
             $table->timestamps();

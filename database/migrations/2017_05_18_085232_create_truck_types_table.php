@@ -17,6 +17,7 @@ class CreateTruckTypesTable extends Migration
             $table->increments('id');
             $table->string('code')->unique()->comment('Mã');
             $table->string('name', 200)->comment('Tên');
+            $table->decimal('weight')->comment('Trọng tải');
             $table->text('description')->nullable()->comment('Mô tả');
             $table->boolean('active')->default(false)->comment('Kích hoạt');
             $table->timestamps();

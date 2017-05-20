@@ -16,8 +16,8 @@ class CreateFuelsTable extends Migration
         Schema::create('fuels', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->unique()->comment('Mã');
-            $table->decimal('money', 18, 0)->default(0)->comment('Chi phí');
-            $table->enum('type', ['Dầu', 'Nhớt']);
+            $table->decimal('price', 18, 0)->default(0)->comment('Giá nhiên liệu');
+            $table->enum('type', ['oil', 'lube']);
             $table->dateTime('apply_date');
             $table->text('note')->nullable()->comment('Ghi chú');
             $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');

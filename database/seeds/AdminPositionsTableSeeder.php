@@ -11,9 +11,10 @@ class AdminPositionsTableSeeder extends Seeder
      */
     public function run()
     {
+        $position_ids = \App\Position::all()->pluck('id')->toArray();
         $array_sub_position = [
-            '1'  => '1',
-            '2'  => '2'
+            1  => $position_ids,
+            2  => $position_ids
         ];
         foreach ($array_sub_position as $key => $sub) {
             if (is_array($sub)) {

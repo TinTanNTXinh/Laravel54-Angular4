@@ -25,6 +25,7 @@ class CreateTrucksTable extends Migration
             $table->integer('width')->comment('Rộng');
             $table->integer('height')->comment('Cao');
             $table->enum('status', ['Chưa phân tài', 'Đang giao hàng', 'Đã giao hàng', 'Không giao được']);
+            $table->text('note')->nullable()->comment('Ghi chú');
             $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');
             $table->integer('updated_by')->default(0)->unsigned()->comment('Người sửa');
             $table->dateTime('created_date')->default(date('Y-m-d H:i:s'))->comment('Ngày tạo');

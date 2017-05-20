@@ -23,11 +23,11 @@ class CreateCostsTable extends Migration
 
             $table->integer('fuel_id')->unsigned();
             $table->decimal('quantum_liter')->default(0)->comment('Số lít dầu/nhớt');
-            $table->dateTime('date_refuel')->comment('Ngày đổ dầu/nhớt');
+            $table->dateTime('refuel_date')->comment('Ngày đổ dầu/nhớt');
 
             $table->integer('unit_price_park_id')->unsigned();
-            $table->dateTime('date_checkin')->comment('Ngày đậu bãi');
-            $table->dateTime('date_checkout')->comment('Ngày ra bãi');
+            $table->dateTime('checkin_date')->comment('Ngày đậu bãi');
+            $table->dateTime('checkout_date')->comment('Ngày ra bãi');
             $table->integer('total_day')->comment('Tổng ngày đậu bãi');
 
             $table->text('note')->nullable()->comment('Ghi chú');

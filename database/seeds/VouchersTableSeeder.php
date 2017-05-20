@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 
 class VouchersTableSeeder extends Seeder
 {
+    use \App\Traits\DBHelper;
+
     /**
      * Run the database seeds.
      *
@@ -11,6 +13,25 @@ class VouchersTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $array_name = [
+            'HĐ xanh',
+            'HĐ vàng',
+            'HĐ hồng',
+            'Phiếu cân',
+            'Phiếu nhập kho',
+            'Phiếu xuất kho',
+            'Phiếu giao hàng',
+            'Lịch giao hàng',
+            'Chứng từ khác'
+        ];
+
+        foreach($array_name as $key => $name){
+            \App\Voucher::create([
+                'code'		  => $this->generateCode(\App\Voucher::class, 'VOUCHER'),
+                'name'        => $array_name[$key],
+                'description' => '',
+                'active'      => true
+            ]);
+        }
     }
 }

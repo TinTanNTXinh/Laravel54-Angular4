@@ -30,14 +30,14 @@ class GroupRolesTableSeeder extends Seeder
         ];
 
         $array_icon_name = [
-            'glyphicon-stats icon text-primary-lter',
-            'glyphicon-cog icon text-danger-lter',
-            'glyphicon-wrench icon text-danger-lter',
-            'glyphicon-phone icon text-danger-lter',
-            'glyphicon-th-large icon text-info-lter',
-            'glyphicon-book icon text-info-lter',
-            'glyphicon-plane icon text-success-lter',
-            'glyphicon-shopping-cart icon text-success-lter'
+            '',
+            'glyphicon-cog icon',
+            'glyphicon-wrench icon',
+            'glyphicon-phone icon',
+            'glyphicon-th-large icon',
+            'glyphicon-book icon',
+            'glyphicon-plane icon',
+            'glyphicon-shopping-cart icon'
         ];
 
         foreach($array_name as $key => $name){

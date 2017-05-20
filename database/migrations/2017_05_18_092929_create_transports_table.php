@@ -36,11 +36,11 @@ class CreateTransportsTable extends Migration
             $table->decimal('add_score_real', 18, 0)->comment('Thêm điểm thực tế');
 
             $table->string('voucher_number')->comment('Số chứng từ');
-            $table->string('voucher_number_product')->comment('Số lượng sản phẩm trên chứng từ');
+            $table->string('quantum_product_on_voucher')->comment('Số lượng sản phẩm trên chứng từ');
             $table->string('receiver')->comment('Người nhận');
-            $table->string('receive_place')->comment('Nơi nhận');
-            $table->string('delivery_place')->comment('Nơi giao');
-            $table->integer('product_code')->unsigned();
+            $table->string('receive_place')->comment('Nơi nhận')->nullable();
+            $table->string('delivery_place')->comment('Nơi giao')->nullable();
+            $table->string('product_code')->nullable();
 
             $table->text('note')->nullable()->comment('Ghi chú');
             $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');

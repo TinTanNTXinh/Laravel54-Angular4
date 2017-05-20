@@ -14,28 +14,24 @@ class FilesTableSeeder extends Seeder
      */
     public function run()
     {
-        $array_name = [
-            'nhacungcap',
-            'nvnhapxuat1',
-            'nvnhapxuat2',
-            'nhaphanphoi1',
-            'nhaphanphoi2'
-        ];
+        $user_ids = \App\User::all()->pluck('id')->toArray();
 
-        foreach($array_name as $key => $name){
+        foreach (array_slice($user_ids, 2) as $key => $user_id) {
             \App\File::create([
                 'code'         => $this->generateCode(\App\File::class, 'FILE'),
-                'name'         => $name,
-                'extension'    => 'jpg',
-                'mime_type'    => '',
-                'path'         => 'assets/img/a'.$key.'.jpg',
+                'name'         => '',
+                'extension'    => 'png',
+                'mime_type'    => 'image/png',
+                'path'         => 'assets/img/a' . 'default' . '.png',
                 'size'         => 0,
+                'table_name'   => 'users',
+                'table_id'     => $user_id,
                 'note'         => '',
+                'created_by'   => 1,
+                'updated_by'   => 0,
                 'created_date' => date('Y-m-d H:i:s'),
                 'updated_date' => null,
-                'active'       => true,
-                'table_name'   => 'users',
-                'table_id'     => ++$key + 3
+                'active'       => true
             ]);
         }
     }

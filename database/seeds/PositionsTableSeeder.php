@@ -30,7 +30,7 @@ class PositionsTableSeeder extends Seeder
             \App\Position::create([
             	'code'		  => $this->generateCode(\App\Position::class, 'POSITION'),
                 'name'        => $array_name[$key],
-                'description' => $array_name[$key],
+                'description' => '',
                 'active'      => true
             ]);
         }

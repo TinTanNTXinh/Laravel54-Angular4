@@ -24,6 +24,8 @@ class CreateFilesTable extends Migration
             $table->string('table_name')->comment('Tên bảng');
             $table->integer('table_id')->unsigned()->comment('Mã bảng');
             $table->text('note')->nullable()->comment('Ghi chú');
+            $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');
+            $table->integer('updated_by')->default(0)->unsigned()->comment('Người sửa');
             $table->dateTime('created_date')->default(date('Y-m-d H:i:s'))->comment('Ngày tạo');
             $table->dateTime('updated_date')->nullable()->comment('Ngày cập nhật');
             $table->boolean('active')->default(false)->comment('Kích hoạt');

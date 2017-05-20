@@ -120,10 +120,11 @@ namespace App{
  * @property string $so_chung_minh
  * @property string $ngay_cap_chung_minh
  * @property string $loai_bang_lai
+ * @property string $so_bang_lai
  * @property string $ngay_cap_bang_lai
  * @property string $ngay_het_han_bang_lai
- * @property string $date_start Ngày vào làm
- * @property string $date_finish Ngày nghĩ việc
+ * @property string $start_date Ngày vào làm
+ * @property string $finish_date Ngày nghĩ việc
  * @property string $note Ghi chú
  * @property int $created_by Người tạo
  * @property int $updated_by Người sửa
@@ -138,11 +139,10 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereCreatedBy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereCreatedDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Driver whereDateFinish($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Driver whereDateStart($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereDiaChiTamTru($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereDiaChiThuongTru($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereEmail($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Driver whereFinishDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereFullname($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereLoaiBangLai($value)
@@ -152,7 +152,9 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereNote($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver wherePhone($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereSex($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Driver whereSoBangLai($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereSoChungMinh($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Driver whereStartDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereUpdatedBy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Driver whereUpdatedDate($value)
@@ -333,11 +335,11 @@ namespace App{
  * @property float $phi_tang_bo_real Phí tăng bo thực tế
  * @property float $add_score_real Thêm điểm thực tế
  * @property string $voucher_number Số chứng từ
- * @property string $voucher_number_product Số lượng sản phẩm trên chứng từ
+ * @property string $quantum_product_on_voucher Số lượng sản phẩm trên chứng từ
  * @property string $receiver Người nhận
  * @property string $receive_place Nơi nhận
  * @property string $delivery_place Nơi giao
- * @property int $product_code
+ * @property string $product_code
  * @property string $note Ghi chú
  * @property int $created_by Người tạo
  * @property int $updated_by Người sửa
@@ -376,6 +378,7 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereProductId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereProfit($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereQuantumProduct($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Transport whereQuantumProductOnVoucher($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereReceive($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereReceivePlace($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereReceiver($value)
@@ -387,7 +390,6 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereUpdatedBy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereUpdatedDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Transport whereVoucherNumber($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Transport whereVoucherNumberProduct($value)
  */
 	class Transport extends \Eloquent {}
 }
@@ -535,6 +537,8 @@ namespace App{
  * @property string $table_name Tên bảng
  * @property int $table_id Mã bảng
  * @property string $note Ghi chú
+ * @property int $created_by Người tạo
+ * @property int $updated_by Người sửa
  * @property string $created_date Ngày tạo
  * @property string $updated_date Ngày cập nhật
  * @property bool $active Kích hoạt
@@ -543,6 +547,7 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\File whereActive($value)
  * @method static \Illuminate\Database\Query\Builder|\App\File whereCode($value)
  * @method static \Illuminate\Database\Query\Builder|\App\File whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereCreatedBy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\File whereCreatedDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\File whereExtension($value)
  * @method static \Illuminate\Database\Query\Builder|\App\File whereId($value)
@@ -554,6 +559,7 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\File whereTableId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\File whereTableName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\File whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereUpdatedBy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\File whereUpdatedDate($value)
  */
 	class File extends \Eloquent {}
@@ -671,7 +677,7 @@ namespace App{
  *
  * @property int $id
  * @property string $code Mã
- * @property float $money Chi phí
+ * @property float $price Giá nhiên liệu
  * @property string $type
  * @property string $apply_date
  * @property string $note Ghi chú
@@ -689,8 +695,8 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Fuel whereCreatedBy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Fuel whereCreatedDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Fuel whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Fuel whereMoney($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Fuel whereNote($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Fuel wherePrice($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Fuel whereType($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Fuel whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Fuel whereUpdatedBy($value)
@@ -729,6 +735,7 @@ namespace App{
  *
  * @property int $id
  * @property string $code Mã
+ * @property string $tax_code Mã số thuế
  * @property string $fullname Họ tên
  * @property string $address Địa chỉ
  * @property string $phone Điện thoại
@@ -758,6 +765,7 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Customer whereNote($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Customer whereOilPerPostage($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Customer wherePhone($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Customer whereTaxCode($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Customer whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Customer whereUpdatedBy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Customer whereUpdatedDate($value)
@@ -827,10 +835,10 @@ namespace App{
  * @property string $type
  * @property int $fuel_id
  * @property float $quantum_liter Số lít dầu/nhớt
- * @property string $date_refuel Ngày đổ dầu/nhớt
+ * @property string $refuel_date Ngày đổ dầu/nhớt
  * @property int $unit_price_park_id
- * @property string $date_checkin Ngày đậu bãi
- * @property string $date_checkout Ngày ra bãi
+ * @property string $checkin_date Ngày đậu bãi
+ * @property string $checkout_date Ngày ra bãi
  * @property int $total_day Tổng ngày đậu bãi
  * @property string $note Ghi chú
  * @property int $created_by Người tạo
@@ -843,18 +851,18 @@ namespace App{
  * @property \Carbon\Carbon $updated_at
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereActive($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereAfterVat($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Cost whereCheckinDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Cost whereCheckoutDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereCode($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereCreatedBy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereCreatedDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Cost whereDateCheckin($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Cost whereDateCheckout($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Cost whereDateRefuel($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereFuelId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereMoney($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereNote($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereQuantumLiter($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Cost whereRefuelDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereTotalDay($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereTruckId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereType($value)
@@ -1026,6 +1034,7 @@ namespace App{
  * @property int $width Rộng
  * @property int $height Cao
  * @property string $status
+ * @property string $note Ghi chú
  * @property int $created_by Người tạo
  * @property int $updated_by Người sửa
  * @property string $created_date Ngày tạo
@@ -1045,6 +1054,7 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Truck whereHeight($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Truck whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Truck whereLength($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Truck whereNote($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Truck whereNumberPlate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Truck whereOwner($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Truck whereStatus($value)
@@ -1098,6 +1108,7 @@ namespace App{
  * @property int $id
  * @property string $code Mã
  * @property string $name Tên
+ * @property float $weight Trọng tải
  * @property string $description Mô tả
  * @property bool $active Kích hoạt
  * @property \Carbon\Carbon $created_at
@@ -1109,6 +1120,7 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\TruckType whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\TruckType whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\TruckType whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\TruckType whereWeight($value)
  */
 	class TruckType extends \Eloquent {}
 }
@@ -1187,7 +1199,7 @@ namespace App{
  *
  * @property int $id
  * @property string $code Mã
- * @property float $money Đơn giá cho loại xe
+ * @property float $price Đơn giá cho loại xe
  * @property string $note Ghi chú
  * @property int $created_by Người tạo
  * @property int $updated_by Người sửa
@@ -1203,8 +1215,8 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\UnitPricePark whereCreatedBy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\UnitPricePark whereCreatedDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\UnitPricePark whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\UnitPricePark whereMoney($value)
  * @method static \Illuminate\Database\Query\Builder|\App\UnitPricePark whereNote($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\UnitPricePark wherePrice($value)
  * @method static \Illuminate\Database\Query\Builder|\App\UnitPricePark whereTruckTypeId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\UnitPricePark whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\UnitPricePark whereUpdatedBy($value)

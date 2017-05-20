@@ -18,11 +18,11 @@ class CreateFormulasTable extends Migration
             $table->string('code')->unique()->comment('Mã');
             $table->enum('rule', ['S', 'R', 'P', 'O', 'PC']);
             $table->string('name');
-            $table->integer('from');
-            $table->integer('to');
-            $table->string('from_place');
-            $table->string('to_place');
-            $table->string('value');
+            $table->integer('from')->nullable();
+            $table->integer('to')->nullable();
+            $table->string('from_place')->nullable();
+            $table->string('to_place')->nullable();
+            $table->string('value')->nullable();
             $table->integer('index');
             $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');
             $table->integer('updated_by')->default(0)->unsigned()->comment('Người sửa');
