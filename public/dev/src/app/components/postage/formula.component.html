@@ -1,0 +1,35 @@
+<div [formGroup]="formulaForm">
+
+  <h1>Type:{{ type}}</h1>
+
+  <div class="form-group">
+    <label class="col-md-2 control-label">Name</label>
+    <div class="col-md-3">
+      <input type="text"
+             class="form-control"
+             placeholder="Name"
+             formControlName="name">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-2 control-label">Value 1</label>
+    <div class="col-md-8">
+      <input type="text"
+             class="form-control"
+             placeholder="Value 1"
+             formControlName="value1">
+    </div>
+  </div>
+
+
+  <div class="form-group" *ngIf="type != 'Single'">
+    <label class="col-md-2 control-label">Value 2</label>
+    <div class="col-md-8">
+      <input type="text"
+             class="form-control"
+             placeholder="Value 2"
+             formControlName="value2">
+    </div>
+  </div>
+</div>

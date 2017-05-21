@@ -10,8 +10,8 @@ import { QuestionService } from '../../dynamic-form/question.service';
 @Component({
     selector: 'app-transport',
     templateUrl: './transport.component.html',
-    providers:  [QuestionService],
-    styles: []
+    styles: [],
+    providers:  [QuestionService]
 })
 export class TransportComponent implements OnInit
     , ICommon, ICrud, IDatePicker, ISearch {

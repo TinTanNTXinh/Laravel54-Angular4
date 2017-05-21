@@ -24,6 +24,7 @@ import {PositionComponent} from './components/position/position.component';
 import {UserComponent} from './components/user/user.component';
 import {PostageComponent} from './components/postage/postage.component';
 import {TransportComponent} from './components/transport/transport.component';
+import {FormulaComponent} from './components/postage/formula.component';
 
 // My dynamic form
 import { DynamicFormComponent }         from './dynamic-form/dynamic-form.component';
@@ -55,6 +56,7 @@ import { DynamicFormQuestionComponent } from './dynamic-form/dynamic-form-questi
         UserComponent,
         PostageComponent,
         TransportComponent,
+        FormulaComponent,
         DynamicFormComponent,
         DynamicFormQuestionComponent
     ],
@@ -82,6 +84,7 @@ import { DynamicFormQuestionComponent } from './dynamic-form/dynamic-form-questi
         UserComponent,
         PostageComponent,
         TransportComponent,
+        FormulaComponent,
         DynamicFormComponent,
         DynamicFormQuestionComponent
     ]

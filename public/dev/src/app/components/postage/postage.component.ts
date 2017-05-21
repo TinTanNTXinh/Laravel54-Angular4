@@ -352,6 +352,11 @@ export class PostageComponent implements OnInit
         return formula;
     }
 
+    removeFormula(i: number) {
+        const control = <FormArray>this.formulaForm.controls['formulas'];
+        control.removeAt(i);
+    }
+
     save(): void {
         console.log(this.formulaForm);
         console.log('Saved: ' + JSON.stringify(this.formulaForm.value));

@@ -40,18 +40,18 @@ export class QuestionService {
         order: 2
       }),
 
-      new TextboxQuestion({
-        key: 'checkbox',
-        label: 'Checkbox',
-        type: 'checkbox',
-        order: 4
-      }),
-      new TextboxQuestion({
-        key: 'radio',
-        label: 'Radio',
-        type: 'radio',
-        order: 5
-      })
+      // new TextboxQuestion({
+      //   key: 'checkbox',
+      //   label: 'Checkbox',
+      //   type: 'checkbox',
+      //   order: 4
+      // }),
+      // new TextboxQuestion({
+      //   key: 'radio',
+      //   label: 'Radio',
+      //   type: 'radio',
+      //   order: 5
+      // })
     ];
 
     return questions.sort((a, b) => a.order - b.order);
