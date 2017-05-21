@@ -103,43 +103,53 @@
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Khách hàng</label>
                               <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="postage.code" name="code">
+                                <autocomplete [data]="customers" [name]="'fullname'" [model_name]="'id'"
+                                              [(ngModel)]="postage.customer_id"></autocomplete>
                               </div>
                             </div>
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Phí giao xe</label>
                               <div class="col-lg-10">
                                 <input type="text" class="form-control"
-                                       [(ngModel)]="postage.code" name="code">
+                                       [(ngModel)]="postage.delivery_percent" name="delivery_percent">
                               </div>
                             </div>
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Đơn giá</label>
                               <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="postage.code" name="code">
+                                <currency [numberData]="postage.unit_price" [(ngModel)]="postage.unit_price" name="unit_price"></currency>
                               </div>
                             </div>
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Đơn vị tính</label>
                               <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="postage.code" name="code">
+                                <autocomplete [data]="units" [name]="'name'" [model_name]="'id'"
+                                              [(ngModel)]="postage.unit_id"></autocomplete>
                               </div>
                             </div>
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Ngày áp dụng</label>
                               <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="postage.code" name="code">
+                                <datetime [(ngModel)]="postage.apply_date" name="apply_date"
+                                          [timepicker]="false"
+                                          [datepicker]="datepickerSettings"></datetime>
+                                {{postage.apply_date}}
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Giờ áp dụng</label>
+                              <div class="col-lg-10">
+                                <datetime [(ngModel)]="postage.apply_time" name="apply_time"
+                                          [timepicker]="timepickerSettings"
+                                          [datepicker]="false"></datetime>
+                                {{getTime(postage.apply_time) | date: "medium"}}
                               </div>
                             </div>
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Ghi chú</label>
                               <div class="col-lg-10">
                                 <input type="text" class="form-control"
-                                       [(ngModel)]="postage.code" name="code">
+                                       [(ngModel)]="postage.note" name="note">
                               </div>
                             </div>
                           </div>
@@ -169,48 +179,10 @@
                               <div formArrayName="formulas" *ngFor="let formula of formulas.controls; let i=index">
                                 <div class="panel-heading">
                                   <span>Formula {{i + 1}}</span>
-                                  <span class="glyphicon glyphicon-remove pull-right" *ngIf="formulaForm.controls.formulas.controls.length > 1" (click)="removeFormula(i)"></span>
+                                  <span class="glyphicon glyphicon-remove pull-right" (click)="removeFormula(i)"></span>
                                 </div>
                                 <div class="panel-body" [formGroupName]="i">
                                   <formula [group]="formulaForm.controls.formulas.controls[i]"></formula>
-
-                                  <!--<h1>Type:{{formulas.getRawValue()[i].type}}</h1>-->
-
-                                  <!--<div class="form-group">-->
-                                    <!--<label class="col-md-2 control-label"-->
-                                           <!--attr.for="{{ 'nameId' + i }}">Name</label>-->
-                                    <!--<div class="col-md-3">-->
-                                      <!--<input type="text"-->
-                                             <!--class="form-control"-->
-                                             <!--id="{{ 'nameId' + i }}"-->
-                                             <!--placeholder="Name"-->
-                                             <!--formControlName="name">-->
-                                    <!--</div>-->
-                                  <!--</div>-->
-
-                                  <!--<div class="form-group">-->
-                                    <!--<label class="col-md-2 control-label"-->
-                                           <!--attr.for="{{ 'value1Id' + i }}">Value 1</label>-->
-                                    <!--<div class="col-md-8">-->
-                                      <!--<input type="text"-->
-                                             <!--class="form-control"-->
-                                             <!--id="{{ 'value1Id' + i }}"-->
-                                             <!--placeholder="Value 1"-->
-                                             <!--formControlName="value1">-->
-                                    <!--</div>-->
-                                  <!--</div>-->
-
-                                  <!--<div class="form-group" *ngIf="formulas.getRawValue()[i].type != 'Single'">-->
-                                    <!--<label class="col-md-2 control-label"-->
-                                           <!--attr.for="{{ 'value2Id' + i }}">Value 2</label>-->
-                                    <!--<div class="col-md-8">-->
-                                      <!--<input type="text"-->
-                                             <!--class="form-control"-->
-                                             <!--id="{{ 'value2Id' + i }}"-->
-                                             <!--placeholder="Value 2"-->
-                                             <!--formControlName="value2">-->
-                                    <!--</div>-->
-                                  <!--</div>-->
                                 </div>
                               </div>
                               <div class="form-group">

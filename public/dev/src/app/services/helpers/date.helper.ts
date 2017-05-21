@@ -13,8 +13,10 @@ export class DateHelperService {
     public locale: string = "vi-VN";
     public locale_options: any = { day: "2-digit", month: "2-digit", year: "numeric" };
     public icon_calendar: string = "fa fa-calendar";
+    public icon_clock: string = "fa fa-clock-o";
 
     public date_placeholder: string = "Chọn ngày";
+    public time_placeholder: string = "Chọn giờ";
     public datepickerSettings: any = {
         autoclose: true,
         todayBtn: 'linked',
@@ -22,6 +24,13 @@ export class DateHelperService {
         icon: this.icon_calendar,
         placeholder: this.date_placeholder,
         format: 'dd/mm/yyyy'
+    };
+
+    public timepickerSettings: any = {
+        showMeridian: false,
+        minuteStep: 1,
+        icon: this.icon_clock,
+        placeholder: this.time_placeholder
     };
 
     public range_date: any[] = [
@@ -36,6 +45,10 @@ export class DateHelperService {
     /** Date */
     public getDate(dt: Date): string {
         return dt.toLocaleDateString(this.locale, this.locale_options);
+    }
+
+    public getTime(dt: Date): number {
+        return dt && dt.getTime();
     }
 
     public createDate(str: string): Date {

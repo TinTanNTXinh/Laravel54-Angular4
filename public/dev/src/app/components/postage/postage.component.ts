@@ -18,6 +18,8 @@ export class PostageComponent implements OnInit
     public postages: any[] = [];
     public postages_search: any[] = [];
     public postage: any;
+    public customers: any[] = [];
+    public units: any[] = [];
 
     /** ICommon **/
     title: string;
@@ -34,6 +36,7 @@ export class PostageComponent implements OnInit
     /** IDatePicker **/
     range_date: any[];
     datepickerSettings: any;
+    timepickerSettings: any;
     datepicker_from: Date;
     datepicker_to: Date;
     datepickerToOpts: any = {};
@@ -54,6 +57,7 @@ export class PostageComponent implements OnInit
         this.range_date = this.dateHelperService.range_date;
         this.refreshData();
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
+        this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
             code: {
                 title: 'Mã'
@@ -71,8 +75,9 @@ export class PostageComponent implements OnInit
         };
 
         this.formulaForm = this.fb.group({
+            formulas: this.fb.array([])
             // Them moi
-            formulas: this.fb.array([ this.buildFormula('Single') ])
+            // formulas: this.fb.array([ this.buildFormula('Single') ])
             // Chinh sua
             // formulas: this.fb.array([ this.buildFormulaEdit() ])
         });
@@ -117,8 +122,13 @@ export class PostageComponent implements OnInit
 
     clearOne(): void {
         this.postage = {
-            code: '',
-            name: ''
+            customer_id: '',
+            unit_id: '',
+            delvery_percent: '',
+            unit_price: '',
+            apply_date: Date,
+            apply_time: Date,
+            note: ''
         };
     }
 
@@ -361,5 +371,9 @@ export class PostageComponent implements OnInit
         console.log(this.formulaForm);
         console.log('Saved: ' + JSON.stringify(this.formulaForm.value));
         console.log('Saved: ' + JSON.stringify(this.postage));
+    }
+
+    public getTime(dt: Date): number {
+        return dt && dt.getTime();
     }
 }
