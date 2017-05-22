@@ -15,11 +15,10 @@ class CreateTransportFormulasTable extends Migration
     {
         Schema::create('transport_formulas', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('rule', ['S', 'R', 'P', 'O']);
+            $table->enum('rule', ['Single', 'Range', 'Pair', 'Oil']);
             $table->string('name');
-            $table->string('value')->nullable();
-            $table->string('from_place')->nullable();
-            $table->string('to_place')->nullable();
+            $table->string('value1');
+            $table->string('value2')->nullable();
             $table->boolean('active')->default(false)->comment('Kích hoạt');
             $table->integer('transport_id')->unsigned();
             $table->timestamps();

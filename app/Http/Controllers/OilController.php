@@ -167,7 +167,7 @@ class OilController extends Controller implements ICrud, IValidate
 
                 # Nếu i_apply_date > KH.finish_date -> Bỏ qua
                 $compare = $this->compareDateTime($data['apply_date'], '', $customer->finish_date, 'Y-m-d H:i:s');
-                if($compare == 1) continue;
+                if ($compare == 1) continue;
 
                 # Find current Fuel of Customer
                 $current_oil_of_customer = Fuel::find($fuel_customer->fuel_id);
@@ -197,7 +197,7 @@ class OilController extends Controller implements ICrud, IValidate
                         ->where('postage_id', $postage->id);
 
                     # Nếu trong công thức có Giá dầu -> bỏ qua
-                    $check_oil = $formulas->where('rule', 'O')->get();
+                    $check_oil = $formulas->where('rule', 'Oil')->get();
                     if (count($check_oil) > 0) continue;
 
                     # Insert Postage (apply_date = null)
@@ -236,11 +236,8 @@ class OilController extends Controller implements ICrud, IValidate
                         $formula_new->code         = $this->generateCode(Formula::class, 'FORMULA');
                         $formula_new->rule         = $formula->rule;
                         $formula_new->name         = $formula->name;
-                        $formula_new->from         = $formula->from;
-                        $formula_new->to           = $formula->to;
-                        $formula_new->from_place   = $formula->from_place;
-                        $formula_new->to_place     = $formula->to_place;
-                        $formula_new->value        = $formula->value;
+                        $formula_new->value1       = $formula->value1;
+                        $formula_new->value2       = $formula->value2;
                         $formula_new->index        = ++$key;
                         $formula_new->created_by   = $one->created_by;
                         $formula_new->updated_by   = 0;

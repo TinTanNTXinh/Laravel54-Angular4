@@ -357,6 +357,7 @@ export class TransportComponent implements OnInit
                 });
                 break;
             case 'Range':
+            case 'Oil':
                 formula = this.fb.group({
                     type: type,
                     name: name,
@@ -405,14 +406,15 @@ export class TransportComponent implements OnInit
                 for(let formula of formulas) {
                     console.log(formula);
                     switch (formula.rule) {
-                        case 'S':
-                            this.addFormula('Single', formula.name, '', '');
+                        case 'Single':
+                            this.addFormula(formula.rule, formula.name, '', '');
                             break;
-                        case 'R':
-                            this.addFormula('Range', formula.name, 0, 0);
+                        case 'Range':
+                        case 'Oil':
+                            this.addFormula(formula.rule, formula.name, 0, 0);
                             break;
-                        case 'P':
-                            this.addFormula('Pair', formula.name, '', '');
+                        case 'Pair':
+                            this.addFormula(formula.rule, formula.name, '', '');
                             break;
                         default: break;
                     }

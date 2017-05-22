@@ -19,13 +19,10 @@ class FormulasTableSeeder extends Seeder
         foreach ($FORMOSA_VALUE as $key => $value) {
             \App\Formula::create([
                 'code'         => $this->generateCode(\App\Formula::class, 'FORMULA'),
-                'rule'         => 'S',
+                'rule'         => 'Single',
                 'name'         => 'Tỉnh',
-                'from'         => null,
-                'to'           => null,
-                'from_place'   => null,
-                'to_place'     => null,
-                'value'        => $value,
+                'value1'       => $value,
+                'value2'       => null,
                 'index'        => ++$key,
                 'created_by'   => 1,
                 'updated_by'   => 0,
@@ -38,18 +35,15 @@ class FormulasTableSeeder extends Seeder
 
         # A CHAU #
         $ACHAU_VALUE1 = ['An Giang', 'TX Châu Đốc', '310', 'M'];
-        $ACHAU_NAME = ['Tỉnh', 'Địa chỉ giao hàng', 'Cự ly', 'Mã SP'];
+        $ACHAU_NAME   = ['Tỉnh', 'Địa chỉ giao hàng', 'Cự ly', 'Mã SP'];
 
         foreach ($ACHAU_VALUE1 as $key => $value) {
             \App\Formula::create([
                 'code'         => $this->generateCode(\App\Formula::class, 'FORMULA'),
-                'rule'         => 'S',
+                'rule'         => 'Single',
                 'name'         => $ACHAU_NAME[$key],
-                'from'         => null,
-                'to'           => null,
-                'from_place'   => null,
-                'to_place'     => null,
-                'value'        => $value,
+                'value1'       => $value,
+                'value2'       => null,
                 'index'        => ++$key,
                 'created_by'   => 1,
                 'updated_by'   => 0,

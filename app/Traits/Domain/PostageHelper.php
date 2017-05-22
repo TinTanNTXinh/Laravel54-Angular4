@@ -35,7 +35,7 @@ trait PostageHelper
         foreach ($i_formulas as $key => $i_formula) {
             $found = null;
             switch ($i_formula['rule']) {
-                case 'S':
+                case 'Single':
                     $found = $formulas
                         ->where('rule', $i_formula['rule'])
                         ->where('name', $i_formula['name'])
@@ -44,23 +44,24 @@ trait PostageHelper
                         ->toArray();
                     array_push($founds, $found);
                     break;
-                case 'R':
-                case 'O':
+                case 'Range':
+                case 'Oil':
+                    // Convert to decimal
                     $found = $formulas
                         ->where('rule', $i_formula['rule'])
                         ->where('name', $i_formula['name'])
-                        ->where('from', '<=', $i_formula['from'])
-                        ->where('to', '>=', $i_formula['to'])
+                        ->where(\DB::raw('CAST(value1 AS DECIMAL(18, 2))'), '<=', floatval($i_formula['value1']))
+                        ->where(\DB::raw('CAST(value2 AS DECIMAL(18, 2))'), '<=', floatval($i_formula['value2']))
                         ->pluck('postage_id')
                         ->toArray();
                     array_push($founds, $found);
                     break;
-                case 'P':
+                case 'Pair':
                     $found = $formulas
                         ->where('rule', $i_formula['rule'])
                         ->where('name', $i_formula['name'])
-                        ->where('from', $i_formula['from'])
-                        ->where('to', $i_formula['to'])
+                        ->where('value1', $i_formula['value1'])
+                        ->where('value2', $i_formula['value2'])
                         ->pluck('postage_id')
                         ->toArray();
                     array_push($founds, $found);
