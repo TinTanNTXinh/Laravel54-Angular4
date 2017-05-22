@@ -27,10 +27,6 @@ import {TransportComponent} from './components/transport/transport.component';
 import {FormulaComponent} from './components/postage/formula.component';
 import {FormulaTransportComponent} from './components/transport/formula-transport.component';
 
-// My dynamic form
-import { DynamicFormComponent }         from './dynamic-form/dynamic-form.component';
-import { DynamicFormQuestionComponent } from './dynamic-form/dynamic-form-question.component';
-
 @NgModule({
     imports: [
         CommonModule,
@@ -59,8 +55,6 @@ import { DynamicFormQuestionComponent } from './dynamic-form/dynamic-form-questi
         TransportComponent,
         FormulaComponent,
         FormulaTransportComponent,
-        DynamicFormComponent,
-        DynamicFormQuestionComponent
     ],
     exports: [
         CommonModule,
@@ -88,8 +82,6 @@ import { DynamicFormQuestionComponent } from './dynamic-form/dynamic-form-questi
         TransportComponent,
         FormulaComponent,
         FormulaTransportComponent,
-        DynamicFormComponent,
-        DynamicFormQuestionComponent
     ]
 })
 export class SharedModule {
