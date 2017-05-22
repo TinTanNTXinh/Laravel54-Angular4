@@ -447,4 +447,12 @@ export class TransportComponent implements OnInit
 
     }
 
+    public a: number = 0;
+    public b: number = 0;
+    public c: number = 0;
+
+    computeC() {
+        this.c = Number(this.a) + Number(this.b);
+    }
+
 }

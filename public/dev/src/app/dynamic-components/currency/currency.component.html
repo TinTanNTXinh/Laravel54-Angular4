@@ -1,6 +1,6 @@
 <!--<input type="text" class="form-control" [(ngModel)]="currencyStringData" (ngModelChange)="pressed($event)">-->
 
 <div class="input-group m-b">
-    <input type="text" class="form-control" id="my-currency" [(ngModel)]="currencyStringData" (keyup)="keyUpped()">
+    <input [readonly]="readonly" type="text" class="form-control" id="my-currency" [(ngModel)]="currencyStringData" (keyup)="keyUpped()">
     <span class="input-group-addon">{{ SUFFIX }}</span>
 </div>

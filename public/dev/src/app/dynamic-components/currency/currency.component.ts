@@ -62,6 +62,8 @@ export class CurrencyComponent implements OnInit, ControlValueAccessor {
         this.SUFFIX = this.currencyHelperService.currency_signal;
     }
 
+    @Input() readonly: boolean = false;
+
     @Input() get numberData(): number {
         this.currencyStringData = this.numberHelperService.formatThousandsSeparator(this.currencyNumberData.toString());
         return this.currencyNumberData;

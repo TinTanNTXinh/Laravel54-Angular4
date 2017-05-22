@@ -99,6 +99,17 @@
                     <div class="panel-body">
                       <form class="bs-example form-horizontal">
                         <div class="row">
+                          <input type="text" class="form-control" name="a"
+                                 [(ngModel)]="a" (input)="computeC()">
+                          {{a}}
+                          <input type="text" class="form-control" name="b"
+                                 [(ngModel)]="b" (input)="computeC()">
+                          {{b}}
+                          <input type="text" class="form-control" name="c"
+                                 [ngModel]="c">
+                          {{c}}
+                        </div>
+                        <div class="row">
                           <div class="col-md-6">
                             <div class="row">
                               <div class="col-md-2"></div>
@@ -182,7 +193,8 @@
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Đơn giá</label>
                               <div class="col-lg-10">
-                                <currency [numberData]="transport.unit_price" [(ngModel)]="transport.unit_price" name="unit_price"></currency>
+                                <currency [numberData]="transport.unit_price" [ngModel]="transport.unit_price" [readonly]="true" name="unit_price"></currency>
+                                {{transport.unit_price}}
                               </div>
                             </div>
                             <div class="form-group">
