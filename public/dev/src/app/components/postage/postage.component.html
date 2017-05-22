@@ -100,100 +100,83 @@
                       <form class="bs-example form-horizontal">
                         <div class="row">
                           <div class="col-md-6">
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Khách hàng</label>
-                              <div class="col-lg-10">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label>Khách hàng</label>
                                 <autocomplete [data]="customers" [name]="'fullname'" [model_name]="'id'"
                                               [(ngModel)]="postage.customer_id"></autocomplete>
                               </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Phí giao xe</label>
-                              <div class="col-lg-10">
+                              <div class="col-md-6">
+                                <label>Phí giao xe</label>
                                 <input type="text" class="form-control"
                                        [(ngModel)]="postage.delivery_percent" name="delivery_percent">
                               </div>
                             </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Đơn giá</label>
-                              <div class="col-lg-10">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label>Đơn giá</label>
                                 <currency [numberData]="postage.unit_price" [(ngModel)]="postage.unit_price" name="unit_price"></currency>
                               </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Đơn vị tính</label>
-                              <div class="col-lg-10">
+                              <div class="col-md-6">
+                                <label>Đơn vị tính</label>
                                 <autocomplete [data]="units" [name]="'name'" [model_name]="'id'"
                                               [(ngModel)]="postage.unit_id"></autocomplete>
                               </div>
                             </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Ngày áp dụng</label>
-                              <div class="col-lg-10">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label>Ngày áp dụng</label>
                                 <datetime [(ngModel)]="postage.apply_date" name="apply_date"
                                           [timepicker]="false"
                                           [datepicker]="datepickerSettings"></datetime>
-                                {{postage.apply_date}}
                               </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Giờ áp dụng</label>
-                              <div class="col-lg-10">
-                                <datetime [(ngModel)]="postage.apply_time" name="apply_time"
+                              <div class="col-md-6">
+                                <label>Giờ áp dụng</label>
+                                <datetime [(ngModel)]="date3" name="apply_time"
                                           [timepicker]="timepickerSettings"
                                           [datepicker]="false"></datetime>
-                                {{getTime(postage.apply_time) | date: "medium"}}
                               </div>
                             </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Ghi chú</label>
-                              <div class="col-lg-10">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <label>Ghi chú</label>
                                 <input type="text" class="form-control"
                                        [(ngModel)]="postage.note" name="note">
                               </div>
                             </div>
                           </div>
                           <div class="col-md-6">
-                            <button class="btn btn-primary"
-                                    type="button"
-                                    [disabled]="!formulas.valid"
-                                    (click)="addFormula('Single')">
-                              Single
-                            </button>
-                            <button class="btn btn-primary"
-                                    type="button"
-                                    [disabled]="!formulas.valid"
-                                    (click)="addFormula('Range')">
-                              Range
-                            </button>
-                            <button class="btn btn-primary"
-                                    type="button"
-                                    [disabled]="!formulas.valid"
-                                    (click)="addFormula('Pair')">
-                              Pair
-                            </button>
+                            <div class="m-b-sm">
+                              <div class="btn-group">
+                                <button [disabled]="!formulas.valid"
+                                        (click)="addFormula('Single')" type="button" class="btn btn-info">Giá trị</button>
+                                <button [disabled]="!formulas.valid"
+                                        (click)="addFormula('Range')" type="button" class="btn btn-success">Khoảng</button>
+                                <button [disabled]="!formulas.valid"
+                                        (click)="addFormula('Pair')" type="button" class="btn btn-primary">Cặp</button>
+                              </div>
+                            </div>
                             <form class="form-horizontal"
                                   novalidate
-                                  (ngSubmit)="save()"
                                   [formGroup]="formulaForm">
                               <div formArrayName="formulas" *ngFor="let formula of formulas.controls; let i=index">
                                 <div class="panel-heading">
-                                  <span>Formula {{i + 1}}</span>
+                                  <span>Công thức {{i + 1}}</span>
                                   <span class="glyphicon glyphicon-remove pull-right" (click)="removeFormula(i)"></span>
                                 </div>
                                 <div class="panel-body" [formGroupName]="i">
                                   <formula [group]="formulaForm.controls.formulas.controls[i]"></formula>
                                 </div>
                               </div>
-                              <div class="form-group">
-                                <div class="col-md-4 col-md-offset-2">
-                                  <button class="btn btn-primary"
-                                          type="submit"
-                                          [disabled]="!formulaForm.valid">
-                                    Save
-                                  </button>
-                                </div>
-                              </div>
+                              <!--<div class="form-group">-->
+                                <!--<div class="col-md-4 col-md-offset-2">-->
+                                  <!--<button class="col-md-6 btn btn-primary"-->
+                                          <!--type="submit"-->
+                                          <!--[disabled]="!formulaForm.valid">-->
+                                    <!--Lưu-->
+                                  <!--</button>-->
+                                <!--</div>-->
+                              <!--</div>-->
                             </form>
                           </div>
                         </div>
@@ -201,7 +184,9 @@
                           <div class="col-sm-12">
                             <div class="form-group">
                               <div class="col-lg-offset-2 col-lg-10">
-                                <button *ngIf="!isEdit" type="button"
+                                <button *ngIf="!isEdit"
+                                        [disabled]="!formulaForm.valid"
+                                        type="button"
                                         class="btn m-b-xs w-xs btn-primary btn-rounded"
                                         (click)="addOne()">Thêm
                                 </button>

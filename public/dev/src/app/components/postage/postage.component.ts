@@ -133,6 +133,9 @@ export class PostageComponent implements OnInit
     }
 
     addOne(): void {
+        console.log('Saved: ' + JSON.stringify(this.formulaForm.value));
+        console.log('Saved: ' + JSON.stringify(this.postage));
+
         if (!this.validateOne()) return;
 
         this.httpClientService.post(this.prefix_url, {"postage": this.postage}).subscribe(
@@ -340,20 +343,20 @@ export class PostageComponent implements OnInit
                     value2: ''
                 });
                 break;
-            case 'Pair':
-                formula = this.fb.group({
-                    type: type,
-                    name: ['', [Validators.required]],
-                    value1: ['', [Validators.pattern('[a-zA-Z].*'), Validators.required]],
-                    value2: ['', [Validators.pattern('[a-zA-Z].*'), Validators.required]]
-                });
-                break;
             case 'Range':
                 formula = this.fb.group({
                     type: type,
                     name: ['', [Validators.required]],
                     value1: [0, [Validators.pattern('[0-9].*'), Validators.required]],
                     value2: [0, [Validators.pattern('[0-9].*'), Validators.required]]
+                });
+                break;
+            case 'Pair':
+                formula = this.fb.group({
+                    type: type,
+                    name: ['', [Validators.required]],
+                    value1: ['', [Validators.pattern('[a-zA-Z].*'), Validators.required]],
+                    value2: ['', [Validators.pattern('[a-zA-Z].*'), Validators.required]]
                 });
                 break;
             default:
@@ -367,12 +370,7 @@ export class PostageComponent implements OnInit
         control.removeAt(i);
     }
 
-    save(): void {
-        console.log(this.formulaForm);
-        console.log('Saved: ' + JSON.stringify(this.formulaForm.value));
-        console.log('Saved: ' + JSON.stringify(this.postage));
-    }
-
+    public date3: Date;
     public getTime(dt: Date): number {
         return dt && dt.getTime();
     }
