@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import {FormGroup, FormBuilder, FormArray, Validators} from '@angular/forms';
 
 import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
@@ -21,6 +21,7 @@ export class TransportComponent implements OnInit
     public customers: any[] = [];
     public trucks: any[] = [];
     public products: any[] = [];
+    public unit_name: string = '';
 
     /** ICommon **/
     title: string;
@@ -45,7 +46,7 @@ export class TransportComponent implements OnInit
     /** ISearch **/
     filtering: any;
 
-    constructor( private fb: FormBuilder
+    constructor(private fb: FormBuilder
         , private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
@@ -325,9 +326,7 @@ export class TransportComponent implements OnInit
     }
 
     displayColumn(): void {
-        let setting = {
-
-        };
+        let setting = {};
         for (let parent in setting) {
             for (let child of setting[parent]) {
                 if (!!this.header[child])
@@ -389,7 +388,7 @@ export class TransportComponent implements OnInit
     public selectedCustomer(event: any): void {
         console.log(event);
         // Nếu đã chọn ngày giờ vận chuyển tìm formula
-        if(!!event.id && event.id != 0) {
+        if (!!event.id && event.id != 0) {
             let find_formulas = {
                 customer_id: event.id,
                 transport_date: this.transport.transport_date,
@@ -403,7 +402,7 @@ export class TransportComponent implements OnInit
         this.httpClientService.get(`${this.prefix_url}/find-formulas?query=${JSON.stringify(find_formulas)}`).subscribe(
             (success: any) => {
                 let formulas = success['formulas'];
-                for(let formula of formulas) {
+                for (let formula of formulas) {
                     console.log(formula);
                     switch (formula.rule) {
                         case 'Single':
@@ -416,7 +415,8 @@ export class TransportComponent implements OnInit
                         case 'Pair':
                             this.addFormula(formula.rule, formula.name, '', '');
                             break;
-                        default: break;
+                        default:
+                            break;
                     }
                 }
             },
@@ -436,7 +436,9 @@ export class TransportComponent implements OnInit
 
         this.httpClientService.get(`${this.prefix_url}/find-postage?query=${JSON.stringify(formulas)}`).subscribe(
             (success: any) => {
-                console.log(success);
+                console.log('postage: ' + success.postage);
+                this.transport.unit_price = success.postage.unit_price;
+                this.unit_name = success.postage.unit_name;
             },
             (error: any) => {
                 this.toastrHelperService.showToastr('error');

@@ -74,7 +74,12 @@ trait PostageHelper
         $postage            = null;
         $result_postage_ids = collect($founds)->collapse();
         if (count($result_postage_ids) == count($i_formulas) && count($result_postage_ids->unique()) == 1) {
-            $postage = Postage::find($result_postage_ids->unique()->first());
+            $postage_id = $result_postage_ids->unique()->first();
+//            $postage = Postage::find($result_postage_ids->unique()->first());
+            $postage = Postage::where('postages.id', '=', $postage_id)
+                ->leftJoin('units', 'units.id', '=', 'postages.unit_id')
+                ->select('postages.*', 'units.name as unit_name')
+                ->first();
         }
         return [
             'postage' => $postage
