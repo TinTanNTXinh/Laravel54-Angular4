@@ -12,11 +12,13 @@ use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 use App\Traits\Domain\FormulaHelper;
 use App\Traits\Domain\PostageHelper;
+use App\Traits\Domain\TransportHelper;
+use App\Traits\Domain\CustomerHelper;
 use App\Transport;
 
 class TransportController extends Controller implements ICrud, IValidate
 {
-    use UserHelper, DBHelper, FormulaHelper, PostageHelper;
+    use UserHelper, DBHelper, FormulaHelper, PostageHelper, TransportHelper, CustomerHelper;
 
     private $first_day, $last_day, $today;
     private $user;
@@ -43,25 +45,7 @@ class TransportController extends Controller implements ICrud, IValidate
         }
 
         $this->table_name = 'transport';
-        $this->skeleton   = Transport::where('transports.active', true)
-            ->leftJoin('products', 'products.id', '=', 'transports.product_id')
-            ->leftJoin('customers', 'customers.id', '=', 'transports.customer_id')
-            ->leftJoin('trucks', 'trucks.id', '=', 'transports.truck_id')
-            ->leftJoin('truck_types', 'truck_types.id', '=', 'trucks.truck_type_id')
-            ->leftJoin('postages', 'postages.id', '=', 'transports.postage_id')
-            ->leftJoin('users as creators', 'creators.id', '=', 'transports.created_by')
-            ->leftJoin('users as updators', 'updators.id', '=', 'transports.updated_by')
-            ->orderBy('transports.transport_date', 'desc')
-            ->select('transports.*',
-                'products.name as product_name',
-                'customers.fullname as customer_fullname',
-                'trucks.area_code as truck_area_code',
-                'trucks.number_plate as truck_number_plate',
-                'creators.fullname as creator_fullname',
-                'updators.fullname as updator_fullname',
-                'truck_types.name as truck_type_name',
-                'postages.unit_price as postage_unit_price'
-            );
+        $this->skeleton   = $this->readAllTransport()['skeleton'];
     }
 
     /** API METHOD */
@@ -134,8 +118,11 @@ class TransportController extends Controller implements ICrud, IValidate
     {
         $transports = $this->skeleton->get();
 
+        $customers = $this->readAllCustomer()['skeleton']->get();
+
         return [
             'transports' => $transports,
+            'customers'  => $customers,
             'first_day'  => $this->first_day,
             'last_day'   => $this->last_day,
             'today'      => $this->today
