@@ -75,6 +75,7 @@ Route::group(['prefix' => 'v1'], function() {
 
         Route::group(['middleware' => 'transport', 'prefix' => 'transports'], function () {
             Route::get('/find-formulas', 'TransportController@getReadFormulas');
+            Route::get('/find-postage', 'TransportController@getReadPostage');
 
             Route::get('/', 'TransportController@getReadAll');
             Route::get('/search', 'TransportController@getSearchOne');

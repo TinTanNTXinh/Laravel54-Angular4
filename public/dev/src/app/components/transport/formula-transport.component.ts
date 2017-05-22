@@ -9,7 +9,7 @@ export class FormulaTransportComponent implements OnInit{
     @Input('group')
     public formulaForm: FormGroup;
 
-    public type: string;
+    public rule: string;
     public name: string;
     public value1: any;
     public value2: any;
@@ -18,7 +18,7 @@ export class FormulaTransportComponent implements OnInit{
     }
 
     ngOnInit() {
-        this.type = this.formulaForm.get('type').value;
+        this.rule = this.formulaForm.get('rule').value;
         this.name = this.formulaForm.get('name').value;
         this.value1 = this.formulaForm.get('value1').value;
         this.value2 = this.formulaForm.get('value2').value;

@@ -284,6 +284,8 @@ class TransportController extends Controller implements ICrud, IValidate
         $customer_id    = $data['customer_id'];
 //        $transport_date = $data['transport_date'];
 
+//        $formulas = $this->findFormulas($customer_id, $transport_date);
+
         $formulas = $this->findFormulas($customer_id);
 
         return $formulas;
@@ -299,10 +301,11 @@ class TransportController extends Controller implements ICrud, IValidate
     public function readPostage($data)
     {
         $i_customer_id    = $data['customer_id'];
-        $i_transport_date = $data['transport_date'];
+//        $i_transport_date = $data['transport_date'];
         $i_formulas       = $data['formulas'];
 
-        $postage = $this->findPostage($i_formulas, $i_customer_id, $i_transport_date);
+//        $postage = $this->findPostage($i_formulas, $i_customer_id, $i_transport_date);
+        $postage = $this->findPostage($i_formulas, $i_customer_id);
 
         return $postage;
     }

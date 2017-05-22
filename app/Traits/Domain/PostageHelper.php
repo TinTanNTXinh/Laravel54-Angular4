@@ -34,12 +34,12 @@ trait PostageHelper
         $founds = [];
         foreach ($i_formulas as $key => $i_formula) {
             $found = null;
-            switch ($i_formula['rule']) {
+            switch ($i_formula->rule) {
                 case 'Single':
                     $found = $formulas
-                        ->where('rule', $i_formula['rule'])
-                        ->where('name', $i_formula['name'])
-                        ->where('value', $i_formula['value'])
+                        ->where('rule', $i_formula->rule)
+                        ->where('name', $i_formula->name)
+                        ->where('value1', $i_formula->value1)
                         ->pluck('postage_id')
                         ->toArray();
                     array_push($founds, $found);
@@ -48,20 +48,20 @@ trait PostageHelper
                 case 'Oil':
                     // Convert to decimal
                     $found = $formulas
-                        ->where('rule', $i_formula['rule'])
-                        ->where('name', $i_formula['name'])
-                        ->where(\DB::raw('CAST(value1 AS DECIMAL(18, 2))'), '<=', floatval($i_formula['value1']))
-                        ->where(\DB::raw('CAST(value2 AS DECIMAL(18, 2))'), '<=', floatval($i_formula['value2']))
+                        ->where('rule', $i_formula->rule)
+                        ->where('name', $i_formula->name)
+                        ->where(\DB::raw('CAST(value1 AS DECIMAL(18, 2))'), '<=', floatval($i_formula->value1))
+                        ->where(\DB::raw('CAST(value2 AS DECIMAL(18, 2))'), '<=', floatval($i_formula->value2))
                         ->pluck('postage_id')
                         ->toArray();
                     array_push($founds, $found);
                     break;
                 case 'Pair':
                     $found = $formulas
-                        ->where('rule', $i_formula['rule'])
-                        ->where('name', $i_formula['name'])
-                        ->where('value1', $i_formula['value1'])
-                        ->where('value2', $i_formula['value2'])
+                        ->where('rule', $i_formula->rule)
+                        ->where('name', $i_formula->name)
+                        ->where('value1', $i_formula->value1)
+                        ->where('value2', $i_formula->value2)
                         ->pluck('postage_id')
                         ->toArray();
                     array_push($founds, $found);

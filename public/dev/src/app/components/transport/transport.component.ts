@@ -339,18 +339,18 @@ export class TransportComponent implements OnInit
     /** My Function **/
     formulaForm: FormGroup;
 
-    addFormula(type: string, name: string, value1: any, value2: any): void {
+    addFormula(rule: string, name: string, value1: any, value2: any): void {
         const control = <FormArray>this.formulaForm.controls['formulas'];
-        const addrCtrl = this.buildFormula(type, name, value1, value2);
+        const addrCtrl = this.buildFormula(rule, name, value1, value2);
         control.push(addrCtrl);
     }
 
-    buildFormula(type: string, name: string, value1: any, value2: any): FormGroup {
+    buildFormula(rule: string, name: string, value1: any, value2: any): FormGroup {
         let formula;
-        switch (type) {
+        switch (rule) {
             case 'Single':
                 formula = this.fb.group({
-                    type: type,
+                    rule: rule,
                     name: name,
                     value1: value1,
                     value2: ''
@@ -359,7 +359,7 @@ export class TransportComponent implements OnInit
             case 'Range':
             case 'Oil':
                 formula = this.fb.group({
-                    type: type,
+                    rule: rule,
                     name: name,
                     value1: value1,
                     value2: 0
@@ -367,7 +367,7 @@ export class TransportComponent implements OnInit
                 break;
             case 'Pair':
                 formula = this.fb.group({
-                    type: type,
+                    rule: rule,
                     name: name,
                     value1: value1,
                     value2: value2
@@ -424,6 +424,25 @@ export class TransportComponent implements OnInit
                 this.toastrHelperService.showToastr('error');
             }
         );
+    }
+
+    public findPostage(): void {
+        console.log(this.formulaForm.value.formulas);
+
+        let formulas = {
+            customer_id: this.transport.customer_id,
+            formulas: this.formulaForm.value.formulas
+        };
+
+        this.httpClientService.get(`${this.prefix_url}/find-postage?query=${JSON.stringify(formulas)}`).subscribe(
+            (success: any) => {
+                console.log(success);
+            },
+            (error: any) => {
+                this.toastrHelperService.showToastr('error');
+            }
+        );
+
     }
 
 }
