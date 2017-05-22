@@ -1,0 +1,15 @@
+<div [formGroup]="formulaForm">
+  <div class="form-group">
+    <label class="col-md-2 control-label">{{ name }}</label>
+    <div class="col-md-5">
+      <input type="text"
+             class="form-control"
+             formControlName="value1">
+    </div>
+    <div class="col-md-5" *ngIf="type == 'Pair'">
+      <input type="text"
+             class="form-control"
+             formControlName="value2">
+    </div>
+  </div>
+</div>

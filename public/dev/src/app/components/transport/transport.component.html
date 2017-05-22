@@ -108,7 +108,13 @@
                               </div>
                             </div>
                             <!--Reactive form-->
-                            <dynamic-form [questions]="questions"></dynamic-form>
+                            <form class="form-horizontal"
+                                  novalidate
+                                  [formGroup]="formulaForm">
+                              <div formArrayName="formulas" *ngFor="let formula of formulas.controls; let i=index">
+                                <formula-transport [group]="formulaForm.controls.formulas.controls[i]"></formula-transport>
+                              </div>
+                            </form>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group">
@@ -126,28 +132,7 @@
                               </div>
                             </div>
                             <div class="form-group">
-                              <label class="col-lg-2 control-label">Nơi nhận</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="transport.code" name="code">
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Nơi giao</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="transport.code" name="code">
-                              </div>
-                            </div>
-                            <div class="form-group">
                               <label class="col-lg-2 control-label">Hàng</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="transport.code" name="code">
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Mã hàng</label>
                               <div class="col-lg-10">
                                 <input type="text" class="form-control"
                                        [(ngModel)]="transport.code" name="code">

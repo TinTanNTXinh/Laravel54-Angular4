@@ -1,17 +1,15 @@
 import {Component, OnInit} from '@angular/core';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
 
-import { QuestionService } from '../../dynamic-form/question.service';
-
 @Component({
     selector: 'app-transport',
     templateUrl: './transport.component.html',
-    styles: [],
-    providers:  [QuestionService]
+    styles: []
 })
 export class TransportComponent implements OnInit
     , ICommon, ICrud, IDatePicker, ISearch {
@@ -20,7 +18,6 @@ export class TransportComponent implements OnInit
     public transports: any[] = [];
     public transports_search: any[] = [];
     public transport: any;
-    questions: any[];
 
     /** ICommon **/
     title: string;
@@ -44,12 +41,11 @@ export class TransportComponent implements OnInit
     /** ISearch **/
     filtering: any;
 
-    constructor( service: QuestionService
+    constructor( private fb: FormBuilder
         , private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
         , private domHelperService: DomHelperService) {
-        this.questions = service.getQuestions();
     }
 
     ngOnInit(): void {
@@ -73,6 +69,14 @@ export class TransportComponent implements OnInit
             body: '',
             footer: ''
         };
+
+        this.formulaForm = this.fb.group({
+            formulas: this.fb.array([])
+            // Them moi
+            // formulas: this.fb.array([ this.buildFormula('Single', 'AAA', '') ])
+            // Chinh sua
+            // formulas: this.fb.array([ this.buildFormulaEdit() ])
+        });
     }
 
     /** ICommon **/
@@ -305,4 +309,51 @@ export class TransportComponent implements OnInit
     }
 
     /** My Function **/
+    formulaForm: FormGroup;
+
+    get formulas(): FormArray{
+        return <FormArray>this.formulaForm.get('formulas');
+    }
+
+    addFormula(type: string, name: string, value1: any, value2: any): void {
+        this.formulas.push(this.buildFormula(type, name, value1, value2));
+    }
+
+    buildFormula(type: string, name: string, value1: any, value2?: any): FormGroup {
+        let formula;
+        switch (type) {
+            case 'Single':
+                formula = this.fb.group({
+                    type: type,
+                    name: [name, [Validators.required]],
+                    value1: [value1, [Validators.required]],
+                    value2: ''
+                });
+                break;
+            case 'Range':
+                formula = this.fb.group({
+                    type: type,
+                    name: [name, [Validators.required]],
+                    value1: [value1, [Validators.pattern('[0-9].*'), Validators.required]],
+                    value2: [0, [Validators.pattern('[0-9].*'), Validators.required]]
+                });
+                break;
+            case 'Pair':
+                formula = this.fb.group({
+                    type: type,
+                    name: [name, [Validators.required]],
+                    value1: [value1, [Validators.pattern('[a-zA-Z].*'), Validators.required]],
+                    value2: [value2, [Validators.pattern('[a-zA-Z].*'), Validators.required]]
+                });
+                break;
+            default:
+                break;
+        }
+        return formula;
+    }
+
+    removeFormula(i: number) {
+        const control = <FormArray>this.formulaForm.controls['formulas'];
+        control.removeAt(i);
+    }
 }
