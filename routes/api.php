@@ -74,6 +74,8 @@ Route::group(['prefix' => 'v1'], function() {
         });
 
         Route::group(['middleware' => 'transport', 'prefix' => 'transports'], function () {
+            Route::get('/find-formulas', 'TransportController@getReadFormulas');
+
             Route::get('/', 'TransportController@getReadAll');
             Route::get('/search', 'TransportController@getSearchOne');
             Route::get('/{id}', 'TransportController@getReadOne');
@@ -81,6 +83,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::put('/', 'TransportController@putUpdateOne');
             Route::patch('/', 'TransportController@patchDeactivateOne');
             Route::delete('/{id}', 'TransportController@deleteDeleteOne');
+
         });
     });
 });

@@ -18,6 +18,9 @@ export class TransportComponent implements OnInit
     public transports: any[] = [];
     public transports_search: any[] = [];
     public transport: any;
+    public customers: any[] = [];
+    public trucks: any[] = [];
+    public products: any[] = [];
 
     /** ICommon **/
     title: string;
@@ -34,6 +37,7 @@ export class TransportComponent implements OnInit
     /** IDatePicker **/
     range_date: any[];
     datepickerSettings: any;
+    timepickerSettings: any;
     datepicker_from: Date;
     datepicker_to: Date;
     datepickerToOpts: any = {};
@@ -54,6 +58,7 @@ export class TransportComponent implements OnInit
         this.range_date = this.dateHelperService.range_date;
         this.refreshData();
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
+        this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
             code: {
                 title: 'Mã'
@@ -73,7 +78,7 @@ export class TransportComponent implements OnInit
         this.formulaForm = this.fb.group({
             formulas: this.fb.array([])
             // Them moi
-            // formulas: this.fb.array([ this.buildFormula('Single', 'AAA', '') ])
+            // formulas: this.fb.array([ this.buildFormula('Pair', 'AAA', '', '') ])
             // Chinh sua
             // formulas: this.fb.array([ this.buildFormulaEdit() ])
         });
@@ -94,6 +99,9 @@ export class TransportComponent implements OnInit
 
     reloadData(arr_data: any[]): void {
         this.transports = [];
+        this.customers = arr_data['customers'];
+        this.trucks = arr_data['trucks'];
+        this.products = arr_data['products'];
     }
 
     refreshData(): void {
@@ -119,7 +127,27 @@ export class TransportComponent implements OnInit
     clearOne(): void {
         this.transport = {
             code: '',
-            name: ''
+            transport_date: Date,
+            type1: '',
+            quantum_product: 0,
+            revenue: 0,
+            receive: 0,
+            delivery: 0,
+            carrying: 0,
+            parking: 0,
+            fine: 0,
+            phi_tang_bo: 0,
+            add_score: 0,
+            voucher_number: '',
+            quantum_product_on_voucher: '',
+            receiver: '',
+            note: '',
+            truck_id: 0,
+            product_id: 0,
+            customer_id: 0,
+            postage_id: 0,
+            fuel_id: 0,
+            unit_price: 0
         };
     }
 
@@ -311,39 +339,37 @@ export class TransportComponent implements OnInit
     /** My Function **/
     formulaForm: FormGroup;
 
-    get formulas(): FormArray{
-        return <FormArray>this.formulaForm.get('formulas');
-    }
-
     addFormula(type: string, name: string, value1: any, value2: any): void {
-        this.formulas.push(this.buildFormula(type, name, value1, value2));
+        const control = <FormArray>this.formulaForm.controls['formulas'];
+        const addrCtrl = this.buildFormula(type, name, value1, value2);
+        control.push(addrCtrl);
     }
 
-    buildFormula(type: string, name: string, value1: any, value2?: any): FormGroup {
+    buildFormula(type: string, name: string, value1: any, value2: any): FormGroup {
         let formula;
         switch (type) {
             case 'Single':
                 formula = this.fb.group({
                     type: type,
-                    name: [name, [Validators.required]],
-                    value1: [value1, [Validators.required]],
+                    name: name,
+                    value1: value1,
                     value2: ''
                 });
                 break;
             case 'Range':
                 formula = this.fb.group({
                     type: type,
-                    name: [name, [Validators.required]],
-                    value1: [value1, [Validators.pattern('[0-9].*'), Validators.required]],
-                    value2: [0, [Validators.pattern('[0-9].*'), Validators.required]]
+                    name: name,
+                    value1: value1,
+                    value2: 0
                 });
                 break;
             case 'Pair':
                 formula = this.fb.group({
                     type: type,
-                    name: [name, [Validators.required]],
-                    value1: [value1, [Validators.pattern('[a-zA-Z].*'), Validators.required]],
-                    value2: [value2, [Validators.pattern('[a-zA-Z].*'), Validators.required]]
+                    name: name,
+                    value1: value1,
+                    value2: value2
                 });
                 break;
             default:
@@ -356,4 +382,46 @@ export class TransportComponent implements OnInit
         const control = <FormArray>this.formulaForm.controls['formulas'];
         control.removeAt(i);
     }
+
+    transport_time: Date;
+
+    public selectedCustomer(event: any): void {
+        console.log(event);
+        // Nếu đã chọn ngày giờ vận chuyển tìm formula
+        if(!!event.id && event.id != 0) {
+            let find_formulas = {
+                customer_id: event.id,
+                transport_date: this.transport.transport_date,
+                transport_time: this.transport_time
+            };
+            this.findFormulas(find_formulas);
+        }
+    }
+
+    public findFormulas(find_formulas: {}) {
+        this.httpClientService.get(`${this.prefix_url}/find-formulas?query=${JSON.stringify(find_formulas)}`).subscribe(
+            (success: any) => {
+                let formulas = success['formulas'];
+                for(let formula of formulas) {
+                    console.log(formula);
+                    switch (formula.rule) {
+                        case 'S':
+                            this.addFormula('Single', formula.name, '', '');
+                            break;
+                        case 'R':
+                            this.addFormula('Range', formula.name, 0, 0);
+                            break;
+                        case 'P':
+                            this.addFormula('Pair', formula.name, '', '');
+                            break;
+                        default: break;
+                    }
+                }
+            },
+            (error: any) => {
+                this.toastrHelperService.showToastr('error');
+            }
+        );
+    }
+
 }

@@ -41,6 +41,7 @@ export class UserComponent implements OnInit
     /** IDatePicker **/
     range_date: any[];
     datepickerSettings: any;
+    timepickerSettings: any;
     datepicker_from: Date;
     datepicker_to: Date;
     datepickerToOpts: any = {};
@@ -60,6 +61,7 @@ export class UserComponent implements OnInit
         this.range_date = this.dateHelperService.range_date;
         this.refreshData();
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
+        this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
             code: {
                 title: 'Mã'

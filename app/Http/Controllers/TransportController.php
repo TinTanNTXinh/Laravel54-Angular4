@@ -14,11 +14,14 @@ use App\Traits\Domain\FormulaHelper;
 use App\Traits\Domain\PostageHelper;
 use App\Traits\Domain\TransportHelper;
 use App\Traits\Domain\CustomerHelper;
+use App\Traits\Domain\TruckHelper;
+use App\Traits\Domain\ProductHelper;
 use App\Transport;
 
 class TransportController extends Controller implements ICrud, IValidate
 {
-    use UserHelper, DBHelper, FormulaHelper, PostageHelper, TransportHelper, CustomerHelper;
+    use UserHelper, DBHelper, FormulaHelper, PostageHelper
+        , TransportHelper, CustomerHelper, TruckHelper, ProductHelper;
 
     private $first_day, $last_day, $today;
     private $user;
@@ -119,10 +122,14 @@ class TransportController extends Controller implements ICrud, IValidate
         $transports = $this->skeleton->get();
 
         $customers = $this->readAllCustomer()['skeleton']->get();
+        $trucks = $this->readAllTruck()['skeleton']->get();
+        $products = $this->readAllProduct()['skeleton']->get();
 
         return [
             'transports' => $transports,
             'customers'  => $customers,
+            'trucks'     => $trucks,
+            'products'   => $products,
             'first_day'  => $this->first_day,
             'last_day'   => $this->last_day,
             'today'      => $this->today
@@ -275,9 +282,9 @@ class TransportController extends Controller implements ICrud, IValidate
     public function readFormulas($data)
     {
         $customer_id    = $data['customer_id'];
-        $transport_date = $data['transport_date'];
+//        $transport_date = $data['transport_date'];
 
-        $formulas = $this->findFormulas($customer_id, $transport_date);
+        $formulas = $this->findFormulas($customer_id);
 
         return $formulas;
     }
