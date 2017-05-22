@@ -7,6 +7,15 @@ use App\Postage;
 
 trait PostageHelper
 {
+    public function readAllPostage()
+    {
+        $skeleton = Postage::whereActive(true);
+
+        return [
+            'skeleton' => $skeleton
+        ];
+    }
+
     public function findPostage($i_formulas, $i_customer_id, $i_transport_date = null)
     {
         if(!isset($i_transport_date))

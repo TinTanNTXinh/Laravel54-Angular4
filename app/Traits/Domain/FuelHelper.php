@@ -6,6 +6,15 @@ use App\Fuel;
 
 trait FuelHelper
 {
+    public function readAllFuel($type)
+    {
+        $skeleton = Fuel::whereActive(true)->where('type', $type);
+
+        return [
+            'skeleton' => $skeleton
+        ];
+    }
+
     public function currentFuel($type, $apply_date = null)
     {
         if(!isset($apply_date))

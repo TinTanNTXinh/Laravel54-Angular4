@@ -7,6 +7,15 @@ use App\Postage;
 
 trait FormulaHelper
 {
+    public function readAllFormula()
+    {
+        $skeleton = Formula::whereActive(true);
+
+        return [
+            'skeleton' => $skeleton
+        ];
+    }
+
     public function findFormulas($customer_id, $transport_date = null)
     {
         if(!isset($transport_date))
