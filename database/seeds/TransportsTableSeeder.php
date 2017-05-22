@@ -17,7 +17,9 @@ class TransportsTableSeeder extends Seeder
         \App\Transport::create([
             'code'             => $this->generateCode(\App\Transport::class, 'TRANSPORT'),
             'transport_date'   => date('Y-m-d h:i:s'),
-            'type'             => 'Bình thường',
+            'type1'            => 'NORMAL',
+            'type2'            => '',
+            'type3'            => '',
             'quantum_product'  => 100,
             'revenue'          => 14900000,
             'profit'           => 13455000,
@@ -48,13 +50,16 @@ class TransportsTableSeeder extends Seeder
             'truck_id'     => 1,
             'product_id'   => 1,
             'customer_id'  => 1,
-            'postage_id'   => 1
+            'postage_id'   => 1,
+            'fuel_id'      => 0
         ]);
 
         \App\Transport::create([
             'code'             => $this->generateCode(\App\Transport::class, 'TRANSPORT'),
             'transport_date'   => date('Y-m-d h:i:s'),
-            'type'             => 'Bình thường',
+            'type1'            => 'NORMAL',
+            'type2'            => '',
+            'type3'            => '',
             'quantum_product'  => 200,
             'revenue'          => 46910000,
             'profit'           => 42224000,
@@ -85,14 +90,17 @@ class TransportsTableSeeder extends Seeder
             'truck_id'     => 2,
             'product_id'   => 2,
             'customer_id'  => 1,
-            'postage_id'   => 2
+            'postage_id'   => 2,
+            'fuel_id'      => 0
         ]);
 
         /* A Chau */
         \App\Transport::create([
             'code'             => $this->generateCode(\App\Transport::class, 'TRANSPORT'),
             'transport_date'   => date('Y-m-d h:i:s'),
-            'type'             => 'Bình thường',
+            'type1'            => 'NORMAL',
+            'type2'            => '',
+            'type3'            => '',
             'quantum_product'  => 5000,
             'revenue'          => 8015000,
             'profit'           => 7258500,
@@ -123,7 +131,8 @@ class TransportsTableSeeder extends Seeder
             'truck_id'     => 3,
             'product_id'   => 6,
             'customer_id'  => 2,
-            'postage_id'   => 4
+            'postage_id'   => 4,
+            'fuel_id'      => 0
         ]);
     }
 }

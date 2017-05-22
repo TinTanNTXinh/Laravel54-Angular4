@@ -37,6 +37,7 @@ class CreateCostsTable extends Migration
             $table->dateTime('updated_date')->nullable()->comment('Ngày cập nhật');
             $table->boolean('active')->default(false)->comment('Kích hoạt');
             $table->integer('truck_id')->unsigned();
+            $table->integer('invoice_id')->unsigned();
             $table->timestamps();
         });
     }

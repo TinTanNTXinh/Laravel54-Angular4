@@ -17,7 +17,18 @@ class CreateTransportsTable extends Migration
             $table->increments('id');
             $table->string('code')->unique()->comment('Mã');
             $table->dateTime('transport_date')->comment('Ngày vận chuyển');
-            $table->enum('type', ['Bình thường', 'Khống'])->comment();
+            $table->enum('type1', ['NORMAL', 'BLANK'])->comment('Đơn hàng thường hay khống');
+            $table->enum('type2', [
+                '',
+                'CUSTOMER-HD-NOTFULL',
+                'CUSTOMER-HD-FULL',
+                'CUSTOMER-PTT-NOTFULL',
+                'CUSTOMER-PTT-FULL'
+            ])->comment('Đã xuất cho khách hàng - HĐ hoặc PTT - Xuất đủ hay chưa');
+            $table->enum('type3', [
+                '',
+                'GARAGE-PTT-FULL'
+            ])->comment('Đã xuất cho nhà xe - PTT - Xuất đủ');
             $table->integer('quantum_product')->comment('Số lượng sản phẩm');
             $table->decimal('revenue', 18, 0)->comment('Doanh thu');
             $table->decimal('profit', 18, 0)->comment('Lợi nhuận');
@@ -49,6 +60,7 @@ class CreateTransportsTable extends Migration
             $table->integer('product_id')->unsigned();
             $table->integer('customer_id')->unsigned();
             $table->integer('postage_id')->unsigned();
+            $table->integer('fuel_id')->unsigned()->comment('Mã giá dầu nếu trong công thức có giá dầu');
             $table->timestamps();
         });
     }

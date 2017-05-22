@@ -11,6 +11,12 @@ TRANSPORT
 - Không thể sửa/xóa đơn hàng đã xuất hóa đơn, hoặc phiếu thanh toán.
 Mẹo: xóa HĐ hoặc PTT rồi sửa/xóa.
 
+* Trạng thái
+ĐH Khống hay thường
+'' or Nhà xe or KH
+'' or HĐ or PTT
+Đủ or chưa
+
 POSTAGE vs FORMULA
 * Lấy mẫu công thức (Nếu có):
 - INPUT: customer_id, transport_date (Lấy ngày hiện tại)
@@ -57,3 +63,8 @@ INVOICE
 
 * Sửa/xóa HĐ, PTT
 - Không thể sửa/xóa HĐ, PTT đã trả đủ.
+
+* Trạng thái
+KH or Nhà xe
+HĐ or PTT
+khống hay thường

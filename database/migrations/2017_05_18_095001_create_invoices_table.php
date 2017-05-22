@@ -16,9 +16,9 @@ class CreateInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->unique()->comment('Mã');
-            $table->enum('kind', ['customer', 'garage']);
-            $table->enum('type', ['HD', 'PTT']);
-            $table->enum('status', []);
+            $table->enum('type1', ['NORMAL', 'BLANK'])->comment('HĐ or PTT thường hay khống');
+            $table->enum('type2', ['', 'CUSTOMER-HD', 'CUSTOMER-PTT'])->comment('Hóa đơn KH - PTT KH');
+            $table->enum('type3', ['', 'GARAGE-PTT'])->comment('PTT nhà xe');
 
             $table->integer('customer_id')->unsigned();
             $table->decimal('total_revenue', 18, 0)->comment('Tổng doanh thu');
