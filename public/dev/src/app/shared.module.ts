@@ -26,6 +26,10 @@ import {PostageComponent} from './components/postage/postage.component';
 import {TransportComponent} from './components/transport/transport.component';
 import {FormulaComponent} from './components/postage/formula.component';
 import {FormulaTransportComponent} from './components/transport/formula-transport.component';
+import {LubeComponent} from './components/lube/lube.component';
+import {OilComponent} from './components/oil/oil.component';
+import {CustomerComponent} from './components/customer/customer.component';
+import {DriverComponent} from './components/driver/driver.component';
 
 @NgModule({
     imports: [
@@ -55,6 +59,10 @@ import {FormulaTransportComponent} from './components/transport/formula-transpor
         TransportComponent,
         FormulaComponent,
         FormulaTransportComponent,
+        LubeComponent,
+        OilComponent,
+        CustomerComponent,
+        DriverComponent
     ],
     exports: [
         CommonModule,
@@ -82,6 +90,10 @@ import {FormulaTransportComponent} from './components/transport/formula-transpor
         TransportComponent,
         FormulaComponent,
         FormulaTransportComponent,
+        LubeComponent,
+        OilComponent,
+        CustomerComponent,
+        DriverComponent
     ]
 })
 export class SharedModule {
