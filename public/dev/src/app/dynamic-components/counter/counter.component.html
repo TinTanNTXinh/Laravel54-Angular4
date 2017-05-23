@@ -2,7 +2,7 @@
   <span (click)="increase()" class="input-group-addon"><i class="fa fa-plus" aria-hidden="true"></i></span>
   <input type="text" class="form-control"
          [readonly]="readonly"
-         [(ngModel)]="value"
+         [(ngModel)]="counter"
          (input)="inputed($event.target.value)">
   <span (click)="decrement()" class="input-group-addon"><i class="fa fa-minus" aria-hidden="true"></i></span>
 </div>

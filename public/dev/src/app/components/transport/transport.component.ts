@@ -14,6 +14,8 @@ import {DomHelperService} from '../../services/helpers/dom.helper';
 export class TransportComponent implements OnInit
     , ICommon, ICrud, IDatePicker, ISearch {
 
+    public num: number = 0;
+
     /** My Variables **/
     public transports: any[] = [];
     public transports_search: any[] = [];

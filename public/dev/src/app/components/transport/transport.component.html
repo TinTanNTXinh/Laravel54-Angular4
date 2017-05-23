@@ -106,6 +106,10 @@
                               </div>
                               <div class="panel-body">
                                 <div class="row">
+                                  <counter [(counter)]="num"></counter>
+                                  {{num}}
+                                </div>
+                                <div class="row">
                                     <div class="col-sm-1"></div>
                                     <div class="col-sm-5">
                                       <label>Ngày vận chuyển</label>
@@ -412,7 +416,7 @@
                       Danh sách chứng từ
                     </div>
                     <div class="panel-body">
-                      <xdatatable [body]="vouchers" [header]="header_voucher"></xdatatable>
+                      <!--<xdatatable [body]="vouchers" [header]="header_voucher"></xdatatable>-->
                     </div>
                   </div>
                 </div>

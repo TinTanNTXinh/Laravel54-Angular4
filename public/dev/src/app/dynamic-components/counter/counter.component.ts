@@ -1,51 +1,13 @@
-import {Component, OnInit, Input, Output, EventEmitter, forwardRef} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'counter',
-    templateUrl: 'counter.component.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => CounterComponent),
-            multi: true
-        }
-    ]
+    templateUrl: 'counter.component.html'
 })
-export class CounterComponent implements OnInit, ControlValueAccessor {
-
-    /** NgModel */
-    @Input('value') _value: number = 0;
-    onChange: any = () => {
-    };
-    onTouched: any = () => {
-    };
-
-    get value() {
-        return this._value;
-    }
-
-    set value(val) {
-        this._value = val;
-        this.onChange(val);
-        this.onTouched();
-    }
-
-    registerOnChange(fn) {
-        this.onChange = fn;
-    }
-
-    registerOnTouched(fn) {
-        this.onTouched = fn;
-    }
-
-    writeValue(value) {
-        if (value) {
-            this._value = value;
-        }
-    }
+export class CounterComponent implements OnInit {
 
     /** Variables */
+    private counterValue = 0;
 
     constructor() {
     }
@@ -53,19 +15,31 @@ export class CounterComponent implements OnInit, ControlValueAccessor {
     ngOnInit() {
     }
 
+    @Input()
+    get counter() {
+        return this.counterValue;
+    }
+
+    @Output() counterChange = new EventEmitter();
+
+    set counter(val) {
+        this.counterValue = val;
+        this.counterChange.emit(this.counterValue);
+    }
+
     @Input() readonly: boolean = false;
 
     @Output() onInputed: EventEmitter<number> = new EventEmitter();
 
     public inputed(event: any) {
-        this.onInputed.emit(this.value);
+        this.onInputed.emit(this.counter);
     }
 
     public increase(): void {
-        this.value++;
+        this.counter++;
     }
 
     public decrement(): void {
-        this.value--;
+        this.counter--;
     }
 }
