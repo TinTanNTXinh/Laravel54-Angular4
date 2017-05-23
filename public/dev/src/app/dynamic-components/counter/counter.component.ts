@@ -15,7 +15,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 export class CounterComponent implements OnInit, ControlValueAccessor {
 
     /** NgModel */
-    @Input('value') _value: any = null;
+    @Input('value') _value: number = 0;
     onChange: any = () => {
     };
     onTouched: any = () => {
