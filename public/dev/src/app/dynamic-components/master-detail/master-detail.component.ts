@@ -13,18 +13,11 @@ export class MasterDetailComponent implements OnInit {
 
     /** Variables Master-Detail */
     public master_data: any[] = [];
-    public detail_data: any[] = [];
-    private header_master_data: any[] = [];
-    private header_detail_data: any[] = [];
-    private setup_data: any = {
-        link: '',
-        json_name: ''
-    };
     public activeRow: number = 0;
 
     /** Variable selected row */
-    selectedRow : number;
-    setClickedRow : Function;
+    selectedRow: number;
+    setClickedRow: Function;
 
     /** Variable sort index */
     public isAsc: boolean = true;
@@ -37,10 +30,10 @@ export class MasterDetailComponent implements OnInit {
     pageSize: number = 10;
 
     constructor(private httpClientService: HttpClientService
-            , private toastrHelperService: ToastrHelperService,
-            private paginationHelperService: PaginationHelperService) {
+        , private toastrHelperService: ToastrHelperService,
+                private paginationHelperService: PaginationHelperService) {
         this.selectedRow = 0;
-        this.setClickedRow = function(index){
+        this.setClickedRow = function (index) {
             this.selectedRow = index;
         };
     }
@@ -48,43 +41,21 @@ export class MasterDetailComponent implements OnInit {
     ngOnInit() {
 
     }
+
     /** Input */
-    @Input() get setup(): string {
-        return this.setup_data;
-    }
-
-    set setup(obj: string) {
-        this.setup_data = obj;
-    }
-
-    @Input() get header_master(): any {
-        return this.header_master_data;
-    }
-    set header_master(obj: any) {
-        this.header_master_data = obj;
-    }
-
-    @Input() get header_detail(): any {
-        return this.header_detail_data;
-    }
-    set header_detail(obj: any) {
-        this.header_detail_data = obj;
-    }
+    @Input() setup: any = {};
+    @Input() header_master: any = {};
+    @Input() header_detail: any = {};
+    @Input() detail: any[] = [];
 
     @Input() get master(): any[] {
         return this.master_data;
     }
+
     set master(obj: any[]) {
         this.master_data = obj;
-        if(this.master_data.length > 0)
+        if (this.master_data.length > 0)
             this.setPage(1);
-    }
-
-    @Input() get detail(): any[] {
-        return this.detail_data;
-    }
-    set detail(obj: any[]) {
-        this.detail_data = obj;
     }
 
     /** Output */
@@ -93,9 +64,9 @@ export class MasterDetailComponent implements OnInit {
             this.activeRow = 0;
             return;
         }
-        this.httpClientService.get(`${this.setup_data.link}/${id}`).subscribe(
+        this.httpClientService.get(`${this.setup.link}/${id}`).subscribe(
             (success: any) => {
-                this.detail_data = success[this.setup_data.json_name];
+                this.detail = success[this.setup.json_name];
                 this.activeRow = id;
             },
             (error: any) => {
@@ -129,7 +100,7 @@ export class MasterDetailComponent implements OnInit {
 
     /** Visible column */
     public visible(value): boolean {
-        if(typeof value === "undefined")
+        if (typeof value === "undefined")
             return true;
         return value;
     }

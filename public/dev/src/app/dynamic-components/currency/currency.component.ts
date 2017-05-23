@@ -74,7 +74,7 @@ export class CurrencyComponent implements OnInit, ControlValueAccessor {
 
     @Output() onInputed: EventEmitter<number> = new EventEmitter();
 
-    inputed(event: any) {
+    public inputed(event: any): void {
         this.currencyStringData = this.numberHelperService.formatThousandsSeparator(event);
         this.currencyNumberData = this.numberHelperService.convertToNumber(this.currencyStringData);
         this.value = this.currencyNumberData;

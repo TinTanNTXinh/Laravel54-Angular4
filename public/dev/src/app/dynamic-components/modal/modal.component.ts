@@ -5,7 +5,6 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
     templateUrl: 'modal.component.html'
 })
 export class ModalComponent implements OnInit {
-    public modalObjectData: any;
 
     constructor() {
 
@@ -15,22 +14,11 @@ export class ModalComponent implements OnInit {
 
     }
 
-    @Input() get objectData(): any {
-        return this.modalObjectData;
-    }
-
-    set objectData(obj: any) {
-        this.modalObjectData = obj;
-    }
+    @Input() objectData: any = {};
 
     @Output() onClicked: EventEmitter<number> = new EventEmitter();
 
-    clicked(id: number, event?: Event) {
-        if (event) {
-            event.preventDefault();
-        }
+    public clicked(id: number): void {
         this.onClicked.emit(id);
     }
-
-
 }

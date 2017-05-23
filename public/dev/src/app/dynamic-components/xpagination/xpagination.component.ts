@@ -14,10 +14,10 @@ export class XPaginationComponent {
     private allItems: any[];
 
     // pager object
-    pager: any = {};
+    public pager: any = {};
 
     // paged items
-    pagedItems: any[];
+    public pagedItems: any[];
 
     constructor(private paginationHelperService: PaginationHelperService) {
 
@@ -34,7 +34,7 @@ export class XPaginationComponent {
     }
 
     /** Function */
-    public setPage(page: number) {
+    public setPage(page: number): void {
         if (page < 1 || page > this.pager.totalPages) {
             return;
         }

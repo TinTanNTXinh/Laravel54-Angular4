@@ -22,6 +22,7 @@
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
 }
+
 .box-thumbnail {
     height: 40px;
     width: 40px;
@@ -35,17 +36,21 @@
     margin-top: 10px;
     margin-left: 50px;
 }
+
 .box-line-xs {
     width: 80px;
     margin-left: 50px;
 }
+
 .box-line-df {
     margin-top: 30px;
     width: 380px;
 }
+
 .box-line-lg {
     width: 200px;
 }
+
 .box-line-lgx {
     width: 450px;
 }

@@ -1,14 +1,19 @@
-
 <div class="input-group m-b">
-    <span (click)="clear()" class="input-group-addon"><i class="fa fa-refresh"></i></span>
-    <input #input type="text" class="form-control input-list" [placeholder]="placeholder" [(ngModel)]="query" (keyup)="filter($event)">
-    <span (click)="showAll(input)" class="input-group-addon"><i class="fa fa-sort-desc" aria-hidden="true"></i></span>
+  <span (click)="clear()" class="input-group-addon"><i class="fa fa-refresh"></i></span>
+  <input #input type="text" class="form-control input-list"
+         [placeholder]="placeholder"
+         [(ngModel)]="query"
+         (keyup)="filter($event)">
+  <span (click)="showAll(input)" class="input-group-addon"><i class="fa fa-sort-desc" aria-hidden="true"></i></span>
 </div>
 
-<ul id="list-group" class="list-group group-list" *ngIf="filteredList.length > 0" style="position: absolute; z-index: 3; overflow: auto; height: 200px;">
-    <li *ngFor="let item of filteredList" [class.active]="item.selected" [id]="item.selected" class="list-group-item item-list" (click)="select(item)">
-        {{ item[my_name] }}
-    </li>
+<ul *ngIf="filteredList.length > 0" id="list-group" class="list-group group-list">
+  <li *ngFor="let item of filteredList" class="list-group-item item-list"
+      [class.active]="item.selected"
+      [id]="item.selected"
+      (click)="select(item)">
+    {{ item[name] }}
+  </li>
 </ul>
 
 <!--<p *ngIf="selectedItem">Selected: {{ selectedItem | json }}</p>-->

@@ -9,7 +9,7 @@ export class MonthPicker implements OnInit {
 
     private mm: any;
 
-    months = [
+    public months: any[] = [
         {val: '01', name: 'Tháng 1'},
         {val: '02', name: 'Tháng 2'},
         {val: '03', name: 'Tháng 3'},
@@ -26,10 +26,9 @@ export class MonthPicker implements OnInit {
 
     ngOnInit() {
         this.getMonth();
-
     }
 
-    getMonth() {
+    private getMonth(): void {
         let today = new Date();
         this.mm = today.getMonth() + 1;
         if (this.mm < 10) {

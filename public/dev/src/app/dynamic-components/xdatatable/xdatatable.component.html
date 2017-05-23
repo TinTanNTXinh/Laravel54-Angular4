@@ -1,13 +1,13 @@
 <!--<div class="well well-lg">-->
 <!--Selected Row : <strong>{{selectedRow}}</strong>-->
 <!--</div>-->
-<button class="btn m-b-xs btn-sm btn-primary btn-addon" (click)="clicked('add')" *ngIf="action_data.ADD">
+<button class="btn m-b-xs btn-sm btn-primary btn-addon" (click)="clicked('add')" *ngIf="action.ADD">
   <i class="fa fa-plus"></i>Thêm
 </button>
-<button class="btn m-b-xs btn-sm btn-warning btn-addon" (click)="clicked('edit')" *ngIf="action_data.EDIT">
+<button class="btn m-b-xs btn-sm btn-warning btn-addon" (click)="clicked('edit')" *ngIf="action.EDIT">
   <i class="fa fa-pencil"></i>Cập nhật
 </button>
-<button class="btn m-b-xs btn-sm btn-danger btn-addon" (click)="clicked('delete')" *ngIf="action_data.DELETE">
+<button class="btn m-b-xs btn-sm btn-danger btn-addon" (click)="clicked('delete')" *ngIf="action.DELETE">
   <i class="fa fa-trash-o"></i>Xóa
 </button>
 <button id="btn-show-modal" data-toggle="modal" data-target="#modal-confirm" hidden></button>
@@ -19,10 +19,9 @@
         <i class="fa fa-sort-desc" *ngIf="isAsc" (click)="sortIndex('desc')"></i>
         <i class="fa fa-sort-asc" *ngIf="!isAsc" (click)="sortIndex('asc')"></i>
       </th>
-      <ng-container *ngFor="let key of header_data | ObjNgFor">
-        <th *ngIf="visible(header_data[key]['visible'])">{{header_data[key]['title']}}</th>
+      <ng-container *ngFor="let key of header | ObjNgFor">
+        <th *ngIf="visible(header[key]['visible'])">{{header[key]['title']}}</th>
       </ng-container>
-      <!--<th *ngFor="let key of header_data | ObjNgFor">{{header_data[key]['title']}}</th>-->
     </tr>
     </thead>
     <tbody>
@@ -31,10 +30,10 @@
     <tr *ngFor="let tr of pagedItems; let i = index"
         (click)="setClickedRow(i)" [class.active]="i == selectedRow">
       <td>{{i + 1}}</td>
-      <ng-container *ngFor="let key of header_data | ObjNgFor">
-        <td *ngIf="visible(header_data[key]['visible'])" [innerHTML]="tr[key] | safeHtml"></td>
+      <ng-container *ngFor="let key of header | ObjNgFor">
+        <td *ngIf="visible(header[key]['visible'])" [innerHTML]="tr[key] | safeHtml"></td>
       </ng-container>
-      <!--<td *ngFor="let key of header_data | ObjNgFor" [innerHTML]="tr[key] | safeHtml"></td>-->
+      <!--<td *ngFor="let key of header | ObjNgFor" [innerHTML]="tr[key] | safeHtml"></td>-->
     </tr>
     </tbody>
   </table>

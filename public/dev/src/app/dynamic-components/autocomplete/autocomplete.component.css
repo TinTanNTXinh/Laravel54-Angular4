@@ -1,0 +1,6 @@
+#list-group {
+    position: absolute;
+    z-index: 3;
+    overflow: auto;
+    height: 200px;
+}

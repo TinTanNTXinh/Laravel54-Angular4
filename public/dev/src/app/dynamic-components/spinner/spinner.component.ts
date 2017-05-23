@@ -6,7 +6,6 @@ import {Component, OnInit, Input} from '@angular/core';
     styleUrls: ['spinner.component.css']
 })
 export class SpinnerComponent implements OnInit {
-    public spinnerIsLoading: boolean;
 
     constructor() {
 
@@ -16,12 +15,6 @@ export class SpinnerComponent implements OnInit {
 
     }
 
-    @Input() get isLoading(): boolean {
-        return this.spinnerIsLoading;
-    }
-
-    set isLoading(obj: boolean) {
-        this.spinnerIsLoading = obj;
-    }
+    @Input() isLoading: boolean = false;
 
 }

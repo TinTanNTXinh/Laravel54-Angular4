@@ -18,6 +18,7 @@ import {MonthPicker} from './dynamic-components/month-picker/month-picker.compon
 import {YearPicker} from './dynamic-components/year-picker/year-picker.component';
 import {XPaginationComponent} from './dynamic-components/xpagination/xpagination.component';
 import {MasterDetailComponent} from './dynamic-components/master-detail/master-detail.component';
+import {CounterComponent} from './dynamic-components/counter/counter.component';
 
 // My components
 import {PositionComponent} from './components/position/position.component';
@@ -52,6 +53,7 @@ import {DriverComponent} from './components/driver/driver.component';
         YearPicker,
         XPaginationComponent,
         MasterDetailComponent,
+        CounterComponent,
 
         PositionComponent,
         UserComponent,
@@ -83,6 +85,7 @@ import {DriverComponent} from './components/driver/driver.component';
         YearPicker,
         XPaginationComponent,
         MasterDetailComponent,
+        CounterComponent,
 
         PositionComponent,
         UserComponent,

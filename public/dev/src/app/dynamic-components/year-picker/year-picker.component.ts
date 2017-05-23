@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
     selector: 'year-picker',
@@ -7,19 +7,19 @@ import { Component, OnInit } from '@angular/core';
 
 export class YearPicker implements OnInit {
 
-    public years: number[] =[];
-    private yy : number;
+    public years: number[] = [];
+    private yy: number;
 
     ngOnInit() {
         this.getYear();
     }
 
-    getYear(){
+    private getYear(): void {
         let today = new Date();
         this.yy = today.getFullYear();
-        for(let i = (this.yy-10); i <= this.yy; i++){
-            this.years.push(i);}
+        for (let i = (this.yy - 10); i <= this.yy; i++) {
+            this.years.push(i);
+        }
     }
-
 
 }
