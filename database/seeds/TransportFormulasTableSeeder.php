@@ -20,7 +20,7 @@ class TransportFormulasTableSeeder extends Seeder
                 'value1'       => $value,
                 'value2'       => null,
                 'active'       => true,
-                'transport_id' => $key
+                'transport_id' => ++$key
             ]);
         }
 

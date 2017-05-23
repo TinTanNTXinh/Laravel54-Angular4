@@ -160,6 +160,8 @@ export class TransportComponent implements OnInit
     addOne(): void {
         if (!this.validateOne()) return;
 
+        this.transport.transport_date = this.toTransportDateTime();
+
         let data = {
             "transport": this.transport,
             "formulas": this.formulaFormArray.value,
