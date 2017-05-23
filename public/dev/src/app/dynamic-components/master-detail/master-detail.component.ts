@@ -16,8 +16,8 @@ export class MasterDetailComponent implements OnInit {
     public activeRow: number = 0;
 
     /** Variable selected row */
-    selectedRow: number;
-    setClickedRow: Function;
+    public selectedRow: number;
+    public setClickedRow: Function;
 
     /** Variable sort index */
     public isAsc: boolean = true;
@@ -25,13 +25,13 @@ export class MasterDetailComponent implements OnInit {
     /**
      * VARIABLE PAGINATION
      */
-    pager: any = {};
-    pagedItems: any[];
-    pageSize: number = 10;
+    public pager: any = {};
+    public pagedItems: any[];
+    private pageSize: number = 10;
 
     constructor(private httpClientService: HttpClientService
-        , private toastrHelperService: ToastrHelperService,
-                private paginationHelperService: PaginationHelperService) {
+        , private toastrHelperService: ToastrHelperService
+        , private paginationHelperService: PaginationHelperService) {
         this.selectedRow = 0;
         this.setClickedRow = function (index) {
             this.selectedRow = index;
@@ -59,7 +59,7 @@ export class MasterDetailComponent implements OnInit {
     }
 
     /** Output */
-    public showDetail(id: number) {
+    public showDetail(id: number): void {
         if (this.activeRow == id) {
             this.activeRow = 0;
             return;
@@ -76,7 +76,7 @@ export class MasterDetailComponent implements OnInit {
     }
 
     /** Sort */
-    public sortIndex(mode: string) {
+    public sortIndex(mode: string): void {
         this.isAsc = !this.isAsc;
         this.pagedItems.reverse();
         this.master_data.reverse();
@@ -86,7 +86,7 @@ export class MasterDetailComponent implements OnInit {
      *  PAGINATION
      */
     /** Function */
-    public setPage(page: number) {
+    public setPage(page: number): void {
         if (page < 1 || page > this.pager.totalPages) {
             return;
         }

@@ -52,13 +52,12 @@ export class AutoCompleteComponent implements ControlValueAccessor {
     }
 
     /** Variables */
-    query: string = '';
-    filteredList: any[] = [];
-    elementRef: ElementRef;
-    pos: number = -1;
-    opened: boolean = false;
-    selectedItem: any;
-    item: any;
+    public query: string = '';
+    public filteredList: any[] = [];
+    private elementRef: ElementRef;
+    private pos: number = -1;
+    private opened: boolean = false;
+    private selectedItem: any;
 
     constructor(private el: ElementRef) {
         this.elementRef = el;
@@ -79,7 +78,7 @@ export class AutoCompleteComponent implements ControlValueAccessor {
         });
     }
 
-    public filter(event: any) {
+    public filter(event: any): void {
         if (this.query !== '') {
             if (this.opened) {
 

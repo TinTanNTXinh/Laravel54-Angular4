@@ -1,0 +1,8 @@
+<div class="input-group m-b">
+  <span (click)="increase()" class="input-group-addon">+</span>
+  <input type="text" class="form-control"
+         [readonly]="readonly"
+         [(ngModel)]="value"
+         (input)="inputed($event.target.value)">
+  <span (click)="decrement()" class="input-group-addon">-</span>
+</div>
