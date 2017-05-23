@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VoucherTransport extends Model
+class TransportVoucher extends Model
 {
     //
 }

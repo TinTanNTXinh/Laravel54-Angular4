@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\TransportFormula;
+use App\Voucher;
+use App\TransportVoucher;
 use Illuminate\Http\Request;
 use League\Flysystem\Exception;
 use Route;
@@ -144,18 +147,89 @@ class TransportController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
+        $transport          = $data['transport'];
+        $formulas           = $data['formulas'];
+        $transport_vouchers = $data['transport_vouchers'];
         try {
             DB::beginTransaction();
-            $one       = new Transport();
-            $one->code = $this->generateCode(Transport::class, 'TRANSPORT');
+            $one                   = new Transport();
+            $one->code             = $this->generateCode(Transport::class, 'TRANSPORT');
+            $one->transport_date   = $this->toStringDateTimeClientForDB($transport['transport_date']);
+            $one->type1            = 'NORMAL';
+            $one->type2            = '';
+            $one->type3            = '';
+            $one->quantum_product  = $transport['quantum_product'];
+            $one->revenue          = $transport['revenue'];
+            $one->profit           = 0;
+            $one->receive          = $transport['receive'];
+            $one->delivery         = $transport['delivery'];
+            $one->carrying         = $transport['carrying'];
+            $one->parking          = $transport['parking'];
+            $one->fine             = $transport['fine'];
+            $one->phi_tang_bo      = $transport['phi_tang_bo'];
+            $one->add_score        = $transport['add_score'];
+            $one->delivery_real    = $transport['delivery_real'];
+            $one->carrying_real    = $transport['carrying_real'];
+            $one->parking_real     = $transport['parking_real'];
+            $one->fine_real        = $transport['fine_real'];
+            $one->phi_tang_bo_real = $transport['phi_tang_bo_real'];
+            $one->add_score_real   = $transport['add_score_real'];
 
+            $one->voucher_number             = $transport['voucher_number'];
+            $one->quantum_product_on_voucher = $transport['quantum_product_on_voucher'];
+            $one->receiver                   = $transport['receiver'];
+
+            $one->note         = $transport['note'];
+            $one->created_by   = $this->user->id;
+            $one->updated_by   = 0;
             $one->created_date = date('Y-m-d H:i:s');
             $one->updated_date = null;
             $one->active       = true;
+            $one->truck_id     = $transport['truck_id'];
+            $one->customer_id  = $transport['customer_id'];
+            $one->postage_id   = $transport['postage_id'];
+            $one->fuel_id      = $transport['fuel_id'];
+
             if (!$one->save()) {
                 DB::rollback();
                 return false;
             }
+
+            # Insert VoucherTransport
+            foreach ($transport_vouchers as $transport_voucher) {
+                $voucher_transport_new = new TransportVoucher();
+                $voucher_transport_new->transport_id = $one->id;
+                $voucher_transport_new->voucher_id = $transport_voucher['voucher_id'];
+                $voucher_transport_new->quantum = $transport_voucher['quantum'];
+                $voucher_transport_new->created_by = $one->created_by;
+                $voucher_transport_new->updated_by = 0;
+                $voucher_transport_new->created_date = $one->created_date;
+                $voucher_transport_new->updated_date = null;
+                $voucher_transport_new->active       = true;
+
+                if(!$voucher_transport_new->save()){
+                    DB::rollback();
+                    return false;
+                }
+            }
+
+            # Insert TransportFormula
+
+            foreach ($formulas as $formula) {
+                $transport_formula = new TransportFormula();
+                $transport_formula->rule = $formula['rule'];
+                $transport_formula->name = $formula['name'];
+                $transport_formula->value1 = $formula['value1'];
+                $transport_formula->value2 = $formula['value2'];
+                $transport_formula->active = true;
+                $transport_formula->transport_id = $one->id;
+
+                if(!$transport_formula->save()){
+                    DB::rollback();
+                    return false;
+                }
+            }
+
 
             DB::commit();
             return true;
@@ -262,9 +336,6 @@ class TransportController extends Controller implements ICrud, IValidate
 
         $skip_id = isset($data['id']) ? [$data['id']] : [];
 
-        if ($this->checkExistData(Transport::class, 'code', $data['code'], $skip_id))
-            array_push($msg_error, 'Mã bộ trung tâm đã tồn tại.');
-
         return [
             'status' => count($msg_error) > 0 ? false : true,
             'errors' => $msg_error
@@ -282,7 +353,7 @@ class TransportController extends Controller implements ICrud, IValidate
     public function readFormulas($data)
     {
         $customer_id    = $data['customer_id'];
-        $transport_date = $this->toStringDateTimeClientForDB($data['transport_date'] . ' ' . $data['transport_time']);
+        $transport_date = $this->toStringDateTimeClientForDB($data['transport_date']);
 
         $formulas = $this->findFormulas($customer_id, $transport_date);
 
@@ -299,7 +370,7 @@ class TransportController extends Controller implements ICrud, IValidate
     public function readPostage($data)
     {
         $i_customer_id    = $data['customer_id'];
-        $i_transport_date = $this->toStringDateTimeClientForDB($data['transport_date'] . ' ' . $data['transport_time']);
+        $i_transport_date = $this->toStringDateTimeClientForDB($data['transport_date']);
         $i_formulas       = $data['formulas'];
 
         $postage = $this->findPostage($i_formulas, $i_customer_id, $i_transport_date);

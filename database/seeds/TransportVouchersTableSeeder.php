@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class VoucherTransportsTableSeeder extends Seeder
+class TransportVouchersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class VoucherTransportsTableSeeder extends Seeder
         /* FORMOSA */
         $voucher_ids = [1, 2, 3, 4];
         foreach($voucher_ids as $key => $voucher_id) {
-            \App\VoucherTransport::create([
+            \App\TransportVoucher::create([
                 'voucher_id'   => $voucher_id,
                 'transport_id' => 1,
                 'quantum'      => 2,

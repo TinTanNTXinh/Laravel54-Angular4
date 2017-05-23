@@ -133,7 +133,6 @@ export class TransportComponent implements OnInit
         this.transport = {
             code: '',
             transport_date: '',
-            transport_time: '',
             type1: '',
             quantum_product: 0,
             revenue: 0,
@@ -161,7 +160,13 @@ export class TransportComponent implements OnInit
     addOne(): void {
         if (!this.validateOne()) return;
 
-        this.httpClientService.post(this.prefix_url, {"transport": this.transport}).subscribe(
+        let data = {
+            "transport": this.transport,
+            "formulas": this.formulaFormArray.value,
+            "transport_vouchers": {}
+        };
+
+        this.httpClientService.post(this.prefix_url, {"transport": data}).subscribe(
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();
@@ -178,7 +183,15 @@ export class TransportComponent implements OnInit
     updateOne(): void {
         if (!this.validateOne()) return;
 
-        this.httpClientService.put(this.prefix_url, {"transport": this.transport}).subscribe(
+        this.transport.transport_date = this.toTransportDateTime();
+
+        let data = {
+            "transport": this.transport,
+            "formulas": this.formulaFormArray.value,
+            "transport_vouchers": {}
+        };
+
+        this.httpClientService.put(this.prefix_url, data).subscribe(
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();
@@ -225,14 +238,6 @@ export class TransportComponent implements OnInit
 
     validateOne(): boolean {
         let flag: boolean = true;
-        if (this.transport.code == '') {
-            flag = false;
-            this.toastrHelperService.showToastr('warning', `Mã ${this.title} không được để trống!`);
-        }
-        if (this.transport.name == '') {
-            flag = false;
-            this.toastrHelperService.showToastr('warning', `Tên  ${this.title} không được để trống!`);
-        }
         return flag;
     }
 
@@ -413,14 +418,10 @@ export class TransportComponent implements OnInit
         // Set lại doanh thu
         this.computeRevenue();
 
-        let transport_date = this.dateHelperService.getDate(this.transport_date);
-        let transport_time = this.dateHelperService.getTime(this.transport_time);
-
         if (!!event.id && event.id != 0) {
             let find_formulas = {
                 customer_id: event.id,
-                transport_date: transport_date,
-                transport_time: transport_time
+                transport_date: this.toTransportDateTime()
             };
             this.findFormulas(find_formulas);
         }
@@ -454,13 +455,9 @@ export class TransportComponent implements OnInit
     }
 
     public findPostage(): void {
-        let transport_date = this.dateHelperService.getDate(this.transport_date);
-        let transport_time = this.dateHelperService.getTime(this.transport_time);
-
         let formulas = {
             customer_id: this.transport.customer_id,
-            transport_date: transport_date,
-            transport_time: transport_time,
+            transport_date: this.toTransportDateTime(),
             formulas: this.formulaFormGroup.value.formulas
         };
 
@@ -480,6 +477,13 @@ export class TransportComponent implements OnInit
 
     public computeRevenue(): void {
         this.transport.revenue = (this.transport.quantum_product * this.transport.unit_price) + (this.transport.carrying + this.transport.parking + this.transport.fine + this.transport.phi_tang_bo + this.transport.add_score);
+    }
+
+    private toTransportDateTime(): string {
+        let transport_date = this.dateHelperService.getDate(this.transport_date);
+        let transport_time = this.dateHelperService.getTime(this.transport_time);
+
+        return `${transport_date} ${transport_time}`;
     }
 
 }

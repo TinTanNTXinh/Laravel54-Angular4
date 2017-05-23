@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVoucherTransportsTable extends Migration
+class CreateTransportVouchersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateVoucherTransportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('voucher_transports', function (Blueprint $table) {
+        Schema::create('transport_vouchers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('voucher_id')->unsigned();
             $table->integer('transport_id')->unsigned();
+            $table->integer('voucher_id')->unsigned();
             $table->integer('quantum')->comment('Số lượng chứng từ');
             $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');
             $table->integer('updated_by')->default(0)->unsigned()->comment('Người sửa');
@@ -34,6 +34,6 @@ class CreateVoucherTransportsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('voucher_transports');
+        Schema::dropIfExists('transport_vouchers');
     }
 }

@@ -66,7 +66,7 @@ class DatabaseSeeder extends Seeder
             // $this->call(TransportsTableSeeder::class);
             // $this->call(TransportFormulasTableSeeder::class);
             // $this->call(TransportInvoicesTableSeeder::class);
-            // $this->call(VoucherTransportsTableSeeder::class);
+            // $this->call(TransportVouchersTableSeeder::class);
             // $this->call(InvoicesTableSeeder::class);
             // $this->call(InvoiceDetailsTableSeeder::class);
 
@@ -124,7 +124,7 @@ class DatabaseSeeder extends Seeder
             $this->call(TransportsTableSeeder::class);
             $this->call(TransportFormulasTableSeeder::class);
             $this->call(TransportInvoicesTableSeeder::class);
-            $this->call(VoucherTransportsTableSeeder::class);
+            $this->call(TransportVouchersTableSeeder::class);
             $this->call(InvoicesTableSeeder::class);
             $this->call(InvoiceDetailsTableSeeder::class);
         }
