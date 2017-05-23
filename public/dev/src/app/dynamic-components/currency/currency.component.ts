@@ -51,18 +51,16 @@ export class CurrencyComponent implements OnInit, ControlValueAccessor {
     /** Variables */
     public currencyStringData: string;
     private currencyNumberData: number;
-    public SUFFIX: string;
 
-    constructor(private currencyHelperService: CurrencyHelperService,
-        private numberHelperService: NumberHelperService) {
-
+    constructor(private currencyHelperService: CurrencyHelperService
+        , private numberHelperService: NumberHelperService) {
     }
 
     ngOnInit() {
-        this.SUFFIX = this.currencyHelperService.currency_signal;
     }
 
     @Input() readonly: boolean = false;
+    @Input() suffix: string = this.currencyHelperService.currency_signal;
 
     @Input() get numberData(): number {
         this.currencyStringData = this.numberHelperService.formatThousandsSeparator(this.currencyNumberData.toString());

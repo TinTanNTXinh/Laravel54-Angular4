@@ -28,7 +28,7 @@ export class DateHelperService {
 
     public timepickerSettings: any = {
         showMeridian: false,
-        minuteStep: 1,
+        showSeconds: false,
         icon: this.icon_clock,
         placeholder: this.time_placeholder
     };
@@ -47,8 +47,9 @@ export class DateHelperService {
         return dt.toLocaleDateString(this.locale, this.locale_options);
     }
 
-    public getTime(dt: Date): number {
-        return dt && dt.getTime();
+    public getTime(dt: Date): string {
+        // return dt && dt.getTime();
+        return `${dt.toTimeString().substr(0, 5)}:00`;
     }
 
     public createDate(str: string): Date {
@@ -68,6 +69,10 @@ export class DateHelperService {
         let m = moment(d, f);
         if (m.isValid()) return m;
         return null;
+    }
+
+    public formatMoment(d: any, f: string): string {
+        return d.format(f);
     }
 
     public isBefore(d1: string, fd1: string, d2: string, fd2: string): boolean {

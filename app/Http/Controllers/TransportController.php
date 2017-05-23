@@ -122,8 +122,8 @@ class TransportController extends Controller implements ICrud, IValidate
         $transports = $this->skeleton->get();
 
         $customers = $this->readAllCustomer()['skeleton']->get();
-        $trucks = $this->readAllTruck()['skeleton']->get();
-        $products = $this->readAllProduct()['skeleton']->get();
+        $trucks    = $this->readAllTruck()['skeleton']->get();
+        $products  = $this->readAllProduct()['skeleton']->get();
 
         return [
             'transports' => $transports,
@@ -282,11 +282,9 @@ class TransportController extends Controller implements ICrud, IValidate
     public function readFormulas($data)
     {
         $customer_id    = $data['customer_id'];
-//        $transport_date = $data['transport_date'];
+        $transport_date = $this->toStringDateTimeClientForDB($data['transport_date'] . ' ' . $data['transport_time']);
 
-//        $formulas = $this->findFormulas($customer_id, $transport_date);
-
-        $formulas = $this->findFormulas($customer_id);
+        $formulas = $this->findFormulas($customer_id, $transport_date);
 
         return $formulas;
     }
@@ -301,11 +299,10 @@ class TransportController extends Controller implements ICrud, IValidate
     public function readPostage($data)
     {
         $i_customer_id    = $data['customer_id'];
-//        $i_transport_date = $data['transport_date'];
+        $i_transport_date = $this->toStringDateTimeClientForDB($data['transport_date'] . ' ' . $data['transport_time']);
         $i_formulas       = $data['formulas'];
 
-//        $postage = $this->findPostage($i_formulas, $i_customer_id, $i_transport_date);
-        $postage = $this->findPostage($i_formulas, $i_customer_id);
+        $postage = $this->findPostage($i_formulas, $i_customer_id, $i_transport_date);
 
         return $postage;
     }

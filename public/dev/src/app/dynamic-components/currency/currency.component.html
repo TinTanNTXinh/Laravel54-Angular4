@@ -2,5 +2,5 @@
 
 <div class="input-group m-b">
     <input [readonly]="readonly" type="text" class="form-control" id="my-currency" [(ngModel)]="currencyStringData" (keyup)="keyUpped()">
-    <span class="input-group-addon">{{ SUFFIX }}</span>
+    <span class="input-group-addon">{{ this.suffix }}</span>
 </div>

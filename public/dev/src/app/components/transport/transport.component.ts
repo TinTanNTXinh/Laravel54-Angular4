@@ -21,7 +21,7 @@ export class TransportComponent implements OnInit
     public customers: any[] = [];
     public trucks: any[] = [];
     public products: any[] = [];
-    public unit_name: string = '';
+    public unit_name: string = 'đ/?';
 
     /** ICommon **/
     title: string;
@@ -79,10 +79,12 @@ export class TransportComponent implements OnInit
         this.formulaForm = this.fb.group({
             formulas: this.fb.array([])
             // Them moi
-            // formulas: this.fb.array([ this.buildFormula('Pair', 'AAA', '', '') ])
+            // formulas: this.fb.array([ this.initFormula('Pair', 'AAA', '', '') ])
             // Chinh sua
-            // formulas: this.fb.array([ this.buildFormulaEdit() ])
+            // formulas: this.fb.array([ this.initFormulaEdit() ])
         });
+
+        this.transport_time.setHours(0, 0, 0, 0);
     }
 
     /** ICommon **/
@@ -102,6 +104,9 @@ export class TransportComponent implements OnInit
         this.transports = [];
         this.customers = arr_data['customers'];
         this.trucks = arr_data['trucks'];
+        for (let truck of this.trucks) {
+            truck.area_code_number_plate = `${truck.area_code}-${truck.number_plate}`;
+        }
         this.products = arr_data['products'];
     }
 
@@ -128,7 +133,8 @@ export class TransportComponent implements OnInit
     clearOne(): void {
         this.transport = {
             code: '',
-            transport_date: Date,
+            transport_date: '',
+            transport_time: '',
             type1: '',
             quantum_product: 0,
             revenue: 0,
@@ -340,11 +346,11 @@ export class TransportComponent implements OnInit
 
     addFormula(rule: string, name: string, value1: any, value2: any): void {
         const control = <FormArray>this.formulaForm.controls['formulas'];
-        const addrCtrl = this.buildFormula(rule, name, value1, value2);
+        const addrCtrl = this.initFormula(rule, name, value1, value2);
         control.push(addrCtrl);
     }
 
-    buildFormula(rule: string, name: string, value1: any, value2: any): FormGroup {
+    initFormula(rule: string, name: string, value1: any, value2: any): FormGroup {
         let formula;
         switch (rule) {
             case 'Single':
@@ -378,21 +384,35 @@ export class TransportComponent implements OnInit
         return formula;
     }
 
-    removeFormula(i: number) {
+    removeFormula(index: number) {
         const control = <FormArray>this.formulaForm.controls['formulas'];
-        control.removeAt(i);
+        control.removeAt(index);
     }
 
-    transport_time: Date;
+    clearFormula(length: number) {
+        for(let i = length; i--;) {
+            this.removeFormula(i);
+        }
+    }
+
+    transport_date: Date = new Date();
+    transport_time: Date = new Date();
 
     public selectedCustomer(event: any): void {
-        console.log(event);
-        // Nếu đã chọn ngày giờ vận chuyển tìm formula
+
+        // Xóa các công thức hiện có
+        const form_array = <FormArray>this.formulaForm.controls['formulas'];
+        let length = form_array.length;
+        this.clearFormula(length);
+
+        let transport_date = this.dateHelperService.getDate(this.transport_date);
+        let transport_time = this.dateHelperService.getTime(this.transport_time);
+
         if (!!event.id && event.id != 0) {
             let find_formulas = {
                 customer_id: event.id,
-                transport_date: this.transport.transport_date,
-                transport_time: this.transport_time
+                transport_date: transport_date,
+                transport_time: transport_time
             };
             this.findFormulas(find_formulas);
         }
@@ -428,9 +448,13 @@ export class TransportComponent implements OnInit
 
     public findPostage(): void {
         console.log(this.formulaForm.value.formulas);
+        let transport_date = this.dateHelperService.getDate(this.transport_date);
+        let transport_time = this.dateHelperService.getTime(this.transport_time);
 
         let formulas = {
             customer_id: this.transport.customer_id,
+            transport_date: transport_date,
+            transport_time: transport_time,
             formulas: this.formulaForm.value.formulas
         };
 
@@ -445,14 +469,6 @@ export class TransportComponent implements OnInit
             }
         );
 
-    }
-
-    public a: number = 0;
-    public b: number = 0;
-    public c: number = 0;
-
-    computeC() {
-        this.c = Number(this.a) + Number(this.b);
     }
 
 }

@@ -4,6 +4,7 @@ namespace App\Traits\Domain;
 
 use App\Formula;
 use App\Postage;
+use DB;
 
 trait PostageHelper
 {
@@ -28,8 +29,7 @@ trait PostageHelper
             ->toArray();
 
         $formulas = Formula::whereActive(true)
-            ->whereIn('postage_id', $postage_ids)
-            ->get();
+            ->whereIn('postage_id', $postage_ids);
 
         $founds = [];
         foreach ($i_formulas as $key => $i_formula) {
@@ -39,7 +39,7 @@ trait PostageHelper
                     $found = $formulas
                         ->where('rule', $i_formula->rule)
                         ->where('name', $i_formula->name)
-                        ->where('value1', $i_formula->value1)
+                        ->where(DB::raw("STRCMP(value1, '{$i_formula->value1}')"), 0)
                         ->pluck('postage_id')
                         ->toArray();
                     array_push($founds, $found);
@@ -50,8 +50,8 @@ trait PostageHelper
                     $found = $formulas
                         ->where('rule', $i_formula->rule)
                         ->where('name', $i_formula->name)
-                        ->where(\DB::raw('CAST(value1 AS DECIMAL(18, 2))'), '<=', floatval($i_formula->value1))
-                        ->where(\DB::raw('CAST(value2 AS DECIMAL(18, 2))'), '<=', floatval($i_formula->value2))
+                        ->where(DB::raw('CAST(value1 AS DECIMAL(18, 2))'), '<=', floatval($i_formula->value1))
+                        ->where(DB::raw('CAST(value2 AS DECIMAL(18, 2))'), '<=', floatval($i_formula->value2))
                         ->pluck('postage_id')
                         ->toArray();
                     array_push($founds, $found);
@@ -60,8 +60,8 @@ trait PostageHelper
                     $found = $formulas
                         ->where('rule', $i_formula->rule)
                         ->where('name', $i_formula->name)
-                        ->where('value1', $i_formula->value1)
-                        ->where('value2', $i_formula->value2)
+                        ->where(DB::raw("STRCMP(value1, '{$i_formula->value1}')"), 0)
+                        ->where(DB::raw("STRCMP(value2, '{$i_formula->value2}')"), 0)
                         ->pluck('postage_id')
                         ->toArray();
                     array_push($founds, $found);
@@ -75,7 +75,6 @@ trait PostageHelper
         $result_postage_ids = collect($founds)->collapse();
         if (count($result_postage_ids) == count($i_formulas) && count($result_postage_ids->unique()) == 1) {
             $postage_id = $result_postage_ids->unique()->first();
-//            $postage = Postage::find($result_postage_ids->unique()->first());
             $postage = Postage::where('postages.id', '=', $postage_id)
                 ->leftJoin('units', 'units.id', '=', 'postages.unit_id')
                 ->select('postages.*', 'units.name as unit_name')

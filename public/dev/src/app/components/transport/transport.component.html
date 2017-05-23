@@ -99,179 +99,227 @@
                     <div class="panel-body">
                       <form class="bs-example form-horizontal">
                         <div class="row">
-                          <input type="text" class="form-control" name="a"
-                                 [(ngModel)]="a" (input)="computeC()">
-                          {{a}}
-                          <input type="text" class="form-control" name="b"
-                                 [(ngModel)]="b" (input)="computeC()">
-                          {{b}}
-                          <input type="text" class="form-control" name="c"
-                                 [ngModel]="c">
-                          {{c}}
+                          {{ transport | json }}
                         </div>
                         <div class="row">
                           <div class="col-md-6">
-                            <div class="row">
-                              <div class="col-md-2"></div>
-                              <div class="col-md-10">
+                            <div class="panel panel-success">
+                              <div class="panel-heading">
+                                Cước phí
+                              </div>
+                              <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-5">
+                                      <label>Ngày vận chuyển</label>
+                                      <datetime [(ngModel)]="transport_date" name="transport_date"
+                                                [timepicker]="false"
+                                                [datepicker]="datepickerSettings"></datetime>
+                                    </div>
+                                    <div class="col-sm-6">
+                                      <label>Giờ vận chuyển</label>
+                                      <datetime [(ngModel)]="transport_time" name="transport_time"
+                                                [timepicker]="timepickerSettings"
+                                                [datepicker]="false"></datetime>
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                   <div class="col-md-6">
-                                    <label>Ngày vận chuyển</label>
-                                    <datetime [(ngModel)]="transport.transport_date" name="transport_date"
-                                              [timepicker]="false"
-                                              [datepicker]="datepickerSettings"></datetime>
+                                    <label>Khách hàng</label>
+                                    <autocomplete [data]="customers" [name]="'fullname'" [model_name]="'id'"
+                                                  [(ngModel)]="transport.customer_id"
+                                                  (onClicked)="selectedCustomer($event)"></autocomplete>
                                   </div>
                                   <div class="col-md-6">
-                                    <label>Giờ vận chuyển</label>
-                                    <datetime [(ngModel)]="transport_time" name="transport_time"
-                                              [timepicker]="timepickerSettings"
-                                              [datepicker]="false"></datetime>
+                                    <label>Đơn giá</label>
+                                    <currency [numberData]="transport.unit_price" [ngModel]="transport.unit_price" [readonly]="true" name="unit_price"></currency>
                                   </div>
                                 </div>
-                              </div>
-                            </div>
 
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Khách hàng</label>
-                              <div class="col-lg-10">
-                                <autocomplete [data]="customers" [name]="'fullname'" [model_name]="'id'"
-                                              [(ngModel)]="transport.customer_id"
-                                              (onClicked)="selectedCustomer($event)"></autocomplete>
-                              </div>
-                            </div>
-
-                            <!--Reactive form-->
-                            <div class="row">
-                              <div class="col-md-12">
-                                <form class="form-horizontal"
-                                      novalidate
-                                      [formGroup]="formulaForm">
-                                  <div class="panel-heading">
-                                    <span>Công thức:</span>
+                                <!--Reactive form-->
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <form class="form-horizontal"
+                                          novalidate
+                                          [formGroup]="formulaForm">
+                                      <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                          <span>Công thức:</span>
+                                        </div>
+                                        <div class="panel-body">
+                                          <div formArrayName="formulas" *ngFor="let formula of formulaForm.controls.formulas.controls; let i=index">
+                                            <formula-transport [group]="formulaForm.controls.formulas.controls[i]"></formula-transport>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </form>
                                   </div>
-                                  <div class="panel-body">
-                                    <div formArrayName="formulas" *ngFor="let formula of formulaForm.controls.formulas.controls; let i=index">
-                                      <formula-transport [group]="formulaForm.controls.formulas.controls[i]"></formula-transport>
+                                </div>
+
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="form-group">
+                                      <button type="button"
+                                              class="btn m-b-xs w-xs btn-primary btn-rounded"
+                                              (click)="findPostage()">Lấy đơn giá
+                                      </button>
                                     </div>
                                   </div>
-                                </form>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-md-12">
-                                <div class="form-group">
-                                  <button type="button"
-                                          class="btn m-b-xs w-xs btn-primary btn-rounded"
-                                          (click)="findPostage()">Lấy đơn giá
-                                  </button>
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div class="col-md-6">
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Xe</label>
-                              <div class="col-lg-10">
-                                <autocomplete [data]="trucks" [name]="'area_code'" [model_name]="'id'"
-                                              [(ngModel)]="transport.truck_id"></autocomplete>
+                            <div class="panel panel-info">
+                              <div class="panel-heading">
+                                Đơn hàng
                               </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Hàng</label>
-                              <div class="col-lg-10">
-                                <autocomplete [data]="products" [name]="'name'" [model_name]="'id'"
-                                              [(ngModel)]="transport.product_id"></autocomplete>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Lượng hàng {{unit_name}}</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="transport.quantum_product" name="quantum_product">
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Đơn giá</label>
-                              <div class="col-lg-10">
-                                <currency [numberData]="transport.unit_price" [ngModel]="transport.unit_price" [readonly]="true" name="unit_price"></currency>
-                                {{transport.unit_price}}
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Bốc xếp</label>
-                              <div class="col-lg-10">
-                                <currency [numberData]="transport.carrying" [(ngModel)]="transport.carrying" name="carrying"></currency>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Neo đêm</label>
-                              <div class="col-lg-10">
-                                <currency [numberData]="transport.parking" [(ngModel)]="transport.parking" name="parking"></currency>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Công an</label>
-                              <div class="col-lg-10">
-                                <currency [numberData]="transport.fine" [(ngModel)]="transport.fine" name="fine"></currency>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Phí tăng bo</label>
-                              <div class="col-lg-10">
-                                <currency [numberData]="transport.phi_tang_bo" [(ngModel)]="transport.phi_tang_bo" name="phi_tang_bo"></currency>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Thêm điểm</label>
-                              <div class="col-lg-10">
-                                <currency [numberData]="transport.add_score" [(ngModel)]="transport.add_score" name="add_score"></currency>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Doanh thu</label>
-                              <div class="col-lg-10">
-                                <currency [numberData]="transport.revenue" [(ngModel)]="transport.revenue" name="revenue"></currency>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Nhận</label>
-                              <div class="col-lg-10">
-                                <currency [numberData]="transport.receive" [(ngModel)]="transport.receive" name="receive"></currency>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Người nhận</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="transport.receiver" name="receiver">
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Số chứng từ</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="transport.voucher_number" name="voucher_number">
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Số hàng chứng từ</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="transport.quantum_product_on_voucher" name="quantum_product_on_voucher">
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Số chứng từ nhận</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="transport.code" name="code">
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Ghi chú</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="transport.note" name="note">
+                              <div class="panel-body">
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Xe</label>
+                                      <div class="col-lg-10">
+                                        <autocomplete [data]="trucks" [name]="'area_code_number_plate'" [model_name]="'id'"
+                                                      [(ngModel)]="transport.truck_id"></autocomplete>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Hàng</label>
+                                      <div class="col-lg-10">
+                                        <autocomplete [data]="products" [name]="'name'" [model_name]="'id'"
+                                                      [(ngModel)]="transport.product_id"></autocomplete>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Lượng hàng</label>
+                                      <div class="col-lg-10">
+                                        <currency [numberData]="transport.quantum_product"
+                                                  [suffix]="this.unit_name"
+                                                  [(ngModel)]="transport.quantum_product" name="quantum_product"></currency>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Bốc xếp</label>
+                                      <div class="col-lg-10">
+                                        <currency [numberData]="transport.carrying" [(ngModel)]="transport.carrying" name="carrying"></currency>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Neo đêm</label>
+                                      <div class="col-lg-10">
+                                        <currency [numberData]="transport.parking" [(ngModel)]="transport.parking" name="parking"></currency>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Công an</label>
+                                      <div class="col-lg-10">
+                                        <currency [numberData]="transport.fine" [(ngModel)]="transport.fine" name="fine"></currency>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Phí tăng bo</label>
+                                      <div class="col-lg-10">
+                                        <currency [numberData]="transport.phi_tang_bo" [(ngModel)]="transport.phi_tang_bo" name="phi_tang_bo"></currency>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Thêm điểm</label>
+                                      <div class="col-lg-10">
+                                        <currency [numberData]="transport.add_score" [(ngModel)]="transport.add_score" name="add_score"></currency>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Nhận</label>
+                                      <div class="col-lg-10">
+                                        <currency [numberData]="transport.receive" [(ngModel)]="transport.receive" name="receive"></currency>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Người nhận</label>
+                                      <div class="col-lg-10">
+                                        <input type="text" class="form-control"
+                                               [(ngModel)]="transport.receiver" name="receiver">
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Số chứng từ</label>
+                                      <div class="col-lg-10">
+                                        <input type="text" class="form-control"
+                                               [(ngModel)]="transport.voucher_number" name="voucher_number">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Số hàng chứng từ</label>
+                                      <div class="col-lg-10">
+                                        <input type="text" class="form-control"
+                                               [(ngModel)]="transport.quantum_product_on_voucher" name="quantum_product_on_voucher">
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Số chứng từ nhận</label>
+                                      <div class="col-lg-10">
+                                        <input type="text" class="form-control"
+                                               [(ngModel)]="transport.code" name="code">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Ghi chú</label>
+                                      <div class="col-lg-10">
+                                        <input type="text" class="form-control"
+                                               [(ngModel)]="transport.note" name="note">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>

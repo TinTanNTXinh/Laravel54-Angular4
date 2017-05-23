@@ -70,6 +70,11 @@ trait DBHelper
         }
     }
 
+    public function toStringDateTimeClientForDB($date, $format = 'd/m/Y H:i:s')
+    {
+        return Carbon::createFromFormat($format, $date)->toDateString();
+    }
+
     /** DB HELPER */
     public function generateCode($class_name, $prefix)
     {
