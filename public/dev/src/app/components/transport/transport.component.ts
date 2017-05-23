@@ -18,9 +18,12 @@ export class TransportComponent implements OnInit
     public transports: any[] = [];
     public transports_search: any[] = [];
     public transport: any;
+    public transport_voucher: any[] = [];
     public customers: any[] = [];
     public trucks: any[] = [];
     public products: any[] = [];
+    public vouchers: any[] = [];
+    public header_voucher: any;
 
     /** ICommon **/
     title: string;
@@ -60,12 +63,7 @@ export class TransportComponent implements OnInit
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
-            code: {
-                title: 'Mã'
-            },
-            name: {
-                title: 'Tên'
-            }
+
         };
 
         this.modal = {
@@ -73,6 +71,12 @@ export class TransportComponent implements OnInit
             header: '',
             body: '',
             footer: ''
+        };
+
+        this.header = {
+            name: {
+                title: 'Tên'
+            }
         };
 
         this.formulaFormGroup = this.fb.group({

@@ -333,8 +333,9 @@
                                     <div class="form-group">
                                       <label class="col-lg-2 control-label">Số chứng từ nhận</label>
                                       <div class="col-lg-10">
-                                        <input type="text" class="form-control"
-                                               [(ngModel)]="transport.code" name="code">
+                                        <button data-toggle="modal" data-target="#modal-transport-voucher" class="btn m-b-xs btn-sm btn-default btn-addon">
+                                          <i class="fa fa-plus"></i>Thêm
+                                        </button>
                                       </div>
                                     </div>
                                   </div>
@@ -393,6 +394,37 @@
       <div class="row">
         <div class="col-sm-12">
           <modal [objectData]="modal" (onClicked)="confirmDeactivateOne($event)"></modal>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div id="modal-transport-voucher" class="modal fade" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle" aria-hidden="true"></i></button>
+                  <h3 class="modal-title">Title</h3>
+                </div>
+                <div class="modal-body">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Danh sách chứng từ
+                    </div>
+                    <div class="panel-body">
+                      <xdatatable [body]="vouchers" [header]="header_voucher"></xdatatable>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-default" data-dismiss="modal">Hủy</button>
+                  <button class="btn btn-primary">
+                    Footer
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
