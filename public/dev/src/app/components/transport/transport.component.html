@@ -142,14 +142,14 @@
                                   <div class="col-md-12">
                                     <form class="form-horizontal"
                                           novalidate
-                                          [formGroup]="formulaForm">
+                                          [formGroup]="formulaFormGroup">
                                       <div class="panel panel-success">
                                         <div class="panel-heading">
                                           <span>Công thức:</span>
                                         </div>
                                         <div class="panel-body">
-                                          <div formArrayName="formulas" *ngFor="let formula of formulaForm.controls.formulas.controls; let i=index">
-                                            <formula-transport [group]="formulaForm.controls.formulas.controls[i]"></formula-transport>
+                                          <div formArrayName="formulas" *ngFor="let formula of formulaFormArray.controls; let i=index">
+                                            <formula-transport [group]="formulaFormArray.controls[i]"></formula-transport>
                                           </div>
                                         </div>
                                       </div>

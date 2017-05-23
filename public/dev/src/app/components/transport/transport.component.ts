@@ -76,7 +76,7 @@ export class TransportComponent implements OnInit
             footer: ''
         };
 
-        this.formulaForm = this.fb.group({
+        this.formulaFormGroup = this.fb.group({
             formulas: this.fb.array([])
             // Them moi
             // formulas: this.fb.array([ this.initFormula('Pair', 'AAA', '', '') ])
@@ -341,17 +341,15 @@ export class TransportComponent implements OnInit
         }
     }
 
-    /** My Function **/
-    formulaForm: FormGroup;
+    /** Formulas Form **/
+    formulaFormGroup: FormGroup;
 
-    addFormula(rule: string, name: string, value1: any, value2: any): void {
-        const control = <FormArray>this.formulaForm.controls['formulas'];
-        const addrCtrl = this.initFormula(rule, name, value1, value2);
-        control.push(addrCtrl);
+    get formulaFormArray(): FormArray {
+        return <FormArray>this.formulaFormGroup.controls['formulas'];
     }
 
     initFormula(rule: string, name: string, value1: any, value2: any): FormGroup {
-        let formula;
+        let formula: FormGroup;
         switch (rule) {
             case 'Single':
                 formula = this.fb.group({
@@ -384,16 +382,22 @@ export class TransportComponent implements OnInit
         return formula;
     }
 
-    removeFormula(index: number) {
-        const control = <FormArray>this.formulaForm.controls['formulas'];
-        control.removeAt(index);
+    addFormula(rule: string, name: string, value1: any, value2: any): void {
+        const new_control = this.initFormula(rule, name, value1, value2);
+        this.formulaFormArray.push(new_control);
     }
 
-    clearFormula(length: number) {
-        for(let i = length; i--;) {
+    removeFormula(index: number): void {
+        this.formulaFormArray.removeAt(index);
+    }
+
+    clearFormula(length: number): void {
+        for (let i = length; i--;) {
             this.removeFormula(i);
         }
     }
+
+    /** My Function **/
 
     transport_date: Date = new Date();
     transport_time: Date = new Date();
@@ -401,9 +405,7 @@ export class TransportComponent implements OnInit
     public selectedCustomer(event: any): void {
 
         // Xóa các công thức hiện có
-        const form_array = <FormArray>this.formulaForm.controls['formulas'];
-        let length = form_array.length;
-        this.clearFormula(length);
+        this.clearFormula(this.formulaFormArray.length);
 
         let transport_date = this.dateHelperService.getDate(this.transport_date);
         let transport_time = this.dateHelperService.getTime(this.transport_time);
@@ -418,7 +420,7 @@ export class TransportComponent implements OnInit
         }
     }
 
-    public findFormulas(find_formulas: {}) {
+    public findFormulas(find_formulas: {}): void {
         this.httpClientService.get(`${this.prefix_url}/find-formulas?query=${JSON.stringify(find_formulas)}`).subscribe(
             (success: any) => {
                 let formulas = success['formulas'];
@@ -447,7 +449,6 @@ export class TransportComponent implements OnInit
     }
 
     public findPostage(): void {
-        console.log(this.formulaForm.value.formulas);
         let transport_date = this.dateHelperService.getDate(this.transport_date);
         let transport_time = this.dateHelperService.getTime(this.transport_time);
 
@@ -455,7 +456,7 @@ export class TransportComponent implements OnInit
             customer_id: this.transport.customer_id,
             transport_date: transport_date,
             transport_time: transport_time,
-            formulas: this.formulaForm.value.formulas
+            formulas: this.formulaFormGroup.value.formulas
         };
 
         this.httpClientService.get(`${this.prefix_url}/find-postage?query=${JSON.stringify(formulas)}`).subscribe(
