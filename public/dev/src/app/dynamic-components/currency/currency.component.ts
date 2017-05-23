@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, forwardRef} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, forwardRef} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 import {CurrencyHelperService} from '../../services/helpers/currency.helper';
@@ -72,13 +72,12 @@ export class CurrencyComponent implements OnInit, ControlValueAccessor {
         this.currencyStringData = this.numberHelperService.formatThousandsSeparator(this.currencyNumberData.toString());
     }
 
-    keyUpped() {
-        this.changed();
-    }
+    @Output() onInputed: EventEmitter<number> = new EventEmitter();
 
-    changed() {
-        this.currencyStringData = this.numberHelperService.formatThousandsSeparator(this.currencyStringData);
+    inputed(event: any) {
+        this.currencyStringData = this.numberHelperService.formatThousandsSeparator(event);
         this.currencyNumberData = this.numberHelperService.convertToNumber(this.currencyStringData);
         this.value = this.currencyNumberData;
+        this.onInputed.emit(this.currencyNumberData);
     }
 }

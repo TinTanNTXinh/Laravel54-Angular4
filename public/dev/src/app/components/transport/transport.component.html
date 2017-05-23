@@ -99,9 +99,6 @@
                     <div class="panel-body">
                       <form class="bs-example form-horizontal">
                         <div class="row">
-                          {{ transport | json }}
-                        </div>
-                        <div class="row">
                           <div class="col-md-6">
                             <div class="panel panel-success">
                               <div class="panel-heading">
@@ -133,7 +130,11 @@
                                   </div>
                                   <div class="col-md-6">
                                     <label>Đơn giá</label>
-                                    <currency [numberData]="transport.unit_price" [ngModel]="transport.unit_price" [readonly]="true" name="unit_price"></currency>
+                                    <currency [numberData]="transport.unit_price"
+                                              [readonly]="true"
+                                              [ngModel]="transport.unit_price" name="unit_price"
+                                              (onInputed)="computeRevenue()">
+                                    </currency>
                                   </div>
                                 </div>
 
@@ -203,8 +204,21 @@
                                       <label class="col-lg-2 control-label">Lượng hàng</label>
                                       <div class="col-lg-10">
                                         <currency [numberData]="transport.quantum_product"
-                                                  [suffix]="this.unit_name"
-                                                  [(ngModel)]="transport.quantum_product" name="quantum_product"></currency>
+                                                  [suffix]="transport.unit_name"
+                                                  [(ngModel)]="transport.quantum_product" name="quantum_product"
+                                                  (onInputed)="computeRevenue()">
+                                        </currency>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label class="col-lg-2 control-label">Doanh thu</label>
+                                      <div class="col-lg-10">
+                                        <currency [numberData]="transport.revenue"
+                                                  [readonly]="true"
+                                                  [ngModel]="transport.revenue" name="revenue">
+                                        </currency>
                                       </div>
                                     </div>
                                   </div>
@@ -215,7 +229,10 @@
                                     <div class="form-group">
                                       <label class="col-lg-2 control-label">Bốc xếp</label>
                                       <div class="col-lg-10">
-                                        <currency [numberData]="transport.carrying" [(ngModel)]="transport.carrying" name="carrying"></currency>
+                                        <currency [numberData]="transport.carrying"
+                                                  [(ngModel)]="transport.carrying" name="carrying"
+                                                  (onInputed)="computeRevenue()">
+                                        </currency>
                                       </div>
                                     </div>
                                   </div>
@@ -223,7 +240,10 @@
                                     <div class="form-group">
                                       <label class="col-lg-2 control-label">Neo đêm</label>
                                       <div class="col-lg-10">
-                                        <currency [numberData]="transport.parking" [(ngModel)]="transport.parking" name="parking"></currency>
+                                        <currency [numberData]="transport.parking"
+                                                  [(ngModel)]="transport.parking" name="parking"
+                                                  (onInputed)="computeRevenue()">
+                                        </currency>
                                       </div>
                                     </div>
                                   </div>
@@ -234,7 +254,10 @@
                                     <div class="form-group">
                                       <label class="col-lg-2 control-label">Công an</label>
                                       <div class="col-lg-10">
-                                        <currency [numberData]="transport.fine" [(ngModel)]="transport.fine" name="fine"></currency>
+                                        <currency [numberData]="transport.fine"
+                                                  [(ngModel)]="transport.fine" name="fine"
+                                                  (onInputed)="computeRevenue()">
+                                        </currency>
                                       </div>
                                     </div>
                                   </div>
@@ -242,7 +265,10 @@
                                     <div class="form-group">
                                       <label class="col-lg-2 control-label">Phí tăng bo</label>
                                       <div class="col-lg-10">
-                                        <currency [numberData]="transport.phi_tang_bo" [(ngModel)]="transport.phi_tang_bo" name="phi_tang_bo"></currency>
+                                        <currency [numberData]="transport.phi_tang_bo"
+                                                  [(ngModel)]="transport.phi_tang_bo" name="phi_tang_bo"
+                                                  (onInputed)="computeRevenue()">
+                                        </currency>
                                       </div>
                                     </div>
                                   </div>
@@ -253,7 +279,10 @@
                                     <div class="form-group">
                                       <label class="col-lg-2 control-label">Thêm điểm</label>
                                       <div class="col-lg-10">
-                                        <currency [numberData]="transport.add_score" [(ngModel)]="transport.add_score" name="add_score"></currency>
+                                        <currency [numberData]="transport.add_score"
+                                                  [(ngModel)]="transport.add_score" name="add_score"
+                                                  (onInputed)="computeRevenue()">
+                                        </currency>
                                       </div>
                                     </div>
                                   </div>
@@ -261,7 +290,9 @@
                                     <div class="form-group">
                                       <label class="col-lg-2 control-label">Nhận</label>
                                       <div class="col-lg-10">
-                                        <currency [numberData]="transport.receive" [(ngModel)]="transport.receive" name="receive"></currency>
+                                        <currency [numberData]="transport.receive"
+                                                  [(ngModel)]="transport.receive" name="receive">
+                                        </currency>
                                       </div>
                                     </div>
                                   </div>

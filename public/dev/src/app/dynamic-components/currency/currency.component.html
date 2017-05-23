@@ -1,6 +1,9 @@
 <!--<input type="text" class="form-control" [(ngModel)]="currencyStringData" (ngModelChange)="pressed($event)">-->
 
 <div class="input-group m-b">
-    <input [readonly]="readonly" type="text" class="form-control" id="my-currency" [(ngModel)]="currencyStringData" (keyup)="keyUpped()">
-    <span class="input-group-addon">{{ this.suffix }}</span>
+    <input type="text" class="form-control" id="my-currency"
+           [readonly]="readonly"
+           [(ngModel)]="currencyStringData"
+           (input)="inputed($event.target.value)">
+    <span class="input-group-addon">{{ suffix }}</span>
 </div>

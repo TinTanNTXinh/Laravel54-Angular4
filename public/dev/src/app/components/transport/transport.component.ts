@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, FormArray, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder, FormArray} from '@angular/forms';
 
 import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
@@ -21,7 +21,6 @@ export class TransportComponent implements OnInit
     public customers: any[] = [];
     public trucks: any[] = [];
     public products: any[] = [];
-    public unit_name: string = 'đ/?';
 
     /** ICommon **/
     title: string;
@@ -154,7 +153,8 @@ export class TransportComponent implements OnInit
             customer_id: 0,
             postage_id: 0,
             fuel_id: 0,
-            unit_price: 0
+            unit_price: 0,
+            unit_name: 'đ/?'
         };
     }
 
@@ -348,7 +348,7 @@ export class TransportComponent implements OnInit
         return <FormArray>this.formulaFormGroup.controls['formulas'];
     }
 
-    initFormula(rule: string, name: string, value1: any, value2: any): FormGroup {
+    private initFormula(rule: string, name: string, value1: any, value2: any): FormGroup {
         let formula: FormGroup;
         switch (rule) {
             case 'Single':
@@ -382,16 +382,16 @@ export class TransportComponent implements OnInit
         return formula;
     }
 
-    addFormula(rule: string, name: string, value1: any, value2: any): void {
+    private addFormula(rule: string, name: string, value1: any, value2: any): void {
         const new_control = this.initFormula(rule, name, value1, value2);
         this.formulaFormArray.push(new_control);
     }
 
-    removeFormula(index: number): void {
+    private removeFormula(index: number): void {
         this.formulaFormArray.removeAt(index);
     }
 
-    clearFormula(length: number): void {
+    private clearFormula(length: number): void {
         for (let i = length; i--;) {
             this.removeFormula(i);
         }
@@ -407,6 +407,12 @@ export class TransportComponent implements OnInit
         // Xóa các công thức hiện có
         this.clearFormula(this.formulaFormArray.length);
 
+        // Set lại đơn giá
+        this.transport.unit_price = 0;
+
+        // Set lại doanh thu
+        this.computeRevenue();
+
         let transport_date = this.dateHelperService.getDate(this.transport_date);
         let transport_time = this.dateHelperService.getTime(this.transport_time);
 
@@ -420,12 +426,11 @@ export class TransportComponent implements OnInit
         }
     }
 
-    public findFormulas(find_formulas: {}): void {
+    private findFormulas(find_formulas: {}): void {
         this.httpClientService.get(`${this.prefix_url}/find-formulas?query=${JSON.stringify(find_formulas)}`).subscribe(
             (success: any) => {
                 let formulas = success['formulas'];
                 for (let formula of formulas) {
-                    console.log(formula);
                     switch (formula.rule) {
                         case 'Single':
                             this.addFormula(formula.rule, formula.name, '', '');
@@ -461,15 +466,20 @@ export class TransportComponent implements OnInit
 
         this.httpClientService.get(`${this.prefix_url}/find-postage?query=${JSON.stringify(formulas)}`).subscribe(
             (success: any) => {
-                console.log('postage: ' + success.postage);
                 this.transport.unit_price = success.postage.unit_price;
-                this.unit_name = success.postage.unit_name;
+                this.transport.unit_name = success.postage.unit_name;
+
+                this.computeRevenue();
             },
             (error: any) => {
                 this.toastrHelperService.showToastr('error');
             }
         );
 
+    }
+
+    public computeRevenue(): void {
+        this.transport.revenue = (this.transport.quantum_product * this.transport.unit_price) + (this.transport.carrying + this.transport.parking + this.transport.fine + this.transport.phi_tang_bo + this.transport.add_score);
     }
 
 }
