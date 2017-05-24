@@ -183,9 +183,8 @@ export class TransportComponent implements OnInit
 
     /** ICrud **/
     loadOne(id: number): void {
+        // len server validate va lay ve transport, transport_vouchers, transport_formulas
         this.transport = this.transports.find(o => o.id == id);
-        this.isEdit = true;
-        this.domHelperService.showTab('menu2');
     }
 
     clearOne(): void {
@@ -341,12 +340,14 @@ export class TransportComponent implements OnInit
     actionCrud(obj: any): void {
         switch (obj.mode) {
             case 'add':
-                this.displayEditBtn(false);
                 this.clearOne();
+                this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
             case 'edit':
                 this.loadOne(obj.data.id);
+                this.displayEditBtn(true);
+                this.domHelperService.showTab('menu2');
                 break;
             case 'delete':
                 this.fillDataModal(obj.data.id);
