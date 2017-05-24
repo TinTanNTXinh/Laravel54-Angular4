@@ -183,9 +183,7 @@ export class TransportComponent implements OnInit
 
     /** ICrud **/
     loadOne(id: number): void {
-        this.transport = this.transports.find(function (o) {
-            return o['id'] == id;
-        });
+        this.transport = this.transports.find(o => o.id == id);
         this.isEdit = true;
         this.domHelperService.showTab('menu2');
     }

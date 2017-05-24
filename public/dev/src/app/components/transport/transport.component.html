@@ -126,7 +126,9 @@
                                     <label>Khách hàng</label>
                                     <autocomplete [data]="customers" [name]="'fullname'" [model_name]="'id'"
                                                   [(ngModel)]="transport.customer_id"
-                                                  (onClicked)="selectedCustomer($event)"></autocomplete>
+                                                  (onClicked)="selectedCustomer($event)">
+                                    </autocomplete>
+                                    {{transport.customer_id}}
                                   </div>
                                   <div class="col-md-6">
                                     <label>Đơn giá</label>
@@ -330,7 +332,7 @@
                                     <div class="form-group">
                                       <label class="col-lg-2 control-label">Số chứng từ nhận</label>
                                       <div class="col-lg-10">
-                                        <button data-toggle="modal" data-target="#modal-transport-voucher" class="btn m-b-xs btn-sm btn-default btn-addon">
+                                        <button type="button" data-toggle="modal" data-target="#modal-transport-voucher" class="btn m-b-xs btn-sm btn-default btn-addon">
                                           <i class="fa fa-plus"></i>Thêm
                                         </button>
                                       </div>

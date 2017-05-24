@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, Output, EventEmitter, forwardRef} from '@angular/core';
+import {Component, ElementRef, Input, Output, EventEmitter, forwardRef, OnChanges} from '@angular/core';
 
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 @Component({
@@ -17,10 +17,16 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
         }
     ]
 })
-export class AutoCompleteComponent implements ControlValueAccessor {
+export class AutoCompleteComponent implements ControlValueAccessor, OnChanges {
+
+    ngOnChanges() {
+        if (this.data.length > 0 && !!this.value) {
+            let item = this.data.find(o => o.id == this.value);
+            this.select(item);
+        }
+    }
 
     /** NgModel */
-    @Input() model_name: string = 'id';
     @Input('value') _value: any = null;
     onChange: any = () => {
     };
@@ -64,6 +70,7 @@ export class AutoCompleteComponent implements ControlValueAccessor {
     }
 
     /** Input */
+    @Input() model_name: string = 'id';
     @Input() placeholder: string = '';
     @Input() name: string = 'name';
     @Input() data: any[] = [];
