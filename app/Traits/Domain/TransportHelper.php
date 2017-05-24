@@ -3,6 +3,7 @@
 namespace App\Traits\Domain;
 
 use App\Transport;
+use DB;
 
 trait TransportHelper
 {
@@ -28,7 +29,13 @@ trait TransportHelper
                 'creators.fullname as creator_fullname',
                 'updators.fullname as updator_fullname',
                 'truck_types.name as truck_type_name',
-                'postages.unit_price as postage_unit_price'
+                'postages.unit_price as postage_unit_price',
+                DB::raw($this->getWithCurrencyFormat('transports.receive', 'fc_receive')),
+                DB::raw($this->getWithCurrencyFormat('transports.carrying', 'fc_carrying')),
+                DB::raw($this->getWithCurrencyFormat('transports.parking', 'fc_parking')),
+                DB::raw($this->getWithCurrencyFormat('transports.fine', 'fc_fine')),
+                DB::raw($this->getWithCurrencyFormat('transports.phi_tang_bo', 'fc_phi_tang_bo')),
+                DB::raw($this->getWithCurrencyFormat('transports.add_score', 'fc_add_score'))
             );
 
         return [

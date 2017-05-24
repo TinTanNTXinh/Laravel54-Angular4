@@ -202,6 +202,8 @@ class TransportController extends Controller implements ICrud, IValidate
 
             # Insert VoucherTransport
             foreach ($transport_vouchers as $transport_voucher) {
+                if($transport_voucher['quantum'] <= 0) continue;
+
                 $voucher_transport_new               = new TransportVoucher();
                 $voucher_transport_new->transport_id = $one->id;
                 $voucher_transport_new->voucher_id   = $transport_voucher['voucher_id'];

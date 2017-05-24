@@ -80,7 +80,39 @@ export class TransportComponent implements OnInit
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
-
+            transport_date: {
+                title: 'Ngày vận chuyển'
+            },
+            customer_fullname: {
+                title: 'Khách hàng'
+            },
+            truck_area_code_number_plate: {
+                title: 'Xe'
+            },
+            quantum_product: {
+                title: 'Lượng hàng'
+            },
+            fc_receive: {
+                title: 'Nhận'
+            },
+            fc_carrying: {
+                title: 'Bốc xếp'
+            },
+            fc_parking: {
+                title: 'Neo đêm'
+            },
+            fc_fine: {
+                title: 'Công an'
+            },
+            fc_phi_tang_bo: {
+                title: 'Phí tăng bo'
+            },
+            fc_add_score: {
+                title: 'Thêm điểm'
+            },
+            receiver: {
+                title: 'Người nhận'
+            }
         };
 
         this.modal = {
@@ -132,9 +164,10 @@ export class TransportComponent implements OnInit
         }
         this.products = arr_data['products'];
         this.vouchers = arr_data['vouchers'];
-        for(let voucher of this.vouchers) {
+        this.vouchers.map(function (voucher) {
             voucher.quantum = 0;
-        }
+            return voucher;
+        });
     }
 
     refreshData(): void {
@@ -190,10 +223,19 @@ export class TransportComponent implements OnInit
 
         this.transport.transport_date = this.toTransportDateTime();
 
+        let transport_vouchers = this.vouchers.filter(function(obj){
+            return obj.quantum > 0;
+        }).map(function (obj) {
+            let transport_voucher = {voucher_id: 0, quantum: 0};
+            transport_voucher.voucher_id = obj.id;
+            transport_voucher.quantum = obj.quantum;
+            return transport_voucher;
+        });
+
         let data = {
             "transport": this.transport,
             "formulas": this.formulaFormArray.value,
-            "transport_vouchers": {}
+            "transport_vouchers": transport_vouchers
         };
 
         this.httpClientService.post(this.prefix_url, {"transport": data}).subscribe(
@@ -268,6 +310,22 @@ export class TransportComponent implements OnInit
 
     validateOne(): boolean {
         let flag: boolean = true;
+        if (this.transport.truck_id == 0) {
+            flag = false;
+            this.toastrHelperService.showToastr('warning', `Xe ${this.title} không được để trống!`);
+        }
+        if (this.transport.product_id == 0) {
+            flag = false;
+            this.toastrHelperService.showToastr('warning', `Hàng ${this.title} không được để trống!`);
+        }
+        if (this.transport.customer_id == 0) {
+            flag = false;
+            this.toastrHelperService.showToastr('warning', `Khách hàng ${this.title} không được để trống!`);
+        }
+        if (this.transport.truck_id == 0) {
+            flag = false;
+            this.toastrHelperService.showToastr('warning', `Xe ${this.title} không được để trống!`);
+        }
         return flag;
     }
 
@@ -353,6 +411,10 @@ export class TransportComponent implements OnInit
 
     reloadDataSearch(arr_data: any[]): void {
         this.transports = arr_data['transports'];
+        this.transports = this.transports.map(function(obj){
+           obj.truck_area_code_number_plate = `${obj.truck_area_code} - ${obj.truck_number_plate}`;
+           return obj;
+        });
         this.transports_search = arr_data['transports'];
     }
 
@@ -523,7 +585,7 @@ export class TransportComponent implements OnInit
                 break;
             case 'edit':
                 this.vouchers[obj.index].quantum -= 1;
-                if(this.vouchers[obj.index].quantum < 0)
+                if (this.vouchers[obj.index].quantum < 0)
                     this.vouchers[obj.index].quantum = 0;
                 break;
             case 'delete':

@@ -188,7 +188,7 @@ export class VoucherComponent implements OnInit
         let flag: boolean = true;
         if (this.voucher.name == '') {
             flag = false;
-            this.toastrHelperService.showToastr('warning', `Tên  ${this.title} không được để trống!`);
+            this.toastrHelperService.showToastr('warning', `Tên ${this.title} không được để trống!`);
         }
         return flag;
     }
