@@ -124,10 +124,10 @@
                                 <div class="row">
                                   <div class="col-md-6">
                                     <label>Khách hàng</label>
-                                    <autocomplete [data]="customers" [name]="'fullname'" [model_name]="'id'"
-                                                  [(ngModel)]="transport.customer_id"
+                                    <xautocomplete [data]="customers" [name]="'fullname'" [model_name]="'id'"
+                                                  [(value)]="transport.customer_id"
                                                   (onClicked)="selectedCustomer($event)">
-                                    </autocomplete>
+                                    </xautocomplete>
                                     {{transport.customer_id}}
                                   </div>
                                   <div class="col-md-6">

@@ -11,9 +11,11 @@ import {CurrencyComponent} from './dynamic-components/currency/currency.componen
 import {SpinnerComponent} from './dynamic-components/spinner/spinner.component';
 import {SpinnerFbComponent} from './dynamic-components/spinner-fb/spinner-fb.component';
 import {AutoCompleteComponent} from './dynamic-components/autocomplete/autocomplete.component';
+import {XAutoCompleteComponent} from './dynamic-components/xautocomplete/xautocomplete.component';
 import {XDatatableComponent} from './dynamic-components/xdatatable/xdatatable.component';
 import {ObjNgFor} from './pipes/objngfor.pipe';
 import {SafeHtmlPipe} from './pipes/safe-html.pipe';
+import {SafeDomPipe} from './pipes/safe-dom.pipe';
 import {MonthPicker} from './dynamic-components/month-picker/month-picker.component';
 import {YearPicker} from './dynamic-components/year-picker/year-picker.component';
 import {XPaginationComponent} from './dynamic-components/xpagination/xpagination.component';
@@ -47,9 +49,11 @@ import {VoucherComponent} from './components/voucher/voucher.component';
         SpinnerComponent,
         SpinnerFbComponent,
         AutoCompleteComponent,
+        XAutoCompleteComponent,
         XDatatableComponent,
         ObjNgFor,
         SafeHtmlPipe,
+        SafeDomPipe,
         MonthPicker,
         YearPicker,
         XPaginationComponent,
@@ -80,9 +84,11 @@ import {VoucherComponent} from './components/voucher/voucher.component';
         SpinnerComponent,
         SpinnerFbComponent,
         AutoCompleteComponent,
+        XAutoCompleteComponent,
         XDatatableComponent,
         ObjNgFor,
         SafeHtmlPipe,
+        SafeDomPipe,
         MonthPicker,
         YearPicker,
         XPaginationComponent,

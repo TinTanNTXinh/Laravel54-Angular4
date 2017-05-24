@@ -508,7 +508,7 @@ export class TransportComponent implements OnInit
         // Set lại doanh thu
         this.computeRevenue();
 
-        if (!!event.id && event.id != 0) {
+        if (!!event.id) {
             let find_formulas = {
                 customer_id: event.id,
                 transport_date: this.toTransportDateTime()
