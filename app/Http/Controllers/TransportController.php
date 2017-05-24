@@ -145,8 +145,21 @@ class TransportController extends Controller implements ICrud, IValidate
 
     public function readOne($id)
     {
-        $one = Transport::find($id);
-        return [$this->table_name => $one];
+        $one = $this->skeleton->where('transports.id', $id)->first();
+
+        $transport_vouchers = TransportVoucher::whereActive(true)
+            ->where('transport_id', $id)
+            ->get();
+
+        $transport_formulas = TransportFormula::whereActive(true)
+            ->where('transport_id', $id)
+            ->get();
+
+        return [
+            $this->table_name    => $one,
+            'transport_vouchers' => $transport_vouchers,
+            'transport_formulas' => $transport_formulas
+        ];
     }
 
     public function createOne($data)
@@ -202,7 +215,7 @@ class TransportController extends Controller implements ICrud, IValidate
 
             # Insert VoucherTransport
             foreach ($transport_vouchers as $transport_voucher) {
-                if($transport_voucher['quantum'] <= 0) continue;
+                if ($transport_voucher['quantum'] <= 0) continue;
 
                 $voucher_transport_new               = new TransportVoucher();
                 $voucher_transport_new->transport_id = $one->id;

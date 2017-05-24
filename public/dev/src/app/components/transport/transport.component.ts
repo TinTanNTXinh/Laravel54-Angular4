@@ -159,7 +159,7 @@ export class TransportComponent implements OnInit
         this.vouchers = arr_data['vouchers'];
 
         this.setAreaCodeNumberPlateTruck();
-        this.resetQuantumVoucher();
+        this.clearQuantumVoucher();
     }
 
     refreshData(): void {
@@ -175,12 +175,33 @@ export class TransportComponent implements OnInit
 
     /** ICrud **/
     loadOne(id: number): void {
-        // len server validate va lay ve transport, transport_vouchers, transport_formulas
-        this.transport = this.transports.find(o => o.id == id);
+        this.httpClientService.get(`${this.prefix_url}/${id}`).subscribe(
+            (success: any) => {
+                // set transport
+                this.transport = success['transport'];
 
-        // set date
-        this.transport_date = new Date(this.transport.transport_date);
-        this.transport_time = new Date(this.transport.transport_date);
+                // set transport_date
+                this.transport_date = new Date(this.transport.transport_date);
+                this.transport_time = new Date(this.transport.transport_date);
+
+                // set transport_vouchers
+                this.clearQuantumVoucher();
+                success['transport_vouchers'].forEach(function (transport_voucher) {
+                    let voucher = this.vouchers.find(o => o.id == transport_voucher.voucher_id);
+                    if (voucher)
+                        voucher.quantum = transport_voucher.quantum;
+                }, this);
+
+                // set transport_formulas
+                this.clearFormula();
+                success['transport_formulas'].forEach(function (transport_formula) {
+                    this.addFormula(transport_formula.rule, transport_formula.name, transport_formula.value1, transport_formula.value2);
+                }, this);
+            },
+            (error: any) => {
+                this.toastrHelperService.showToastr('error');
+            }
+        );
     }
 
     clearOne(): void {
@@ -480,7 +501,8 @@ export class TransportComponent implements OnInit
         this.formulaFormArray.removeAt(index);
     }
 
-    private clearFormula(length: number): void {
+    private clearFormula(): void {
+        let length: number = this.formulaFormArray.length;
         for (let i = length; i--;) {
             this.removeFormula(i);
         }
@@ -490,7 +512,7 @@ export class TransportComponent implements OnInit
     public selectedCustomer(event: any): void {
 
         // Xóa các công thức hiện có
-        this.clearFormula(this.formulaFormArray.length);
+        this.clearFormula();
 
         // Set lại đơn giá
         this.transport.postage_unit_price = 0;
@@ -580,7 +602,7 @@ export class TransportComponent implements OnInit
         }
     }
 
-    private resetQuantumVoucher(): void {
+    private clearQuantumVoucher(): void {
         this.vouchers.map(function (voucher) {
             voucher.quantum = 0;
             return voucher;
