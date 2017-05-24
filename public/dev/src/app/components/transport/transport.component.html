@@ -124,19 +124,20 @@
                                 <div class="row">
                                   <div class="col-md-6">
                                     <label>Khách hàng</label>
-                                    <xautocomplete [data]="customers" [name]="'fullname'" [model_name]="'id'"
-                                                  [(value)]="transport.customer_id"
-                                                  (onClicked)="selectedCustomer($event)">
+                                    <xautocomplete [data]="customers"
+                                                   [name]="'fullname'"
+                                                   [model_name]="'id'"
+                                                   [(value)]="transport.customer_id"
+                                                   (onClicked)="selectedCustomer($event)">
                                     </xautocomplete>
-                                    {{transport.customer_id}}
                                   </div>
                                   <div class="col-md-6">
                                     <label>Đơn giá</label>
-                                    <!--<currency [numberData]="transport.unit_price"-->
-                                              <!--[readonly]="true"-->
-                                              <!--[ngModel]="transport.unit_price" name="unit_price"-->
-                                              <!--(onInputed)="computeRevenue()">-->
-                                    <!--</currency>-->
+                                    <currency [numberData]="transport.postage_unit_price"
+                                              [readonly]="true"
+                                              [ngModel]="transport.postage_unit_price" name="postage_unit_price"
+                                              (onInputed)="computeRevenue()">
+                                    </currency>
                                   </div>
                                 </div>
 
@@ -181,8 +182,11 @@
                                     <div class="form-group">
                                       <label class="col-lg-2 control-label">Xe</label>
                                       <div class="col-lg-10">
-                                        <autocomplete [data]="trucks" [name]="'area_code_number_plate'" [model_name]="'id'"
-                                                      [(ngModel)]="transport.truck_id"></autocomplete>
+                                        <xautocomplete [data]="trucks"
+                                                       [name]="'area_code_number_plate'"
+                                                       [model_name]="'id'"
+                                                       [(value)]="transport.truck_id">
+                                        </xautocomplete>
                                       </div>
                                     </div>
                                   </div>
@@ -190,8 +194,11 @@
                                     <div class="form-group">
                                       <label class="col-lg-2 control-label">Hàng</label>
                                       <div class="col-lg-10">
-                                        <autocomplete [data]="products" [name]="'name'" [model_name]="'id'"
-                                                      [(ngModel)]="transport.product_id"></autocomplete>
+                                        <xautocomplete [data]="products"
+                                                       [name]="'name'"
+                                                       [model_name]="'id'"
+                                                       [(value)]="transport.product_id">
+                                        </xautocomplete>
                                       </div>
                                     </div>
                                   </div>

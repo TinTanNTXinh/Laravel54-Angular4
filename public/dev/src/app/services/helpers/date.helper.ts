@@ -52,6 +52,10 @@ export class DateHelperService {
         return `${dt.toTimeString().substr(0, 5)}:00`;
     }
 
+    public joinDateTimeToString(date1: Date, date2: Date): string {
+        return `${this.getDate(date1)} ${this.getTime(date2)}`;
+    }
+
     public createDate(str: string): Date {
         // Mask: dd/mm/YYYY;
         let day: number = Number(str.substr(0, 2));

@@ -16,9 +16,7 @@ export class TransportComponent implements OnInit
 
     /** My Variables **/
     public transports: any[] = [];
-    public transports_search: any[] = [];
     public transport: any;
-    public transport_voucher: any[] = [];
     public customers: any[] = [];
     public trucks: any[] = [];
     public products: any[] = [];
@@ -41,6 +39,8 @@ export class TransportComponent implements OnInit
             icon: ''
         }
     };
+    public transport_date: Date = new Date();
+    public transport_time: Date = new Date();
 
     /** ICommon **/
     title: string;
@@ -80,7 +80,7 @@ export class TransportComponent implements OnInit
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
-            transport_date: {
+            fd_transport_date: {
                 title: 'Ngày vận chuyển'
             },
             customer_fullname: {
@@ -133,10 +133,6 @@ export class TransportComponent implements OnInit
 
         this.formulaFormGroup = this.fb.group({
             formulas: this.fb.array([])
-            // Them moi
-            // formulas: this.fb.array([ this.initFormula('Pair', 'AAA', '', '') ])
-            // Chinh sua
-            // formulas: this.fb.array([ this.initFormulaEdit() ])
         });
 
         this.transport_time.setHours(0, 0, 0, 0);
@@ -159,15 +155,11 @@ export class TransportComponent implements OnInit
         this.transports = [];
         this.customers = arr_data['customers'];
         this.trucks = arr_data['trucks'];
-        for (let truck of this.trucks) {
-            truck.area_code_number_plate = `${truck.area_code}-${truck.number_plate}`;
-        }
         this.products = arr_data['products'];
         this.vouchers = arr_data['vouchers'];
-        this.vouchers.map(function (voucher) {
-            voucher.quantum = 0;
-            return voucher;
-        });
+
+        this.setAreaCodeNumberPlateTruck();
+        this.resetQuantumVoucher();
     }
 
     refreshData(): void {
@@ -185,6 +177,10 @@ export class TransportComponent implements OnInit
     loadOne(id: number): void {
         // len server validate va lay ve transport, transport_vouchers, transport_formulas
         this.transport = this.transports.find(o => o.id == id);
+
+        // set date
+        this.transport_date = new Date(this.transport.transport_date);
+        this.transport_time = new Date(this.transport.transport_date);
     }
 
     clearOne(): void {
@@ -210,7 +206,7 @@ export class TransportComponent implements OnInit
             customer_id: 0,
             postage_id: 0,
             fuel_id: 0,
-            unit_price: 0,
+            postage_unit_price: 0,
             unit_name: 'đ/?'
         };
     }
@@ -218,9 +214,9 @@ export class TransportComponent implements OnInit
     addOne(): void {
         if (!this.validateOne()) return;
 
-        this.transport.transport_date = this.toTransportDateTime();
+        this.setDateTimeToTransport();
 
-        let transport_vouchers = this.vouchers.filter(function(obj){
+        let transport_vouchers = this.vouchers.filter(function (obj) {
             return obj.quantum > 0;
         }).map(function (obj) {
             let transport_voucher = {voucher_id: 0, quantum: 0};
@@ -252,7 +248,7 @@ export class TransportComponent implements OnInit
     updateOne(): void {
         if (!this.validateOne()) return;
 
-        this.transport.transport_date = this.toTransportDateTime();
+        this.setDateTimeToTransport();
 
         let data = {
             "transport": this.transport,
@@ -410,11 +406,8 @@ export class TransportComponent implements OnInit
 
     reloadDataSearch(arr_data: any[]): void {
         this.transports = arr_data['transports'];
-        this.transports = this.transports.map(function(obj){
-           obj.truck_area_code_number_plate = `${obj.truck_area_code} - ${obj.truck_number_plate}`;
-           return obj;
-        });
-        this.transports_search = arr_data['transports'];
+
+        this.setAreaCodeNumberPlateTruck();
     }
 
     clearSearch(): void {
@@ -494,17 +487,13 @@ export class TransportComponent implements OnInit
     }
 
     /** My Function **/
-
-    transport_date: Date = new Date();
-    transport_time: Date = new Date();
-
     public selectedCustomer(event: any): void {
 
         // Xóa các công thức hiện có
         this.clearFormula(this.formulaFormArray.length);
 
         // Set lại đơn giá
-        this.transport.unit_price = 0;
+        this.transport.postage_unit_price = 0;
 
         // Set lại doanh thu
         this.computeRevenue();
@@ -512,7 +501,7 @@ export class TransportComponent implements OnInit
         if (!!event.id) {
             let find_formulas = {
                 customer_id: event.id,
-                transport_date: this.toTransportDateTime()
+                transport_date: this.dateHelperService.joinDateTimeToString(this.transport_date, this.transport_time)
             };
             this.findFormulas(find_formulas);
         }
@@ -548,13 +537,13 @@ export class TransportComponent implements OnInit
     public findPostage(): void {
         let formulas = {
             customer_id: this.transport.customer_id,
-            transport_date: this.toTransportDateTime(),
+            transport_date: this.dateHelperService.joinDateTimeToString(this.transport_date, this.transport_time),
             formulas: this.formulaFormGroup.value.formulas
         };
 
         this.httpClientService.get(`${this.prefix_url}/find-postage?query=${JSON.stringify(formulas)}`).subscribe(
             (success: any) => {
-                this.transport.unit_price = success.postage.unit_price;
+                this.transport.postage_unit_price = success.postage.unit_price;
                 this.transport.unit_name = success.postage.unit_name;
 
                 this.computeRevenue();
@@ -567,14 +556,11 @@ export class TransportComponent implements OnInit
     }
 
     public computeRevenue(): void {
-        this.transport.revenue = (this.transport.quantum_product * this.transport.unit_price) + (this.transport.carrying + this.transport.parking + this.transport.fine + this.transport.phi_tang_bo + this.transport.add_score);
+        this.transport.revenue = (this.transport.quantum_product * this.transport.postage_unit_price) + (this.transport.carrying + this.transport.parking + this.transport.fine + this.transport.phi_tang_bo + this.transport.add_score);
     }
 
-    private toTransportDateTime(): string {
-        let transport_date = this.dateHelperService.getDate(this.transport_date);
-        let transport_time = this.dateHelperService.getTime(this.transport_time);
-
-        return `${transport_date} ${transport_time}`;
+    private setDateTimeToTransport(): void {
+        this.transport.transport_date = this.dateHelperService.joinDateTimeToString(this.transport_date, this.transport_time);
     }
 
     public actionVoucher(obj: any): void {
@@ -592,5 +578,19 @@ export class TransportComponent implements OnInit
             default:
                 break;
         }
+    }
+
+    private resetQuantumVoucher(): void {
+        this.vouchers.map(function (voucher) {
+            voucher.quantum = 0;
+            return voucher;
+        });
+    }
+
+    private setAreaCodeNumberPlateTruck(): void {
+        this.trucks.map(function (truck) {
+            truck.area_code_number_plate = `${truck.area_code}-${truck.number_plate}`;
+            return truck;
+        });
     }
 }
