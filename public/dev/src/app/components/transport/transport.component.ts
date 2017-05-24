@@ -14,8 +14,6 @@ import {DomHelperService} from '../../services/helpers/dom.helper';
 export class TransportComponent implements OnInit
     , ICommon, ICrud, IDatePicker, ISearch {
 
-    public num: number = 0;
-
     /** My Variables **/
     public transports: any[] = [];
     public transports_search: any[] = [];
@@ -26,6 +24,23 @@ export class TransportComponent implements OnInit
     public products: any[] = [];
     public vouchers: any[] = [];
     public header_voucher: any;
+    public action_voucher: any = {
+        ADD: {
+            visible: true,
+            caption: 'Tăng',
+            icon: 'fa fa-plus'
+        },
+        EDIT: {
+            visible: true,
+            caption: 'Giảm',
+            icon: 'fa fa-minus'
+        },
+        DELETE: {
+            visible: false,
+            caption: '',
+            icon: ''
+        }
+    };
 
     /** ICommon **/
     title: string;
@@ -75,9 +90,12 @@ export class TransportComponent implements OnInit
             footer: ''
         };
 
-        this.header = {
+        this.header_voucher = {
             name: {
                 title: 'Tên'
+            },
+            quantum: {
+                title: 'Số lượng'
             }
         };
 
@@ -113,6 +131,10 @@ export class TransportComponent implements OnInit
             truck.area_code_number_plate = `${truck.area_code}-${truck.number_plate}`;
         }
         this.products = arr_data['products'];
+        this.vouchers = arr_data['vouchers'];
+        for(let voucher of this.vouchers) {
+            voucher.quantum = 0;
+        }
     }
 
     refreshData(): void {
@@ -494,4 +516,20 @@ export class TransportComponent implements OnInit
         return `${transport_date} ${transport_time}`;
     }
 
+    public actionVoucher(obj: any): void {
+        switch (obj.mode) {
+            case 'add':
+                this.vouchers[obj.index].quantum += 1;
+                break;
+            case 'edit':
+                this.vouchers[obj.index].quantum -= 1;
+                if(this.vouchers[obj.index].quantum < 0)
+                    this.vouchers[obj.index].quantum = 0;
+                break;
+            case 'delete':
+                break;
+            default:
+                break;
+        }
+    }
 }

@@ -1,14 +1,14 @@
 <!--<div class="well well-lg">-->
 <!--Selected Row : <strong>{{selectedRow}}</strong>-->
 <!--</div>-->
-<button class="btn m-b-xs btn-sm btn-primary btn-addon" (click)="clicked('add')" *ngIf="action.ADD">
-  <i class="fa fa-plus"></i>Thêm
+<button class="btn m-b-xs btn-sm btn-primary btn-addon" (click)="clicked('add')" *ngIf="action.ADD.visible">
+  <i [class]="action.ADD.icon"></i>{{action.ADD.caption}}
 </button>
-<button class="btn m-b-xs btn-sm btn-warning btn-addon" (click)="clicked('edit')" *ngIf="action.EDIT">
-  <i class="fa fa-pencil"></i>Cập nhật
+<button class="btn m-b-xs btn-sm btn-warning btn-addon" (click)="clicked('edit')" *ngIf="action.EDIT.visible">
+  <i [class]="action.EDIT.icon"></i>{{action.EDIT.caption}}
 </button>
-<button class="btn m-b-xs btn-sm btn-danger btn-addon" (click)="clicked('delete')" *ngIf="action.DELETE">
-  <i class="fa fa-trash-o"></i>Xóa
+<button class="btn m-b-xs btn-sm btn-danger btn-addon" (click)="clicked('delete')" *ngIf="action.DELETE.visible">
+  <i [class]="action.DELETE.icon"></i>{{action.DELETE.caption}}
 </button>
 <button id="btn-show-modal" data-toggle="modal" data-target="#modal-confirm" hidden></button>
 <div class="table-responsive">

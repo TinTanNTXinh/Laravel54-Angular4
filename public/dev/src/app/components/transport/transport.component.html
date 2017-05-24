@@ -106,10 +106,6 @@
                               </div>
                               <div class="panel-body">
                                 <div class="row">
-                                  <counter [(counter)]="num"></counter>
-                                  {{num}}
-                                </div>
-                                <div class="row">
                                     <div class="col-sm-1"></div>
                                     <div class="col-sm-5">
                                       <label>Ngày vận chuyển</label>
@@ -403,22 +399,19 @@
       <div class="row">
         <div class="col-sm-12">
           <div id="modal-transport-voucher" class="modal fade" role="dialog" tabindex="-1">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
               <!-- Modal content-->
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle" aria-hidden="true"></i></button>
-                  <h3 class="modal-title">Title</h3>
+                  <h3 class="modal-title">Danh sách chứng từ</h3>
                 </div>
                 <div class="modal-body">
-                  <div class="panel panel-default">
-                    <div class="panel-heading font-bold">
-                      Danh sách chứng từ
-                    </div>
-                    <div class="panel-body">
-                      <!--<xdatatable [body]="vouchers" [header]="header_voucher"></xdatatable>-->
-                    </div>
-                  </div>
+                  <xdatatable [header]="header_voucher"
+                              [body]="vouchers"
+                              [action]="action_voucher"
+                              (onClicked)="actionVoucher($event)">
+                  </xdatatable>
                 </div>
                 <div class="modal-footer">
                   <button class="btn btn-default" data-dismiss="modal">Hủy</button>

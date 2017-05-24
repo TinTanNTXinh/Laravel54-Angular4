@@ -31,6 +31,7 @@ import {LubeComponent} from './components/lube/lube.component';
 import {OilComponent} from './components/oil/oil.component';
 import {CustomerComponent} from './components/customer/customer.component';
 import {DriverComponent} from './components/driver/driver.component';
+import {VoucherComponent} from './components/voucher/voucher.component';
 
 @NgModule({
     imports: [
@@ -64,7 +65,8 @@ import {DriverComponent} from './components/driver/driver.component';
         LubeComponent,
         OilComponent,
         CustomerComponent,
-        DriverComponent
+        DriverComponent,
+        VoucherComponent
     ],
     exports: [
         CommonModule,
@@ -96,7 +98,8 @@ import {DriverComponent} from './components/driver/driver.component';
         LubeComponent,
         OilComponent,
         CustomerComponent,
-        DriverComponent
+        DriverComponent,
+        VoucherComponent
     ]
 })
 export class SharedModule {

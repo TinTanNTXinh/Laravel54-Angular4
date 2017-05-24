@@ -19,12 +19,14 @@ use App\Traits\Domain\TransportHelper;
 use App\Traits\Domain\CustomerHelper;
 use App\Traits\Domain\TruckHelper;
 use App\Traits\Domain\ProductHelper;
+use App\Traits\Domain\VoucherHelper;
 use App\Transport;
 
 class TransportController extends Controller implements ICrud, IValidate
 {
     use UserHelper, DBHelper, FormulaHelper, PostageHelper
-        , TransportHelper, CustomerHelper, TruckHelper, ProductHelper;
+        , TransportHelper, CustomerHelper, TruckHelper, ProductHelper
+        , VoucherHelper;
 
     private $first_day, $last_day, $today;
     private $user;
@@ -127,12 +129,14 @@ class TransportController extends Controller implements ICrud, IValidate
         $customers = $this->readAllCustomer()['skeleton']->get();
         $trucks    = $this->readAllTruck()['skeleton']->get();
         $products  = $this->readAllProduct()['skeleton']->get();
+        $vouchers  = $this->readAllVoucher()['skeleton']->get();
 
         return [
             'transports' => $transports,
             'customers'  => $customers,
             'trucks'     => $trucks,
             'products'   => $products,
+            'vouchers'   => $vouchers,
             'first_day'  => $this->first_day,
             'last_day'   => $this->last_day,
             'today'      => $this->today

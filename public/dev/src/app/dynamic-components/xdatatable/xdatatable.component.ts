@@ -13,8 +13,8 @@ import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 export class XDatatableComponent {
 
     /** Variables */
-    selectedRow: number;
-    setClickedRow: Function;
+    public selectedRow: number;
+    public setClickedRow: Function;
     public isAsc: boolean = true;
     public id_pagination: string;
     private body_data: any[];
@@ -22,11 +22,11 @@ export class XDatatableComponent {
     /**
      * VARIABLE PAGINATION
      */
-        // pager object
-    pager: any = {};
+    // pager object
+    public pager: any = {};
     // paged items
-    pagedItems: any[];
-    pageSize: number = 10;
+    public pagedItems: any[];
+    private pageSize: number = 10;
 
 
     constructor(private paginationHelperService: PaginationHelperService,
@@ -43,9 +43,21 @@ export class XDatatableComponent {
     /** Input */
     @Input() header: any;
     @Input() action: any = {
-        ADD: true,
-        EDIT: true,
-        DELETE: true
+        ADD: {
+            visible: true,
+            caption: 'Thêm',
+            icon: 'fa fa-plus',
+        },
+        EDIT: {
+            visible: true,
+            caption: 'Cập nhật',
+            icon: 'fa fa-pencil',
+        },
+        DELETE: {
+            visible: true,
+            caption: 'Xóa',
+            icon: 'fa fa-trash-o',
+        }
     };
 
     @Input() get body(): any[] {
@@ -63,26 +75,35 @@ export class XDatatableComponent {
     @Output() onClicked: EventEmitter<any> = new EventEmitter();
 
     public clicked(mode: string): void {
-        switch (mode) {
-            case 'add':
-                this.onClicked.emit({index: 0, mode: mode, data: {}});
-                break;
-            case 'edit':
-            case 'delete':
-                let index = this.selectedRow + (this.pager.currentPage * this.pageSize) - this.pageSize;
-                let data = this.body_data[index];
-                if (typeof data !== 'undefined') {
-                    this.onClicked.emit({index: index, mode: mode, data: data});
-                    if (mode == 'delete')
-                        this.domHelperService.getElementById('btn-show-modal').click();
-                }
-                else
-                    this.toastrHelperService.showToastr('warning', 'Vui lòng chọn một dòng dữ liệu!');
-                break;
-            default:
-                break;
-        }
 
+        let index = this.selectedRow + (this.pager.currentPage * this.pageSize) - this.pageSize;
+        let data = this.body_data[index];
+        if (typeof data !== 'undefined') {
+            this.onClicked.emit({index: index, mode: mode, data: data});
+            switch (mode) {
+                case 'add':
+                case 'edit':
+                    break;
+                case 'delete':
+                    this.domHelperService.getElementById('btn-show-modal').click();
+                    break;
+                default:
+                    break;
+            }
+        }
+        else {
+            switch (mode) {
+                case 'add':
+                    this.onClicked.emit({index: 0, mode: mode, data: {}});
+                    break;
+                case 'edit':
+                case 'delete':
+                    this.toastrHelperService.showToastr('warning', 'Vui lòng chọn một dòng dữ liệu!');
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     /** Visible column */

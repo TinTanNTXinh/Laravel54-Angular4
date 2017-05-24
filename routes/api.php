@@ -86,6 +86,17 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'TransportController@deleteDeleteOne');
 
         });
+
+        Route::group(['middleware' => [], 'prefix' => 'vouchers'], function () {
+            Route::get('/', 'VoucherController@getReadAll');
+            Route::get('/search', 'VoucherController@getSearchOne');
+            Route::get('/{id}', 'VoucherController@getReadOne');
+            Route::post('/', 'VoucherController@postCreateOne');
+            Route::put('/', 'VoucherController@putUpdateOne');
+            Route::patch('/', 'VoucherController@patchDeactivateOne');
+            Route::delete('/{id}', 'VoucherController@deleteDeleteOne');
+
+        });
     });
 });
 
