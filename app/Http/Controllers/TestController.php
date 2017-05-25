@@ -2,26 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\Domain\FormulaHelper;
-use App\Traits\Domain\PostageHelper;
 use Illuminate\Http\Request;
-use App\Interfaces\ICrud;
-use App\Interfaces\IValidate;
+
+use App\Repositories\TransportRepositoryInterface;
 
 class TestController extends Controller
 {
-    use FormulaHelper, PostageHelper;
-
-    public function index()
+    protected $postRepository  = '';
+    public function __construct(TransportRepositoryInterface $PostRepositoryInterface)
     {
-//        $formulas = $this->findFormulas(1);
-//        return $formulas;
+        $this->postRepository = $PostRepositoryInterface;
+    }
 
-        $postage = $this->findPostage([[
-            'rule' => 'S',
-            'name' => 'Tỉnh',
-            'value' => 'Đồng Nai'
-        ]], 1);
-        return $postage;
+    /**
+     * Lấy danh sách post
+     */
+    function all()
+    {
+        $list = $this->postRepository->allActive();
+        return $list;
     }
 }
