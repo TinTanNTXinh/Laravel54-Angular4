@@ -85,7 +85,9 @@ class AuthController extends Controller
         if (!$roles)
             return ['error' => 'role is not exist', 'status_code' => 401];
 
-        $group_roles = GroupRole::whereActive(true)->get();
+        $group_roles = GroupRole::whereActive(true)
+            ->orderBy('index')
+            ->get();
 
         return [
             'user' => $user,

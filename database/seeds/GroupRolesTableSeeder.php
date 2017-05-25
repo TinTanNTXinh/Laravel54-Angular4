@@ -18,7 +18,7 @@ class GroupRolesTableSeeder extends Seeder
             'Mặc định',
             'QL người dùng',
             'QL khách hàng',
-            'QL nhà xe',
+            'QL Xe - Tài xế',
             'QL công nợ',
             'QL chi phí',
             'QL nhiên liệu',
@@ -26,7 +26,7 @@ class GroupRolesTableSeeder extends Seeder
         ];
 
         $array_index = [
-            1, 2, 3, 4, 5, 6, 7, 8
+            1, 2, 3, 4, 7, 6, 5, 8
         ];
 
         $array_icon_name = [

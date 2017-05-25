@@ -33,7 +33,7 @@ export class XAutoCompleteComponent implements OnChanges {
     private pos: number = -1;
     private opened: boolean = false;
     private selectedItem: any;
-    
+
     // http://keycode.info/
     private key_codes_deny: any[] = [17, 16, 20, 9, 192, 27
         , 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123
