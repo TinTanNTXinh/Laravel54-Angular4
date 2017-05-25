@@ -72,7 +72,7 @@ trait DBHelper
 
     public function toStringDateTimeClientForDB($date, $format = 'd/m/Y H:i:s')
     {
-        return Carbon::createFromFormat($format, $date)->toDateString();
+        return Carbon::createFromFormat($format, $date)->toDateTimeString();
     }
 
     /** DB HELPER */

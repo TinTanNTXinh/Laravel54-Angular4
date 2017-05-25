@@ -207,7 +207,7 @@ export class TransportComponent implements OnInit
         this.transport = {
             code: '',
             transport_date: '',
-            type1: '',
+            type1: 'NORMAL',
             quantum_product: 0,
             revenue: 0,
             receive: 0,
@@ -274,13 +274,22 @@ export class TransportComponent implements OnInit
 
         this.setDateTimeToTransport();
 
+        let transport_vouchers = this.vouchers.filter(function (obj) {
+            return obj.quantum > 0;
+        }).map(function (obj) {
+            let transport_voucher = {voucher_id: 0, quantum: 0};
+            transport_voucher.voucher_id = obj.id;
+            transport_voucher.quantum = obj.quantum;
+            return transport_voucher;
+        });
+
         let data = {
             "transport": this.transport,
             "formulas": this.formulaFormArray.value,
-            "transport_vouchers": {}
+            "transport_vouchers": transport_vouchers
         };
 
-        this.httpClientService.put(this.prefix_url, data).subscribe(
+        this.httpClientService.put(this.prefix_url, {"transport": data}).subscribe(
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();

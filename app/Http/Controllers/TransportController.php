@@ -172,7 +172,7 @@ class TransportController extends Controller implements ICrud, IValidate
             $one                   = new Transport();
             $one->code             = $this->generateCode(Transport::class, 'TRANSPORT');
             $one->transport_date   = $this->toStringDateTimeClientForDB($transport['transport_date']);
-            $one->type1            = 'NORMAL';
+            $one->type1            = $transport['type1'];
             $one->type2            = '';
             $one->type3            = '';
             $one->quantum_product  = $transport['quantum_product'];
@@ -249,7 +249,6 @@ class TransportController extends Controller implements ICrud, IValidate
                 }
             }
 
-
             DB::commit();
             return true;
         } catch (Exception $ex) {
@@ -260,16 +259,104 @@ class TransportController extends Controller implements ICrud, IValidate
 
     public function updateOne($data)
     {
+        $transport          = $data['transport'];
+        $formulas           = $data['formulas'];
+        $transport_vouchers = $data['transport_vouchers'];
         try {
             DB::beginTransaction();
-            $one       = Transport::find($data['id']);
-            $one->code = $data['code'];
+            $one                   = Transport::find($transport['id']);
+            $one->transport_date   = $this->toStringDateTimeClientForDB($transport['transport_date']);
+            $one->type1            = $transport['type1'];
+            $one->type2            = '';
+            $one->type3            = '';
+            $one->quantum_product  = $transport['quantum_product'];
+            $one->revenue          = $transport['revenue'];
+            $one->profit           = 0;
+            $one->receive          = $transport['receive'];
+            $one->delivery         = $transport['delivery'];
+            $one->carrying         = $transport['carrying'];
+            $one->parking          = $transport['parking'];
+            $one->fine             = $transport['fine'];
+            $one->phi_tang_bo      = $transport['phi_tang_bo'];
+            $one->add_score        = $transport['add_score'];
+            $one->delivery_real    = $one->delivery;
+            $one->carrying_real    = $one->carrying;
+            $one->parking_real     = $one->parking;
+            $one->fine_real        = $one->fine;
+            $one->phi_tang_bo_real = $one->phi_tang_bo;
+            $one->add_score_real   = $one->add_score;
 
+            $one->voucher_number             = $transport['voucher_number'];
+            $one->quantum_product_on_voucher = $transport['quantum_product_on_voucher'];
+            $one->receiver                   = $transport['receiver'];
+
+            $one->note         = $transport['note'];
+            $one->updated_by   = $this->user->id;
             $one->updated_date = date('Y-m-d H:i:s');
             $one->active       = true;
+            $one->truck_id     = $transport['truck_id'];
+            $one->product_id   = $transport['product_id'];
+            $one->customer_id  = $transport['customer_id'];
+            $one->postage_id   = $transport['postage_id'];
+            $one->fuel_id      = $transport['fuel_id'];
+
             if (!$one->update()) {
                 DB::rollBack();
                 return false;
+            }
+
+            # Delete TransportVoucher
+            $transport_vouchers_delete = TransportVoucher::whereActive(true)
+                ->where('transport_id', $one->id)
+                ->get();
+
+            $transport_vouchers_delete->each(function ($item) {
+                $item->delete();
+            });
+
+            # Insert TransportVoucher
+            foreach ($transport_vouchers as $transport_voucher) {
+                if ($transport_voucher['quantum'] <= 0) continue;
+
+                $voucher_transport_new               = new TransportVoucher();
+                $voucher_transport_new->transport_id = $one->id;
+                $voucher_transport_new->voucher_id   = $transport_voucher['voucher_id'];
+                $voucher_transport_new->quantum      = $transport_voucher['quantum'];
+                $voucher_transport_new->created_by   = $one->created_by;
+                $voucher_transport_new->updated_by   = 0;
+                $voucher_transport_new->created_date = $one->created_date;
+                $voucher_transport_new->updated_date = null;
+                $voucher_transport_new->active       = true;
+
+                if (!$voucher_transport_new->save()) {
+                    DB::rollback();
+                    return false;
+                }
+            }
+
+            # Delete TransportFormula
+            $transport_formulas_delete = TransportFormula::whereActive(true)
+                ->where('transport_id', $one->id)
+                ->get();
+
+            $transport_formulas_delete->each(function ($item) {
+                $item->delete();
+            });
+
+            # Insert TransportFormula
+            foreach ($formulas as $formula) {
+                $transport_formula               = new TransportFormula();
+                $transport_formula->rule         = $formula['rule'];
+                $transport_formula->name         = $formula['name'];
+                $transport_formula->value1       = $formula['value1'];
+                $transport_formula->value2       = $formula['value2'];
+                $transport_formula->active       = true;
+                $transport_formula->transport_id = $one->id;
+
+                if (!$transport_formula->save()) {
+                    DB::rollback();
+                    return false;
+                }
             }
 
             DB::commit();
