@@ -6,11 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Repositories\BaseRepositoryInterface;
 
+use Carbon\Carbon;
+
+use App\Traits\Common\DateHelper;
+
+
 /**
  * Class EloquentBaseRepository
  */
 abstract class EloquentBaseRepository implements BaseRepositoryInterface
 {
+    use DateHelper;
+
     /**
      * @var \Illuminate\Database\Eloquent\Model An instance of the Eloquent Model
      */
@@ -88,5 +95,76 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
     public function destroy($id)
     {
         return $this->model->destroy($id);
+    }
+
+    public function get($query)
+    {
+        return $query->get();
+    }
+
+    public function generateCode($prefix)
+    {
+        $code = $prefix . date('ymd');
+        $stt  = $this->model->where('code', 'like', $code . '%')->get()->count() + 1;
+        $code .= substr("00" . $stt, -3);
+        return $code;
+    }
+
+    public function searchFromDateToDate($query, $field_name, $from_date, $to_date)
+    {
+        if ($from_date && $to_date) {
+            $from_date = Carbon::createFromFormat('d/m/Y', $from_date)->toDateString();
+            $to_date   = Carbon::createFromFormat('d/m/Y', $to_date)->toDateString();
+            return $query->whereBetween($field_name, [$this->addTimeForDate($from_date, 'min'), $this->addTimeForDate($to_date, 'max')]);
+        }
+        return $query;
+    }
+
+    public function searchRangeDate($query, $field_name, $range)
+    {
+        if ($range && $range != 'none') {
+            switch ($range) {
+                case 'yesterday':
+                    $query = $query
+                        ->whereDate($field_name, $this->getYesterday('Y-m-d')['yesterday']);
+                    break;
+                case 'today':
+                    $query = $query
+                        ->whereDate($field_name, date('Y-m-d'));
+                    break;
+                case 'week':
+                    $start_of_week = Carbon::now()->startOfWeek()->toDateString();
+                    $end_of_week   = Carbon::now()->endOfWeek()->toDateString();
+                    $query         = $query
+                        ->whereBetween($field_name, [$this->addTimeForDate($start_of_week, 'min'), $this->addTimeForDate($end_of_week, 'max')]);
+                    break;
+                case 'month':
+                    $query = $query
+                        ->whereMonth($field_name, date('m'))
+                        ->whereYear($field_name, date('Y'));
+                    break;
+                case 'year':
+                    $query = $query
+                        ->whereYear($field_name, date('Y'));
+                    break;
+                default:
+                    break;
+            }
+        }
+        return $query;
+    }
+
+    public function searchFieldName($query, $field_name, $value, $operator = '=')
+    {
+        if ($value)
+            return $query->where($field_name, $operator, $value);
+        return $query;
+    }
+
+    public function checkExistValue($field_name, $value, $skip_id = [])
+    {
+        // Check luôn cả dữ liệu đã deactivate [whereActive(true)]
+        $exists = $this->model->where($field_name, $value)->whereNotIn('id', $skip_id)->get();
+        return ($exists->count() > 0);
     }
 }

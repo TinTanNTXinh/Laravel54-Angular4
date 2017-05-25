@@ -45,4 +45,10 @@ interface BaseRepositoryInterface
      * @return number (1 = success; 0 = fail)
      */
     public function destroy($id);
+
+    public function get($query);
+
+    public function searchFromDateToDate($query, $field_name, $from_date, $to_date);
+
+    public function searchRangeDate($query, $field_name, $range);
 }

@@ -9,13 +9,12 @@ use App\Repositories\PositionRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Traits\UserHelper;
-use App\Traits\DBHelper;
 use Route;
 use DB;
 
 class PositionController extends Controller implements ICrud, IValidate
 {
-    use UserHelper, DBHelper;
+    use UserHelper;
 
     private $first_day, $last_day, $today;
     private $format_date, $format_time;
@@ -28,14 +27,14 @@ class PositionController extends Controller implements ICrud, IValidate
     {
         $this->positionRepository = $positionRepository;
 
-        $format_date_time  = $this->getFormatDateTime();
-        $this->format_date = $format_date_time['date'];
-        $this->format_time = $format_date_time['time'];
-
-        $current_month   = $this->getCurrentMonth();
-        $this->first_day = $current_month['first_day'];
-        $this->last_day  = $current_month['last_day'];
-        $this->today     = $current_month['today'];
+//        $format_date_time  = $this->getFormatDateTime();
+//        $this->format_date = $format_date_time['date'];
+//        $this->format_time = $format_date_time['time'];
+//
+//        $current_month   = $this->getFirstDayLastDay();
+//        $this->first_day = $current_month['first_day'];
+//        $this->last_day  = $current_month['last_day'];
+//        $this->today     = $current_month['today'];
 
         $jwt_data = $this->getCurrentUser();
         if ($jwt_data['status']) {
@@ -45,7 +44,7 @@ class PositionController extends Controller implements ICrud, IValidate
         }
 
         $this->table_name = 'position';
-        $this->skeleton   = $this->positionRepository->allActive();
+        $this->skeleton = $this->positionRepository->allActive();
     }
 
     /** ===== API METHOD ===== */
@@ -116,7 +115,7 @@ class PositionController extends Controller implements ICrud, IValidate
     /** ===== LOGIC METHOD ===== */
     public function readAll()
     {
-        $all = $this->skeleton->get();
+        $all = $this->positionRepository->get($this->skeleton);
 
         return [
             'positions' => $all
@@ -174,12 +173,12 @@ class PositionController extends Controller implements ICrud, IValidate
 
         $filtered = $this->skeleton;
 
-        $filtered = $this->searchFromDateToDate($filtered, 'positions.created_at', $from_date, $to_date);
+        $filtered = $this->positionRepository->searchFromDateToDate($filtered, 'positions.created_at', $from_date, $to_date);
 
-        $filtered = $this->searchRangeDate($filtered, 'positions.created_at', $range);
+        $filtered = $this->positionRepository->searchRangeDate($filtered, 'positions.created_at', $range);
 
         return [
-            'positions' => $filtered->get()
+            'positions' => $this->positionRepository->get($filtered)
         ];
     }
 
