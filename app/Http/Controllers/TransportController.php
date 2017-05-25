@@ -56,7 +56,7 @@ class TransportController extends Controller implements ICrud, IValidate
         $this->skeleton   = $this->readAllTransport()['skeleton'];
     }
 
-    /** API METHOD */
+    /** ===== API METHOD ===== */
     public function getReadAll()
     {
         $arr_datas = $this->readAll();
@@ -121,7 +121,7 @@ class TransportController extends Controller implements ICrud, IValidate
         return response()->json($arr_datas, 200);
     }
 
-    /** LOGIC METHOD */
+    /** ===== LOGIC METHOD ===== */
     public function readAll()
     {
         $transports = $this->skeleton->get();
@@ -306,13 +306,9 @@ class TransportController extends Controller implements ICrud, IValidate
             }
 
             # Delete TransportVoucher
-            $transport_vouchers_delete = TransportVoucher::whereActive(true)
+            TransportVoucher::whereActive(true)
                 ->where('transport_id', $one->id)
-                ->get();
-
-            $transport_vouchers_delete->each(function ($item) {
-                $item->delete();
-            });
+                ->delete();
 
             # Insert TransportVoucher
             foreach ($transport_vouchers as $transport_voucher) {
@@ -335,13 +331,9 @@ class TransportController extends Controller implements ICrud, IValidate
             }
 
             # Delete TransportFormula
-            $transport_formulas_delete = TransportFormula::whereActive(true)
+            TransportFormula::whereActive(true)
                 ->where('transport_id', $one->id)
-                ->get();
-
-            $transport_formulas_delete->each(function ($item) {
-                $item->delete();
-            });
+                ->delete();
 
             # Insert TransportFormula
             foreach ($formulas as $formula) {
@@ -378,6 +370,26 @@ class TransportController extends Controller implements ICrud, IValidate
                 return false;
             }
 
+            # Deactivate TransportVoucher
+            $transport_vouchers_delete = TransportVoucher::whereActive(true)
+                ->where('transport_id', $one->id)
+                ->get();
+
+            $transport_vouchers_delete->each(function ($item) {
+                $item->active = false;
+                $item->update();
+            });
+
+            # Deactivate TransportFormula
+            $transport_formulas_delete = TransportFormula::whereActive(true)
+                ->where('transport_id', $one->id)
+                ->get();
+
+            $transport_formulas_delete->each(function ($item) {
+                $item->active = false;
+                $item->update();
+            });
+
             DB::commit();
             return true;
         } catch (Exception $ex) {
@@ -390,11 +402,25 @@ class TransportController extends Controller implements ICrud, IValidate
     {
         try {
             DB::beginTransaction();
-            $one = Transport::find($id);
-            if (!$one->delete()) {
-                DB::rollBack();
-                return false;
-            }
+            Transport::destroy($id);
+
+            # Delete TransportVoucher
+            $transport_vouchers_delete = TransportVoucher::whereActive(true)
+                ->where('transport_id', $id)
+                ->get();
+
+            $transport_vouchers_delete->each(function ($item) {
+                $item->delete();
+            });
+
+            # Delete TransportFormula
+            $transport_formulas_delete = TransportFormula::whereActive(true)
+                ->where('transport_id', $id)
+                ->get();
+
+            $transport_formulas_delete->each(function ($item) {
+                $item->delete();
+            });
 
             DB::commit();
             return true;
@@ -421,7 +447,7 @@ class TransportController extends Controller implements ICrud, IValidate
         ];
     }
 
-    /** VALIDATION */
+    /** ===== VALIDATION ===== */
     public function validateInput($data)
     {
         if (!$this->validateEmpty($data))
@@ -448,7 +474,7 @@ class TransportController extends Controller implements ICrud, IValidate
         ];
     }
 
-    /** MY FUNCTION */
+    /** ===== MY FUNCTION ===== */
     public function getReadFormulas()
     {
         $filter    = (array)json_decode($_GET['query']);
