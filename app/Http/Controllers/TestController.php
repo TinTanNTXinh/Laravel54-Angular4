@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Transport;
 use Illuminate\Http\Request;
 
 use App\Repositories\TransportRepositoryInterface;
@@ -19,7 +20,7 @@ class TestController extends Controller
      */
     function all()
     {
-        $list = $this->postRepository->allActive();
+        $list = $this->postRepository->destroy(3);
         return $list;
     }
 }

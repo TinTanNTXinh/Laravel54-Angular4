@@ -75,19 +75,18 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function deactivate($model, $id)
+    public function deactivate($id)
     {
-        $obj         = $model->find($id);
-        $obj->active = false;
-        $obj->update();
-        return $obj;
+        if ($this->model->find($id)->update(['active' => false]))
+            return 1;
+        return 0;
     }
 
     /**
      * @inheritdoc
      */
-    public function destroy($model, $id)
+    public function destroy($id)
     {
-        return $model->destroy($id);
+        return $this->model->destroy($id);
     }
 }

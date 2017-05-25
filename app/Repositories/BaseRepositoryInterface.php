@@ -35,16 +35,14 @@ interface BaseRepositoryInterface
     public function update($model, $data);
 
     /**
-     * @param  $model
      * @param  int $id
-     * @return $model
+     * @return number (1 = success; 0 = fail)
      */
-    public function deactivate($model, $id);
+    public function deactivate($id);
 
     /**
-     * @param  $model
      * @param  int $id
-     * @return $model
+     * @return number (1 = success; 0 = fail)
      */
-    public function destroy($model, $id);
+    public function destroy($id);
 }
