@@ -23,7 +23,8 @@
         "classmap": [
             "database",
             "app/Repositories",
-            "app/Repositories/Eloquent"
+            "app/Repositories/Eloquent",
+            "app/Repositories/MongoDB"
         ],
         "psr-4": {
             "App\\": "app/"

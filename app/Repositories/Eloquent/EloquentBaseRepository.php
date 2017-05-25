@@ -34,7 +34,7 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
      */
     private function getModel()
     {
-        $model = $this->setModel();
+        $model       = $this->setModel();
         $this->model = app()->make($model);
     }
 
@@ -43,7 +43,6 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
      */
     public function find($id)
     {
-
         return $this->model->find($id);
     }
 
@@ -78,7 +77,7 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
      */
     public function deactivate($model, $id)
     {
-        $obj = $model->find($id);
+        $obj         = $model->find($id);
         $obj->active = false;
         $obj->update();
         return $obj;
@@ -91,6 +90,4 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
     {
         return $model->destroy($id);
     }
-
-
 }

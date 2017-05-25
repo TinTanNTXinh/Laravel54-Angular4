@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Repositories;
+
 /**
  * Interface CoreRepository
  * @package App\Repositories
