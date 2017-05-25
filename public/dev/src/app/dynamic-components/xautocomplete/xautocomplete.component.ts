@@ -11,11 +11,7 @@ import {Component, ElementRef, Input, Output, EventEmitter, OnChanges} from '@an
 })
 export class XAutoCompleteComponent implements OnChanges {
 
-    ngOnChanges() {
-        this.selectByValue();
-    }
-
-    /** NgModel */
+    /** ===== BINDING DATA ===== **/
     private _value: number = 0;
 
     @Input()
@@ -30,38 +26,80 @@ export class XAutoCompleteComponent implements OnChanges {
         this.valueChange.emit(this._value);
     }
 
-    /** Variables */
+    /** ===== VARIABLES ===== **/
     public query: string = '';
     public filteredList: any[] = [];
     private elementRef: ElementRef;
     private pos: number = -1;
     private opened: boolean = false;
     private selectedItem: any;
+    
+    // http://keycode.info/
+    private key_codes_deny: any[] = [17, 16, 20, 9, 192, 27
+        , 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123
+        , 18, 91, 92, 93, 42, 19, 45, 36, 33, 35, 34, 37, 39, 144];
 
     constructor(private el: ElementRef) {
         this.elementRef = el;
     }
 
-    /** Input */
+    ngOnChanges() {
+        this.selectByValue();
+    }
+
+    /** ===== INPUT ===== **/
     @Input() model_name: string = 'id';
     @Input() placeholder: string = '';
     @Input() name: string = 'name';
     @Input() data: any[] = [];
 
-    /** Output */
+    /** ===== OUTPUT ===== **/
     @Output() onClicked: EventEmitter<any> = new EventEmitter();
 
-    /** Function */
-    private filterQuery() {
-        this.filteredList = this.data.filter((el: any) => {
-            return el[this.name].toLowerCase().indexOf(this.query.toLowerCase()) > -1;
-        });
+    /** ===== FUCTION HANDLE ===== **/
+
+    // Handle outside click to close suggestions
+    handleClick(event: any): void {
+        let clickedComponent = event.target;
+        let inside = false;
+        do {
+            if (clickedComponent === this.elementRef.nativeElement) {
+                inside = true;
+            }
+            clickedComponent = clickedComponent.parentNode;
+        } while (clickedComponent);
+        if (!inside) {
+            this.filteredList = [];
+            this.opened = false;
+        }
     }
 
-    public filter(event: any): void {
+    // Prevent default actions of Up & Down arrows
+    handleKeyDown(event: any): void {
+        if (event.keyCode == 40 || event.keyCode == 38) {
+            event.preventDefault();
+        }
+    }
+
+    /** ===== FUNCTION ACTION ===== **/
+    /**
+     * Filter item
+     * @event {KeyboardEvent} event
+     */
+    public filter(event: KeyboardEvent): void {
+        // Validate key code
+        if (this.key_codes_deny.includes(event.keyCode)) {
+            return;
+        }
+        if (event.ctrlKey && !this.key_codes_deny.includes(event.keyCode)) {
+            return;
+        }
+        if (event.altKey && !this.key_codes_deny.includes(event.keyCode)) {
+            return;
+        }
+
         if (this.query !== '') {
             if (this.opened) {
-
                 /*
                  48 -> 57 : 0 -> 9
                  65 -> 90 : a -> z
@@ -69,6 +107,7 @@ export class XAutoCompleteComponent implements OnChanges {
                  38       : Up Arrow
                  40       : Down Arrow
                  13       : Enter
+                 32       : Space
                  */
                 if ((event.keyCode >= 48 && event.keyCode <= 57) ||
                     (event.keyCode >= 65 && event.keyCode <= 90) ||
@@ -91,9 +130,7 @@ export class XAutoCompleteComponent implements OnChanges {
             }
         }
 
-        for (let i = 0; i < this.filteredList.length; i++) {
-            this.filteredList[i].selected = false;
-        }
+        this.clearAll();
 
         if (this.selectedItem) {
             this.filteredList.map((i) => {
@@ -135,6 +172,10 @@ export class XAutoCompleteComponent implements OnChanges {
         }
     }
 
+    /**
+     * Select one item
+     * @item {any} item
+     */
     public select(item: any): void {
         this.selectedItem = item;
         this.selectedItem.selected = true;
@@ -144,6 +185,10 @@ export class XAutoCompleteComponent implements OnChanges {
         this.value = this.selectedItem[this.model_name];
     }
 
+    /**
+     * Show all items
+     * @input {any} input
+     */
     public showAll(input: any): void {
         input.select();
 
@@ -161,46 +206,9 @@ export class XAutoCompleteComponent implements OnChanges {
         this.clearSelects();
     }
 
-    handleKeyDown(event: any): void {
-        // Prevent default actions of arrows
-        if (event.keyCode == 40 || event.keyCode == 38) {
-            event.preventDefault();
-        }
-    }
-
-    private clearAll(): void {
-        if (this.filteredList) {
-            for (let i = 0; i < this.filteredList.length; i++)
-                this.filteredList[i].selected = false;
-        }
-    }
-
-    /** Remove selected from all items of the list **/
-    private clearSelects(): void {
-        if (this.selectedItem) {
-            for (let i = 0; i < this.filteredList.length; i++) {
-                if (this.filteredList[i].id != this.selectedItem.id)
-                    this.filteredList[i].selected = false;
-            }
-        }
-    }
-
-    /** Handle outside click to close suggestions**/
-    handleClick(event: any): void {
-        let clickedComponent = event.target;
-        let inside = false;
-        do {
-            if (clickedComponent === this.elementRef.nativeElement) {
-                inside = true;
-            }
-            clickedComponent = clickedComponent.parentNode;
-        } while (clickedComponent);
-        if (!inside) {
-            this.filteredList = [];
-            this.opened = false;
-        }
-    }
-
+    /**
+     * Clear selected item
+     */
     public clear(): void {
         this.clearSelects();
         this.selectedItem = null;
@@ -210,13 +218,59 @@ export class XAutoCompleteComponent implements OnChanges {
         this.value = null;
     }
 
-    public selectByValue(): void {
-        if (this.data.length > 0 && !!this.value) {
-            let item = this.data.find(o => o.id == this.value);
-            this.selectedItem = item;
-            this.selectedItem.selected = true;
-            this.query = item[this.name];
-            this.filteredList = [];
+    /** ===== FUNCTION ===== **/
+
+    /**
+     * Find filtered list
+     */
+    private filterQuery() {
+        this.filteredList = this.data.filter((el: any) => {
+            return el[this.name].toLowerCase().indexOf(this.query.toLowerCase()) > -1;
+        });
+    }
+
+    /**
+     * Remove selected from all items
+     */
+    private clearAll(): void {
+        if (this.filteredList) {
+            this.filteredList.forEach(function (item) {
+                item.selected = false;
+                return item;
+            });
+        }
+    }
+
+    /**
+     * Remove selected from all items except item selected
+     */
+    private clearSelects(): void {
+        if (this.selectedItem) {
+            this.filteredList.forEach(function (item) {
+                if (item.id !== this.selectedItem.id)
+                    item.selected = false;
+                return item;
+            }, this);
+        }
+    }
+
+    /**
+     * Set selected item by value
+     */
+    private selectByValue(): void {
+        if (this.data.length > 0) {
+            if (this.value == 0) {
+                this.clearSelects();
+                this.selectedItem = null;
+                this.query = '';
+                this.clearAll();
+            } else if (!!this.value) {
+                let item = this.data.find(o => o.id == this.value);
+                this.selectedItem = item;
+                this.selectedItem.selected = true;
+                this.query = item[this.name];
+                this.filteredList = [];
+            }
         }
     }
 }
