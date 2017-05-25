@@ -14,7 +14,7 @@ import {DomHelperService} from '../../services/helpers/dom.helper';
 export class TransportComponent implements OnInit
     , ICommon, ICrud, IDatePicker, ISearch {
 
-    /** My Variables **/
+    /** ===== MY VARIABLES ===== **/
     public transports: any[] = [];
     public transport: any;
     public customers: any[] = [];
@@ -42,7 +42,7 @@ export class TransportComponent implements OnInit
     public transport_date: Date = new Date();
     public transport_time: Date = new Date();
 
-    /** ICommon **/
+    /** ===== ICOMMON ===== **/
     title: string;
     placeholder_code: string;
     prefix_url: string;
@@ -50,11 +50,11 @@ export class TransportComponent implements OnInit
     header: any;
     action_data: any;
 
-    /** ICrud **/
+    /** ===== ICRUD ===== **/
     modal: any;
     isEdit: boolean;
 
-    /** IDatePicker **/
+    /** ===== IDATEPICKER ===== **/
     range_date: any[];
     datepickerSettings: any;
     timepickerSettings: any;
@@ -62,7 +62,7 @@ export class TransportComponent implements OnInit
     datepicker_to: Date;
     datepickerToOpts: any = {};
 
-    /** ISearch **/
+    /** ===== ISEARCH ===== **/
     filtering: any;
 
     constructor(private fb: FormBuilder
@@ -73,10 +73,11 @@ export class TransportComponent implements OnInit
     }
 
     ngOnInit(): void {
+        this.initFormulaFormGroup();
+
         this.title = 'Đơn hàng';
         this.prefix_url = 'transports';
         this.range_date = this.dateHelperService.range_date;
-        this.refreshData();
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
@@ -131,14 +132,12 @@ export class TransportComponent implements OnInit
             }
         };
 
-        this.formulaFormGroup = this.fb.group({
-            formulas: this.fb.array([])
-        });
-
         this.transport_time.setHours(0, 0, 0, 0);
+
+        this.refreshData();
     }
 
-    /** ICommon **/
+    /** ===== ICOMMON ===== **/
     loadData(): void {
         this.httpClientService.get(this.prefix_url).subscribe(
             (success: any) => {
@@ -158,7 +157,7 @@ export class TransportComponent implements OnInit
         this.products = arr_data['products'];
         this.vouchers = arr_data['vouchers'];
 
-        this.setAreaCodeNumberPlateTruck();
+        this.setAreaCodeNumberPlate('TRUCK');
         this.clearQuantumVoucher();
     }
 
@@ -173,7 +172,7 @@ export class TransportComponent implements OnInit
         this.isLoading = status;
     }
 
-    /** ICrud **/
+    /** ===== ICRUD ===== **/
     loadOne(id: number): void {
         this.httpClientService.get(`${this.prefix_url}/${id}`).subscribe(
             (success: any) => {
@@ -230,6 +229,10 @@ export class TransportComponent implements OnInit
             postage_unit_price: 0,
             unit_name: 'đ/?'
         };
+
+        this.clearQuantumVoucher();
+
+        this.clearFormula();
     }
 
     addOne(): void {
@@ -374,7 +377,7 @@ export class TransportComponent implements OnInit
         }
     }
 
-    /** IDatePicker **/
+    /** ===== IDATEPICKER ===== **/
     handleDateFromChange(dateFrom: Date): void {
         this.datepicker_from = dateFrom;
         this.datepickerToOpts = {
@@ -403,7 +406,7 @@ export class TransportComponent implements OnInit
         }
     }
 
-    /** ISearch **/
+    /** ===== ISEARCH ===== **/
     search(): void {
         if (this.datepicker_from != null && this.datepicker_to != null) {
             let from_date = this.dateHelperService.getDate(this.datepicker_from);
@@ -428,7 +431,7 @@ export class TransportComponent implements OnInit
     reloadDataSearch(arr_data: any[]): void {
         this.transports = arr_data['transports'];
 
-        this.setAreaCodeNumberPlateTruck();
+        this.setAreaCodeNumberPlate('TRANSPORT');
     }
 
     clearSearch(): void {
@@ -451,14 +454,20 @@ export class TransportComponent implements OnInit
         }
     }
 
-    /** Formulas Form **/
-    formulaFormGroup: FormGroup;
+    /** ===== FORM FORMULA ===== **/
+    public formulaFormGroup: FormGroup;
+
+    private initFormulaFormGroup(): void {
+        this.formulaFormGroup = this.fb.group({
+            formulas: this.fb.array([])
+        });
+    }
 
     get formulaFormArray(): FormArray {
         return <FormArray>this.formulaFormGroup.controls['formulas'];
     }
 
-    private initFormula(rule: string, name: string, value1: any, value2: any): FormGroup {
+    private buildFormula(rule: string, name: string, value1: any, value2: any): FormGroup {
         let formula: FormGroup;
         switch (rule) {
             case 'Single':
@@ -493,7 +502,7 @@ export class TransportComponent implements OnInit
     }
 
     private addFormula(rule: string, name: string, value1: any, value2: any): void {
-        const new_control = this.initFormula(rule, name, value1, value2);
+        const new_control = this.buildFormula(rule, name, value1, value2);
         this.formulaFormArray.push(new_control);
     }
 
@@ -508,7 +517,7 @@ export class TransportComponent implements OnInit
         }
     }
 
-    /** My Function **/
+    /** ===== FUNCTION ACTION ===== **/
     public selectedCustomer(event: any): void {
 
         // Xóa các công thức hiện có
@@ -527,33 +536,6 @@ export class TransportComponent implements OnInit
             };
             this.findFormulas(find_formulas);
         }
-    }
-
-    private findFormulas(find_formulas: {}): void {
-        this.httpClientService.get(`${this.prefix_url}/find-formulas?query=${JSON.stringify(find_formulas)}`).subscribe(
-            (success: any) => {
-                let formulas = success['formulas'];
-                for (let formula of formulas) {
-                    switch (formula.rule) {
-                        case 'Single':
-                            this.addFormula(formula.rule, formula.name, '', '');
-                            break;
-                        case 'Range':
-                        case 'Oil':
-                            this.addFormula(formula.rule, formula.name, 0, 0);
-                            break;
-                        case 'Pair':
-                            this.addFormula(formula.rule, formula.name, '', '');
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            },
-            (error: any) => {
-                this.toastrHelperService.showToastr('error');
-            }
-        );
     }
 
     public findPostage(): void {
@@ -581,10 +563,6 @@ export class TransportComponent implements OnInit
         this.transport.revenue = (this.transport.quantum_product * this.transport.postage_unit_price) + (this.transport.carrying + this.transport.parking + this.transport.fine + this.transport.phi_tang_bo + this.transport.add_score);
     }
 
-    private setDateTimeToTransport(): void {
-        this.transport.transport_date = this.dateHelperService.joinDateTimeToString(this.transport_date, this.transport_time);
-    }
-
     public actionVoucher(obj: any): void {
         switch (obj.mode) {
             case 'add':
@@ -602,6 +580,38 @@ export class TransportComponent implements OnInit
         }
     }
 
+    /** ===== FUNCTION ===== **/
+    private findFormulas(find_formulas: {}): void {
+        this.httpClientService.get(`${this.prefix_url}/find-formulas?query=${JSON.stringify(find_formulas)}`).subscribe(
+            (success: any) => {
+                let formulas = success['formulas'];
+                for (let formula of formulas) {
+                    switch (formula.rule) {
+                        case 'Single':
+                            this.addFormula(formula.rule, formula.name, '', '');
+                            break;
+                        case 'Range':
+                        case 'Oil':
+                            this.addFormula(formula.rule, formula.name, 0, 0);
+                            break;
+                        case 'Pair':
+                            this.addFormula(formula.rule, formula.name, '', '');
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            },
+            (error: any) => {
+                this.toastrHelperService.showToastr('error');
+            }
+        );
+    }
+
+    private setDateTimeToTransport(): void {
+        this.transport.transport_date = this.dateHelperService.joinDateTimeToString(this.transport_date, this.transport_time);
+    }
+
     private clearQuantumVoucher(): void {
         this.vouchers.map(function (voucher) {
             voucher.quantum = 0;
@@ -609,10 +619,21 @@ export class TransportComponent implements OnInit
         });
     }
 
-    private setAreaCodeNumberPlateTruck(): void {
-        this.trucks.map(function (truck) {
-            truck.area_code_number_plate = `${truck.area_code}-${truck.number_plate}`;
-            return truck;
-        });
+    private setAreaCodeNumberPlate(type: string): void {
+        switch (type) {
+            case 'TRUCK':
+                this.trucks.map(function (item) {
+                    item.area_code_number_plate = `${item.area_code}-${item.number_plate}`;
+                    return item;
+                });
+                break;
+            case 'TRANSPORT':
+                this.transports.map(function (item) {
+                    item.truck_area_code_number_plate = `${item.truck_area_code}-${item.truck_number_plate}`;
+                    return item;
+                });
+                break;
+            default: break;
+        }
     }
 }
