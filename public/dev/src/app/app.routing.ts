@@ -22,14 +22,31 @@ const APP_ROUTES: Routes = [
     {path: 'dashboards', component: DashboardComponent},
     {path: 'login', component: LoginComponent},
     {path: 'change-password', component: ChangePasswordComponent},
-    {path: 'users', component: UserComponent},
+
     {path: 'positions', component: PositionComponent},
+    {path: 'users', component: UserComponent},
+
+    {path: 'customers', component: CustomerComponent},
     {path: 'postages', component: PostageComponent},
     {path: 'transports', component: TransportComponent},
-    {path: 'lubes', component: LubeComponent},
-    {path: 'oils', component: OilComponent},
-    {path: 'customers', component: CustomerComponent},
+
+    {path: 'garages', component: null},
+    {path: 'trucks', component: null},
     {path: 'drivers', component: DriverComponent},
+
+    {path: 'oils', component: OilComponent},
+    {path: 'lubes', component: LubeComponent},
+
+    {path: 'cost-oils', component: null},
+    {path: 'cost-lubes', component: null},
+    {path: 'cost-parks', component: null},
+    {path: 'cost-others', component: null},
+
+    {path: 'invoice-customers', component: null},
+    {path: 'invoice-garages', component: null},
+
+    {path: 'report-revenues', component: null},
+    {path: 'report-transports', component: null},
 ];
 
 export const routing = RouterModule.forRoot(APP_ROUTES);

@@ -30,5 +30,10 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\TransportRepositoryInterface',
             'App\Repositories\Eloquent\EloquentTransportRepository'
         );
+
+        $this->app->bind(
+            'App\Repositories\PositionRepositoryInterface',
+            'App\Repositories\Eloquent\EloquentPositionRepository'
+        );
     }
 }
