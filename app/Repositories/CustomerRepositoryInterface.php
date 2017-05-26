@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-interface CostOtherRepositoryInterface
+interface CustomerRepositoryInterface
 {
 
 }

@@ -95,7 +95,16 @@ Route::group(['prefix' => 'v1'], function() {
             Route::put('/', 'VoucherController@putUpdateOne');
             Route::patch('/', 'VoucherController@patchDeactivateOne');
             Route::delete('/{id}', 'VoucherController@deleteDeleteOne');
+        });
 
+        Route::group(['middleware' => [], 'prefix' => 'customers'], function () {
+            Route::get('/', 'CustomerController@getReadAll');
+            Route::get('/search', 'CustomerController@getSearchOne');
+            Route::get('/{id}', 'CustomerController@getReadOne');
+            Route::post('/', 'CustomerController@postCreateOne');
+            Route::put('/', 'CustomerController@putUpdateOne');
+            Route::patch('/', 'CustomerController@patchDeactivateOne');
+            Route::delete('/{id}', 'CustomerController@deleteDeleteOne');
         });
     });
 });
