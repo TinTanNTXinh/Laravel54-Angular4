@@ -196,12 +196,23 @@
                                 <span>Danh mục</span>
                               </div>
                               <div class="panel-body">
-                                <div class="checkbox" *ngFor="let role of roles">
-                                  <label class="i-checks">
-                                    <input #rolecb type="checkbox" (change)="checkRole(rolecb.checked, role.id)">
-                                    <i></i>
-                                    {{ role.description }}
-                                  </label>
+                                <div class="dd">
+                                  <ul class="dd-list">
+                                    <ng-container *ngFor="let group_role of group_roles">
+                                      <li class="dd-item dd3-item">
+                                        <div class="dd-handle dd3-handle">{{group_role.name}}</div>
+                                        <div class="dd3-content">
+                                          <div class="checkbox" *ngFor="let role of slideRoles(group_role.id)">
+                                            <label class="i-checks">
+                                              <input #rolecb type="checkbox" (change)="checkRole(rolecb.checked, role.id)">
+                                              <i></i>
+                                              {{ role.description }}
+                                            </label>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </ng-container>
+                                  </ul>
                                 </div>
                               </div>
                             </div>

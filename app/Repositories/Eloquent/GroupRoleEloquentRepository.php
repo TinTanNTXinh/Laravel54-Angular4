@@ -2,17 +2,17 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Repositories\RoleRepositoryInterface;
-use App\Role;
+use App\Repositories\GroupRoleRepositoryInterface;
+use App\GroupRole;
 
-class RoleEloquentRepository extends EloquentBaseRepository implements RoleRepositoryInterface
+class GroupRoleEloquentRepository extends EloquentBaseRepository implements GroupRoleRepositoryInterface
 {
     /**
      * Khai báo Model
      */
     public function setModel()
     {
-        return Role::class;
+        return GroupRole::class;
     }
 
     public function allSkeleton()
@@ -23,6 +23,6 @@ class RoleEloquentRepository extends EloquentBaseRepository implements RoleRepos
 
     public function oneSkeleton($id)
     {
-        return $this->allSkeleton()->where('.id', $id);
+        return $this->allSkeleton()->where('group_roles.id', $id);
     }
 }

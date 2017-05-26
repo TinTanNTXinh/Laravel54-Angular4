@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Repositories\UserRepositoryInterface;
 use App\Repositories\PositionRepositoryInterface;
 use App\Repositories\RoleRepositoryInterface;
+use App\Repositories\GroupRoleRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Common\AuthHelper;
@@ -20,15 +21,17 @@ class UserController extends Controller implements ICrud, IValidate
     private $table_name;
     private $skeleton;
 
-    protected $userRepo, $positionRepo, $roleRepo;
+    protected $userRepo, $positionRepo, $roleRepo, $groupRoleRepo;
 
     public function __construct(UserRepositoryInterface $userRepo
         , PositionRepositoryInterface $positionRepo
-        , RoleRepositoryInterface $roleRepo)
+        , RoleRepositoryInterface $roleRepo
+        , GroupRoleRepositoryInterface $groupRoleRepo)
     {
-        $this->userRepo     = $userRepo;
-        $this->positionRepo = $positionRepo;
-        $this->roleRepo     = $roleRepo;
+        $this->userRepo      = $userRepo;
+        $this->positionRepo  = $positionRepo;
+        $this->roleRepo      = $roleRepo;
+        $this->groupRoleRepo = $groupRoleRepo;
 
         $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
@@ -116,14 +119,15 @@ class UserController extends Controller implements ICrud, IValidate
     {
         $all = $this->skeleton->get();
 
-        $positions = $this->positionRepo->allActive();
-
-        $roles = $this->roleRepo->allActive();
+        $positions   = $this->positionRepo->allActive();
+        $roles       = $this->roleRepo->allActive();
+        $group_roles = $this->groupRoleRepo->allActive();
 
         return [
-            'users'     => $all,
-            'positions' => $positions,
-            'roles'     => $roles
+            'users'       => $all,
+            'positions'   => $positions,
+            'roles'       => $roles,
+            'group_roles' => $group_roles
         ];
     }
 

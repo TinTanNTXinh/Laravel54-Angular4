@@ -17,6 +17,7 @@ export class UserComponent implements OnInit
     /** My Variables **/
     public positions: any[] = [];
     public roles: any[] = [];
+    public group_roles: any[] = [];
     public users: any[] = [];
     public users_search: any[] = [];
     public user: any;
@@ -113,6 +114,7 @@ export class UserComponent implements OnInit
         this.users_search = arr_data['users'];
 
         this.positions = arr_data['positions'];
+        this.group_roles = arr_data['group_roles'];
         this.roles = arr_data['roles'];
 
         this.placeholder_code = arr_data['placeholder_code'];
@@ -351,4 +353,7 @@ export class UserComponent implements OnInit
     }
 
     /** My Function **/
+    public slideRoles(group_role_id): any[] {
+        return this.roles.filter(o => o.group_role_id == group_role_id);
+    }
 }

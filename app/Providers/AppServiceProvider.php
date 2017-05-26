@@ -124,6 +124,12 @@ class AppServiceProvider extends ServiceProvider
 
         /**  **/
 
+        // Group Role
+        $this->app->bind(
+            'App\Repositories\GroupRoleRepositoryInterface',
+            'App\Repositories\Eloquent\GroupRoleEloquentRepository'
+        );
+
         // Role
         $this->app->bind(
             'App\Repositories\RoleRepositoryInterface',
