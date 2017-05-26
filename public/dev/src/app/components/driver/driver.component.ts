@@ -104,8 +104,6 @@ export class DriverComponent implements OnInit
         this.driver = this.drivers.find(function (o) {
             return o['id'] == id;
         });
-        this.isEdit = true;
-        this.domHelperService.showTab('menu2');
     }
 
     clearOne(): void {
@@ -217,12 +215,14 @@ export class DriverComponent implements OnInit
     actionCrud(obj: any): void {
         switch (obj.mode) {
             case 'add':
-                this.displayEditBtn(false);
                 this.clearOne();
+                this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
             case 'edit':
                 this.loadOne(obj.data.id);
+                this.displayEditBtn(true);
+                this.domHelperService.showTab('menu2');
                 break;
             case 'delete':
                 this.fillDataModal(obj.data.id);
