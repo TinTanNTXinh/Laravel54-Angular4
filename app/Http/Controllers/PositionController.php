@@ -20,7 +20,7 @@ class PositionController extends Controller implements ICrud, IValidate
     private $table_name;
     private $skeleton;
 
-    protected $positionRepo = '';
+    protected $positionRepo;
 
     public function __construct(PositionRepositoryInterface $positionRepo)
     {

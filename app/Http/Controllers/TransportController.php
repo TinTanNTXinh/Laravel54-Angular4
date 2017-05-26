@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\TransportFormula;
-use App\Voucher;
-use App\TransportVoucher;
+use App\Common\DateTimeHelper;
+use App\Common\DBHelper;
+use Faker\Provider\DateTime;
 use Illuminate\Http\Request;
 use League\Flysystem\Exception;
 use Route;
@@ -12,7 +12,6 @@ use DB;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Traits\UserHelper;
-use App\Traits\Common\DBHelper;
 use App\Traits\Domain\FormulaHelper;
 use App\Traits\Domain\PostageHelper;
 use App\Traits\Domain\TransportHelper;
@@ -21,26 +20,29 @@ use App\Traits\Domain\TruckHelper;
 use App\Traits\Domain\ProductHelper;
 use App\Traits\Domain\VoucherHelper;
 use App\Transport;
+use App\TransportFormula;
+use App\Voucher;
+use App\TransportVoucher;
+use App\Repositories\TransportRepositoryInterface;
 
 class TransportController extends Controller implements ICrud, IValidate
 {
-    use UserHelper, DBHelper, FormulaHelper, PostageHelper
+    use UserHelper, FormulaHelper, PostageHelper
         , TransportHelper, CustomerHelper, TruckHelper, ProductHelper
         , VoucherHelper;
 
     private $first_day, $last_day, $today;
     private $user;
-    private $format_date, $format_time;
     private $table_name;
     private $skeleton;
 
-    public function __construct()
-    {
-        $format_date_time  = $this->getFormatDateTime();
-        $this->format_date = $format_date_time['date'];
-        $this->format_time = $format_date_time['time'];
+    protected $transportRepo;
 
-        $current_month   = $this->getCurrentMonth();
+    public function __construct(TransportRepositoryInterface $transportRepo)
+    {
+        $this->transportRepo = $transportRepo;
+
+        $current_month   = DateTimeHelper::getFirstDayLastDay();
         $this->first_day = $current_month['first_day'];
         $this->last_day  = $current_month['last_day'];
         $this->today     = $current_month['today'];
@@ -53,7 +55,7 @@ class TransportController extends Controller implements ICrud, IValidate
         }
 
         $this->table_name = 'transport';
-        $this->skeleton   = $this->readAllTransport()['skeleton'];
+        $this->skeleton   = $this->transportRepo->allActive();
     }
 
     /** ===== API METHOD ===== */
@@ -170,8 +172,8 @@ class TransportController extends Controller implements ICrud, IValidate
         try {
             DB::beginTransaction();
             $one                   = new Transport();
-            $one->code             = $this->generateCode(Transport::class, 'TRANSPORT');
-            $one->transport_date   = $this->toStringDateTimeClientForDB($transport['transport_date']);
+            $one->code             = $this->transportRepo->generateCode('TRANSPORT');
+            $one->transport_date   = DateTimeHelper::toStringDateTimeClientForDB($transport['transport_date']);
             $one->type1            = $transport['type1'];
             $one->type2            = '';
             $one->type3            = '';
@@ -265,7 +267,7 @@ class TransportController extends Controller implements ICrud, IValidate
         try {
             DB::beginTransaction();
             $one                   = Transport::find($transport['id']);
-            $one->transport_date   = $this->toStringDateTimeClientForDB($transport['transport_date']);
+            $one->transport_date   = DateTimeHelper::toStringDateTimeClientForDB($transport['transport_date']);
             $one->type1            = $transport['type1'];
             $one->type2            = '';
             $one->type3            = '';
@@ -438,9 +440,9 @@ class TransportController extends Controller implements ICrud, IValidate
 
         $transports = $this->skeleton;
 
-        $transports = $this->searchFromDateToDate($transports, 'transports.created_date', $from_date, $to_date);
+        $transports = $this->transportRepo->searchFromDateToDate($transports, 'transports.created_date', $from_date, $to_date);
 
-        $transports = $this->searchRangeDate($transports, 'transports.created_date', $range);
+        $transports = $this->transportRepo->searchRangeDate($transports, 'transports.created_date', $range);
 
         return [
             'transports' => $transports->get()
@@ -485,7 +487,7 @@ class TransportController extends Controller implements ICrud, IValidate
     public function readFormulas($data)
     {
         $customer_id    = $data['customer_id'];
-        $transport_date = $this->toStringDateTimeClientForDB($data['transport_date']);
+        $transport_date = DateTimeHelper::toStringDateTimeClientForDB($data['transport_date']);
 
         $formulas = $this->findFormulas($customer_id, $transport_date);
 
@@ -502,7 +504,7 @@ class TransportController extends Controller implements ICrud, IValidate
     public function readPostage($data)
     {
         $i_customer_id    = $data['customer_id'];
-        $i_transport_date = $this->toStringDateTimeClientForDB($data['transport_date']);
+        $i_transport_date = DateTimeHelper::toStringDateTimeClientForDB($data['transport_date']);
         $i_formulas       = $data['formulas'];
 
         $postage = $this->findPostage($i_formulas, $i_customer_id, $i_transport_date);
