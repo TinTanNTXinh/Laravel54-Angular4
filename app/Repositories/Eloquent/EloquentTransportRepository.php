@@ -46,13 +46,13 @@ class EloquentTransportRepository extends EloquentBaseRepository implements Tran
                 , 'truck_types.name as truck_type_name'
                 , 'postages.unit_price as postage_unit_price'
                 , 'units.name as unit_name'
-                , DB::raw($this->dbHelper->getWithCurrencyFormat('transports.receive', 'fc_receive'))
-                , DB::raw($this->dbHelper->getWithCurrencyFormat('transports.carrying', 'fc_carrying'))
-                , DB::raw($this->dbHelper->getWithCurrencyFormat('transports.parking', 'fc_parking'))
-                , DB::raw($this->dbHelper->getWithCurrencyFormat('transports.fine', 'fc_fine'))
-                , DB::raw($this->dbHelper->getWithCurrencyFormat('transports.phi_tang_bo', 'fc_phi_tang_bo'))
-                , DB::raw($this->dbHelper->getWithCurrencyFormat('transports.add_score', 'fc_add_score'))
-                , DB::raw($this->dbHelper->getWithDateTimeFormat('transports.transport_date', 'fd_transport_date'))
+                , DB::raw(DBHelper::getWithCurrencyFormat('transports.receive', 'fc_receive'))
+                , DB::raw(DBHelper::getWithCurrencyFormat('transports.carrying', 'fc_carrying'))
+                , DB::raw(DBHelper::getWithCurrencyFormat('transports.parking', 'fc_parking'))
+                , DB::raw(DBHelper::getWithCurrencyFormat('transports.fine', 'fc_fine'))
+                , DB::raw(DBHelper::getWithCurrencyFormat('transports.phi_tang_bo', 'fc_phi_tang_bo'))
+                , DB::raw(DBHelper::getWithCurrencyFormat('transports.add_score', 'fc_add_score'))
+                , DB::raw(DBHelper::getWithDateTimeFormat('transports.transport_date', 'fd_transport_date'))
             );
     }
 }

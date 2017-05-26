@@ -46,13 +46,43 @@ interface BaseRepositoryInterface
      */
     public function destroy($id);
 
+    /**
+     * @param $prefix
+     * @return mixed
+     */
     public function generateCode($prefix);
 
+    /**
+     * @param $query
+     * @param $field_name
+     * @param $from_date
+     * @param $to_date
+     * @return mixed
+     */
     public function filterFromDateToDate($query, $field_name, $from_date, $to_date);
 
+    /**
+     * @param $query
+     * @param $field_name
+     * @param $range
+     * @return mixed
+     */
     public function filterRangeDate($query, $field_name, $range);
 
+    /**
+     * @param $query
+     * @param $field_name
+     * @param $value
+     * @param string $operator
+     * @return mixed
+     */
     public function filterColumn($query, $field_name, $value, $operator = '=');
 
+    /**
+     * @param $field_name
+     * @param $value
+     * @param array $skip_id
+     * @return mixed
+     */
     public function checkExistValue($field_name, $value, $skip_id = []);
 }

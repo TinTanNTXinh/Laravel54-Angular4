@@ -19,7 +19,6 @@ class PositionController extends Controller implements ICrud, IValidate
     private $user;
     private $table_name;
     private $skeleton;
-    private $dateTimeHelper;
 
     protected $positionRepo = '';
 
@@ -35,7 +34,7 @@ class PositionController extends Controller implements ICrud, IValidate
         }
 
         $this->dateTimeHelper = new DateTimeHelper();
-        $current_month   = $this->dateTimeHelper->getFirstDayLastDay();
+        $current_month   = DateTimeHelper::getFirstDayLastDay();
         $this->first_day = $current_month['first_day'];
         $this->last_day  = $current_month['last_day'];
         $this->today     = $current_month['today'];
