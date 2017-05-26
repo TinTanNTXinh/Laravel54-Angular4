@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 
 import {StringHelperService} from './string.helper';
+import {CommonHelperService} from './common.helper';
 
 declare let $: any;
 
 @Injectable()
 export class ArrayHelperService {
-    constructor(private stringHelperService: StringHelperService) {
+    constructor(private stringHelperService: StringHelperService
+        , private commonHelperService: CommonHelperService) {
 
     }
 
@@ -44,10 +46,12 @@ export class ArrayHelperService {
     }
 
     public chunkArray(myArray, chunk_size){
+        let clone = this.commonHelperService.cloneObject(myArray);
+
         let results = [];
 
-        while (myArray.length) {
-            results.push(myArray.splice(0, chunk_size));
+        while (clone.length) {
+            results.push(clone.splice(0, chunk_size));
         }
 
         return results;

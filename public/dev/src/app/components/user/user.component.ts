@@ -356,4 +356,8 @@ export class UserComponent implements OnInit
     public slideRoles(group_role_id): any[] {
         return this.roles.filter(o => o.group_role_id == group_role_id);
     }
+
+    public chunk(data: any[], size){
+        return this.arrayHelperService.chunkArray(data, size);
+    }
 }
