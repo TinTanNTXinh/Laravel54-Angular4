@@ -47,13 +47,23 @@ interface BaseRepositoryInterface
     public function destroy($id);
 
     /**
+     * @return mixed
+     */
+    public function allActive();
+
+    /**
      * @param $prefix
      * @return mixed
      */
-
-    public function allActive();
-
     public function generateCode($prefix);
+
+    /**
+     * @param $field_name
+     * @param $value
+     * @param array $skip_id
+     * @return mixed
+     */
+    public function checkExistValue($field_name, $value, $skip_id = []);
 
     /**
      * @param $query
@@ -80,12 +90,4 @@ interface BaseRepositoryInterface
      * @return mixed
      */
     public function filterColumn($query, $field_name, $value, $operator = '=');
-
-    /**
-     * @param $field_name
-     * @param $value
-     * @param array $skip_id
-     * @return mixed
-     */
-    public function checkExistValue($field_name, $value, $skip_id = []);
 }

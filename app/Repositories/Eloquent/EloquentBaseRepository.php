@@ -95,7 +95,7 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
 
     public function allActive()
     {
-        return $this->model->whereActive(true);
+        return $this->model->whereActive(true)->get();
     }
 
     public function generateCode($prefix)
@@ -104,6 +104,13 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
         $stt  = $this->model->where('code', 'like', $code . '%')->get()->count() + 1;
         $code .= substr("00" . $stt, -3);
         return $code;
+    }
+
+    public function checkExistValue($field_name, $value, $skip_id = [])
+    {
+        // Check luôn cả dữ liệu đã deactivate [whereActive(true)]
+        $exists = $this->model->where($field_name, $value)->whereNotIn('id', $skip_id)->get();
+        return ($exists->count() > 0);
     }
 
     public function filterFromDateToDate($query, $field_name, $from_date, $to_date)
@@ -157,12 +164,5 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
         if ($value)
             return $query->where($field_name, $operator, $value);
         return $query;
-    }
-
-    public function checkExistValue($field_name, $value, $skip_id = [])
-    {
-        // Check luôn cả dữ liệu đã deactivate [whereActive(true)]
-        $exists = $this->model->where($field_name, $value)->whereNotIn('id', $skip_id)->get();
-        return ($exists->count() > 0);
     }
 }

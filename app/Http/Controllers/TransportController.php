@@ -2,45 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use App\Common\DateTimeHelper;
-use App\Common\DBHelper;
-use Faker\Provider\DateTime;
 use Illuminate\Http\Request;
 use League\Flysystem\Exception;
 use Route;
 use DB;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
+use App\Repositories\TransportRepositoryInterface;
+use App\Repositories\FormulaRepositoryInterface;
+use App\Repositories\PostageRepositoryInterface;
+use App\Repositories\CustomerRepositoryInterface;
+use App\Repositories\TruckRepositoryInterface;
+use App\Repositories\ProductRepositoryInterface;
+use App\Repositories\VoucherRepositoryInterface;
+use App\Repositories\TransportFormulaRepositoryInterface;
+use App\Repositories\TransportVoucherRepositoryInterface;
 use App\Traits\UserHelper;
-use App\Traits\Domain\FormulaHelper;
-use App\Traits\Domain\PostageHelper;
-use App\Traits\Domain\TransportHelper;
-use App\Traits\Domain\CustomerHelper;
-use App\Traits\Domain\TruckHelper;
-use App\Traits\Domain\ProductHelper;
-use App\Traits\Domain\VoucherHelper;
+use App\Common\DateTimeHelper;
 use App\Transport;
 use App\TransportFormula;
 use App\Voucher;
 use App\TransportVoucher;
-use App\Repositories\TransportRepositoryInterface;
 
 class TransportController extends Controller implements ICrud, IValidate
 {
-    use UserHelper, FormulaHelper, PostageHelper
-        , TransportHelper, CustomerHelper, TruckHelper, ProductHelper
-        , VoucherHelper;
+    use UserHelper;
 
     private $first_day, $last_day, $today;
     private $user;
     private $table_name;
     private $skeleton;
 
-    protected $transportRepo;
+    protected $transportRepo, $formulaRepo, $postageRepo
+        , $customerRepo, $truckRepo, $productRepo, $voucherRepo
+        , $transportFormulaRepo, $transportVoucherRepo;
 
-    public function __construct(TransportRepositoryInterface $transportRepo)
+    public function __construct(TransportRepositoryInterface $transportRepo
+        , FormulaRepositoryInterface $formulaRepo
+        , PostageRepositoryInterface $postageRepo
+        , CustomerRepositoryInterface $customerRepo
+        , TruckRepositoryInterface $truckRepo
+        , ProductRepositoryInterface $productRepo
+        , VoucherRepositoryInterface $voucherRepo
+        , TransportFormulaRepositoryInterface $transportFormulaRepo
+        , TransportVoucherRepositoryInterface $transportVoucherRepo)
     {
         $this->transportRepo = $transportRepo;
+        $this->formulaRepo = $formulaRepo;
+        $this->postageRepo = $postageRepo;
+        $this->customerRepo = $customerRepo;
+        $this->truckRepo = $truckRepo;
+        $this->productRepo = $productRepo;
+        $this->voucherRepo = $voucherRepo;
+        $this->transportFormulaRepo = $transportFormulaRepo;
+        $this->transportVoucherRepo = $transportVoucherRepo;
 
         $current_month   = DateTimeHelper::getFirstDayLastDay();
         $this->first_day = $current_month['first_day'];
@@ -128,10 +143,10 @@ class TransportController extends Controller implements ICrud, IValidate
     {
         $transports = $this->skeleton->get();
 
-        $customers = $this->readAllCustomer()['skeleton']->get();
-        $trucks    = $this->readAllTruck()['skeleton']->get();
-        $products  = $this->readAllProduct()['skeleton']->get();
-        $vouchers  = $this->readAllVoucher()['skeleton']->get();
+        $customers = $this->customerRepo->allActive()->get();
+        $trucks    = $this->truckRepo->allActive()->get();
+        $products  = $this->productRepo->allActive()->get();
+        $vouchers  = $this->voucherRepo->allActive()->get();
 
         return [
             'transports' => $transports,
@@ -149,13 +164,9 @@ class TransportController extends Controller implements ICrud, IValidate
     {
         $one = $this->transportRepo->oneSkeleton($id)->first();
 
-        $transport_vouchers = TransportVoucher::whereActive(true)
-            ->where('transport_id', $id)
-            ->get();
+        $transport_vouchers = $this->transportVoucherRepo->readByTransportId($id);
 
-        $transport_formulas = TransportFormula::whereActive(true)
-            ->where('transport_id', $id)
-            ->get();
+        $transport_formulas = $this->transportFormulaRepo->readByTransportId($id);
 
         return [
             $this->table_name    => $one,
@@ -220,21 +231,24 @@ class TransportController extends Controller implements ICrud, IValidate
                 return false;
             }
 
-            # Insert VoucherTransport
+            # Insert TransportVoucher
             foreach ($transport_vouchers as $transport_voucher) {
                 if ($transport_voucher['quantum'] <= 0) continue;
 
-                $voucher_transport_new               = new TransportVoucher();
-                $voucher_transport_new->transport_id = $one->id;
-                $voucher_transport_new->voucher_id   = $transport_voucher['voucher_id'];
-                $voucher_transport_new->quantum      = $transport_voucher['quantum'];
-                $voucher_transport_new->created_by   = $one->created_by;
-                $voucher_transport_new->updated_by   = 0;
-                $voucher_transport_new->created_date = $one->created_date;
-                $voucher_transport_new->updated_date = null;
-                $voucher_transport_new->active       = true;
+                $input = [
+                    'voucher_id'   => $transport_voucher['voucher_id'],
+                    'transport_id' => $one->id,
+                    'quantum'      => $transport_voucher['quantum'],
+                    'created_by'   => $one->created_by,
+                    'updated_by'   => 0,
+                    'created_date' => $one->created_date,
+                    'updated_date' => null,
+                    'active'       => true
+                ];
 
-                if (!$voucher_transport_new->save()) {
+                $voucher_transport_new = $this->transportVoucherRepo->create($input);
+
+                if (!$voucher_transport_new) {
                     DB::rollback();
                     return false;
                 }
@@ -242,15 +256,19 @@ class TransportController extends Controller implements ICrud, IValidate
 
             # Insert TransportFormula
             foreach ($formulas as $formula) {
-                $transport_formula               = new TransportFormula();
-                $transport_formula->rule         = $formula['rule'];
-                $transport_formula->name         = $formula['name'];
-                $transport_formula->value1       = $formula['value1'];
-                $transport_formula->value2       = $formula['value2'];
-                $transport_formula->active       = true;
-                $transport_formula->transport_id = $one->id;
 
-                if (!$transport_formula->save()) {
+                $input = [
+                    'rule'         => $formula['rule'],
+                    'name'         => $formula['name'],
+                    'value1'       => $formula['value1'],
+                    'value2'       => $formula['value2'],
+                    'active'       => true,
+                    'transport_id' => $one->id
+                ];
+
+                $transport_formula_new = $this->transportFormulaRepo->create($input);
+
+                if (!$transport_formula_new) {
                     DB::rollback();
                     return false;
                 }
@@ -318,46 +336,49 @@ class TransportController extends Controller implements ICrud, IValidate
             }
 
             # Delete TransportVoucher
-            TransportVoucher::whereActive(true)
-                ->where('transport_id', $one->id)
-                ->delete();
+            $this->transportVoucherRepo->deleteByTransportId($one->id);
+
 
             # Insert TransportVoucher
             foreach ($transport_vouchers as $transport_voucher) {
                 if ($transport_voucher['quantum'] <= 0) continue;
 
-                $voucher_transport_new               = new TransportVoucher();
-                $voucher_transport_new->transport_id = $one->id;
-                $voucher_transport_new->voucher_id   = $transport_voucher['voucher_id'];
-                $voucher_transport_new->quantum      = $transport_voucher['quantum'];
-                $voucher_transport_new->created_by   = $one->created_by;
-                $voucher_transport_new->updated_by   = 0;
-                $voucher_transport_new->created_date = $one->created_date;
-                $voucher_transport_new->updated_date = null;
-                $voucher_transport_new->active       = true;
+                $input = [
+                    'voucher_id'   => $transport_voucher['voucher_id'],
+                    'transport_id' => $one->id,
+                    'quantum'      => $transport_voucher['quantum'],
+                    'created_by'   => $one->created_by,
+                    'updated_by'   => 0,
+                    'created_date' => $one->created_date,
+                    'updated_date' => null,
+                    'active'       => true
+                ];
 
-                if (!$voucher_transport_new->save()) {
+                $voucher_transport_new = $this->transportVoucherRepo->create($input);
+
+                if (!$voucher_transport_new) {
                     DB::rollback();
                     return false;
                 }
             }
 
             # Delete TransportFormula
-            TransportFormula::whereActive(true)
-                ->where('transport_id', $one->id)
-                ->delete();
+            $this->transportFormulaRepo->deleteByTransportId($one->id);
 
             # Insert TransportFormula
             foreach ($formulas as $formula) {
-                $transport_formula               = new TransportFormula();
-                $transport_formula->rule         = $formula['rule'];
-                $transport_formula->name         = $formula['name'];
-                $transport_formula->value1       = $formula['value1'];
-                $transport_formula->value2       = $formula['value2'];
-                $transport_formula->active       = true;
-                $transport_formula->transport_id = $one->id;
+                $input = [
+                    'rule'         => $formula['rule'],
+                    'name'         => $formula['name'],
+                    'value1'       => $formula['value1'],
+                    'value2'       => $formula['value2'],
+                    'active'       => true,
+                    'transport_id' => $one->id
+                ];
 
-                if (!$transport_formula->save()) {
+                $transport_formula_new = $this->transportFormulaRepo->create($input);
+
+                if (!$transport_formula_new) {
                     DB::rollback();
                     return false;
                 }
@@ -384,24 +405,10 @@ class TransportController extends Controller implements ICrud, IValidate
             }
 
             # Deactivate TransportVoucher
-            $transport_vouchers_delete = TransportVoucher::whereActive(true)
-                ->where('transport_id', $id)
-                ->get();
-
-            $transport_vouchers_delete->each(function ($item) {
-                $item->active = false;
-                $item->update();
-            });
+            $this->transportVoucherRepo->deactivateByTransportId($id);
 
             # Deactivate TransportFormula
-            $transport_formulas_delete = TransportFormula::whereActive(true)
-                ->where('transport_id', $id)
-                ->get();
-
-            $transport_formulas_delete->each(function ($item) {
-                $item->active = false;
-                $item->update();
-            });
+            $this->transportFormulaRepo->deactivateByTransportId($id);
 
             DB::commit();
             return true;
@@ -423,22 +430,10 @@ class TransportController extends Controller implements ICrud, IValidate
             }
 
             # Delete TransportVoucher
-            $transport_vouchers_delete = TransportVoucher::whereActive(true)
-                ->where('transport_id', $id)
-                ->get();
-
-            $transport_vouchers_delete->each(function ($item) {
-                $item->delete();
-            });
+            $this->transportVoucherRepo->deleteByTransportId($id);
 
             # Delete TransportFormula
-            $transport_formulas_delete = TransportFormula::whereActive(true)
-                ->where('transport_id', $id)
-                ->get();
-
-            $transport_formulas_delete->each(function ($item) {
-                $item->delete();
-            });
+            $this->transportFormulaRepo->deleteByTransportId($id);
 
             DB::commit();
             return true;
@@ -505,7 +500,8 @@ class TransportController extends Controller implements ICrud, IValidate
         $customer_id    = $data['customer_id'];
         $transport_date = DateTimeHelper::toStringDateTimeClientForDB($data['transport_date']);
 
-        $formulas = $this->findFormulas($customer_id, $transport_date);
+//        $formulas = $this->findFormulas($customer_id, $transport_date);
+        $formulas = $this->formulaRepo->findFormulas($customer_id, $transport_date);
 
         return $formulas;
     }
