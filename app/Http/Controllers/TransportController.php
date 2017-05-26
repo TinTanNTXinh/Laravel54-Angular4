@@ -143,10 +143,10 @@ class TransportController extends Controller implements ICrud, IValidate
     {
         $transports = $this->skeleton->get();
 
-        $customers = $this->customerRepo->allActive()->get();
-        $trucks    = $this->truckRepo->allActive()->get();
-        $products  = $this->productRepo->allActive()->get();
-        $vouchers  = $this->voucherRepo->allActive()->get();
+        $customers = $this->customerRepo->allActive();
+        $trucks    = $this->truckRepo->allActive();
+        $products  = $this->productRepo->allActive();
+        $vouchers  = $this->voucherRepo->allActive();
 
         return [
             'transports' => $transports,
@@ -500,10 +500,9 @@ class TransportController extends Controller implements ICrud, IValidate
         $customer_id    = $data['customer_id'];
         $transport_date = DateTimeHelper::toStringDateTimeClientForDB($data['transport_date']);
 
-//        $formulas = $this->findFormulas($customer_id, $transport_date);
-        $formulas = $this->formulaRepo->findFormulas($customer_id, $transport_date);
+        $formulas = $this->formulaRepo->readByCustomerId($customer_id, $transport_date);
 
-        return $formulas;
+        return ['formulas' => $formulas];
     }
 
     public function getReadPostage()
@@ -519,8 +518,8 @@ class TransportController extends Controller implements ICrud, IValidate
         $i_transport_date = DateTimeHelper::toStringDateTimeClientForDB($data['transport_date']);
         $i_formulas       = $data['formulas'];
 
-        $postage = $this->findPostage($i_formulas, $i_customer_id, $i_transport_date);
+        $postage = $this->postageRepo->readByCustomerIdFormulas($i_formulas, $i_customer_id, $i_transport_date);
 
-        return $postage;
+        return ['postage' => $postage];
     }
 }
