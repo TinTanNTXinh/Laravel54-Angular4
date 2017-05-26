@@ -7,7 +7,7 @@ use App\Transport;
 use App\Common\DBHelper;
 use DB;
 
-class EloquentTransportRepository extends EloquentBaseRepository implements TransportRepositoryInterface
+class TransportEloquentRepository extends EloquentBaseRepository implements TransportRepositoryInterface
 {
     /**
      * Khai báo Model
@@ -21,7 +21,7 @@ class EloquentTransportRepository extends EloquentBaseRepository implements Tran
      * Lấy danh sách các post đã active
      * @return object
      */
-    public function allActive()
+    public function allSkeleton()
     {
         return $this->model->where('transports.active', true)
 //            ->where('transports.type2', '!=', 'CUSTOMER-HD-FULL')
@@ -54,5 +54,10 @@ class EloquentTransportRepository extends EloquentBaseRepository implements Tran
                 , DB::raw(DBHelper::getWithCurrencyFormat('transports.add_score', 'fc_add_score'))
                 , DB::raw(DBHelper::getWithDateTimeFormat('transports.transport_date', 'fd_transport_date'))
             );
+    }
+
+    public function oneSkeleton($id)
+    {
+        return $this->allSkeleton()->where('transports.id', $id);
     }
 }

@@ -28,12 +28,12 @@ class AppServiceProvider extends ServiceProvider
         //
         $this->app->bind(
             'App\Repositories\TransportRepositoryInterface',
-            'App\Repositories\Eloquent\EloquentTransportRepository'
+            'App\Repositories\Eloquent\TransportEloquentRepository'
         );
 
         $this->app->bind(
             'App\Repositories\PositionRepositoryInterface',
-            'App\Repositories\Eloquent\EloquentPositionRepository'
+            'App\Repositories\Eloquent\PositionEloquentRepository'
         );
     }
 }

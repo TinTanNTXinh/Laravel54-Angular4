@@ -55,7 +55,7 @@ class TransportController extends Controller implements ICrud, IValidate
         }
 
         $this->table_name = 'transport';
-        $this->skeleton   = $this->transportRepo->allActive();
+        $this->skeleton   = $this->transportRepo->allSkeleton();
     }
 
     /** ===== API METHOD ===== */
@@ -147,7 +147,7 @@ class TransportController extends Controller implements ICrud, IValidate
 
     public function readOne($id)
     {
-        $one = $this->skeleton->where('transports.id', $id)->first();
+        $one = $this->transportRepo->oneSkeleton($id)->first();
 
         $transport_vouchers = TransportVoucher::whereActive(true)
             ->where('transport_id', $id)
@@ -169,48 +169,53 @@ class TransportController extends Controller implements ICrud, IValidate
         $transport          = $data['transport'];
         $formulas           = $data['formulas'];
         $transport_vouchers = $data['transport_vouchers'];
+
         try {
             DB::beginTransaction();
-            $one                   = new Transport();
-            $one->code             = $this->transportRepo->generateCode('TRANSPORT');
-            $one->transport_date   = DateTimeHelper::toStringDateTimeClientForDB($transport['transport_date']);
-            $one->type1            = $transport['type1'];
-            $one->type2            = '';
-            $one->type3            = '';
-            $one->quantum_product  = $transport['quantum_product'];
-            $one->revenue          = $transport['revenue'];
-            $one->profit           = 0;
-            $one->receive          = $transport['receive'];
-            $one->delivery         = $transport['delivery'];
-            $one->carrying         = $transport['carrying'];
-            $one->parking          = $transport['parking'];
-            $one->fine             = $transport['fine'];
-            $one->phi_tang_bo      = $transport['phi_tang_bo'];
-            $one->add_score        = $transport['add_score'];
-            $one->delivery_real    = $one->delivery;
-            $one->carrying_real    = $one->carrying;
-            $one->parking_real     = $one->parking;
-            $one->fine_real        = $one->fine;
-            $one->phi_tang_bo_real = $one->phi_tang_bo;
-            $one->add_score_real   = $one->add_score;
 
-            $one->voucher_number             = $transport['voucher_number'];
-            $one->quantum_product_on_voucher = $transport['quantum_product_on_voucher'];
-            $one->receiver                   = $transport['receiver'];
+            $input = [
+                'code'             => $this->transportRepo->generateCode('TRANSPORT'),
+                'transport_date'   => DateTimeHelper::toStringDateTimeClientForDB($transport['transport_date']),
+                'type1'            => $transport['type1'],
+                'type2'            => '',
+                'type3'            => '',
+                'quantum_product'  => $transport['quantum_product'],
+                'revenue'          => $transport['revenue'],
+                'profit'           => 0,
+                'receive'          => $transport['receive'],
+                'delivery'         => $transport['delivery'],
+                'carrying'         => $transport['carrying'],
+                'parking'          => $transport['parking'],
+                'fine'             => $transport['fine'],
+                'phi_tang_bo'      => $transport['phi_tang_bo'],
+                'add_score'        => $transport['add_score'],
+                'delivery_real'    => $transport['delivery'],
+                'carrying_real'    => $transport['carrying'],
+                'parking_real'     => $transport['parking'],
+                'fine_real'        => $transport['fine'],
+                'phi_tang_bo_real' => $transport['phi_tang_bo'],
+                'add_score_real'   => $transport['add_score'],
 
-            $one->note         = $transport['note'];
-            $one->created_by   = $this->user->id;
-            $one->updated_by   = 0;
-            $one->created_date = date('Y-m-d H:i:s');
-            $one->updated_date = null;
-            $one->active       = true;
-            $one->truck_id     = $transport['truck_id'];
-            $one->product_id   = $transport['product_id'];
-            $one->customer_id  = $transport['customer_id'];
-            $one->postage_id   = $transport['postage_id'];
-            $one->fuel_id      = $transport['fuel_id'];
+                'voucher_number'             => $transport['voucher_number'],
+                'quantum_product_on_voucher' => $transport['quantum_product_on_voucher'],
+                'receiver'                   => $transport['receiver'],
 
-            if (!$one->save()) {
+                'note'         => $transport['note'],
+                'created_by'   => $this->user->id,
+                'updated_by'   => 0,
+                'created_date' => date('Y-m-d'),
+                'updated_date' => null,
+                'active'       => true,
+                'truck_id'     => $transport['truck_id'],
+                'product_id'   => $transport['product_id'],
+                'customer_id'  => $transport['customer_id'],
+                'postage_id'   => $transport['postage_id'],
+                'fuel_id'      => $transport['fuel_id']
+            ];
+
+            $one = $this->transportRepo->create($input);
+
+            if (!$one) {
                 DB::rollback();
                 return false;
             }
@@ -266,43 +271,48 @@ class TransportController extends Controller implements ICrud, IValidate
         $transport_vouchers = $data['transport_vouchers'];
         try {
             DB::beginTransaction();
-            $one                   = Transport::find($transport['id']);
-            $one->transport_date   = DateTimeHelper::toStringDateTimeClientForDB($transport['transport_date']);
-            $one->type1            = $transport['type1'];
-            $one->type2            = '';
-            $one->type3            = '';
-            $one->quantum_product  = $transport['quantum_product'];
-            $one->revenue          = $transport['revenue'];
-            $one->profit           = 0;
-            $one->receive          = $transport['receive'];
-            $one->delivery         = $transport['delivery'];
-            $one->carrying         = $transport['carrying'];
-            $one->parking          = $transport['parking'];
-            $one->fine             = $transport['fine'];
-            $one->phi_tang_bo      = $transport['phi_tang_bo'];
-            $one->add_score        = $transport['add_score'];
-            $one->delivery_real    = $one->delivery;
-            $one->carrying_real    = $one->carrying;
-            $one->parking_real     = $one->parking;
-            $one->fine_real        = $one->fine;
-            $one->phi_tang_bo_real = $one->phi_tang_bo;
-            $one->add_score_real   = $one->add_score;
 
-            $one->voucher_number             = $transport['voucher_number'];
-            $one->quantum_product_on_voucher = $transport['quantum_product_on_voucher'];
-            $one->receiver                   = $transport['receiver'];
+            $input = [
+                'transport_date'   => DateTimeHelper::toStringDateTimeClientForDB($transport['transport_date']),
+                'type1'            => $transport['type1'],
+                'type2'            => '',
+                'type3'            => '',
+                'quantum_product'  => $transport['quantum_product'],
+                'revenue'          => $transport['revenue'],
+                'profit'           => 0,
+                'receive'          => $transport['receive'],
+                'delivery'         => $transport['delivery'],
+                'carrying'         => $transport['carrying'],
+                'parking'          => $transport['parking'],
+                'fine'             => $transport['fine'],
+                'phi_tang_bo'      => $transport['phi_tang_bo'],
+                'add_score'        => $transport['add_score'],
+                'delivery_real'    => $transport['delivery'],
+                'carrying_real'    => $transport['carrying'],
+                'parking_real'     => $transport['parking'],
+                'fine_real'        => $transport['fine'],
+                'phi_tang_bo_real' => $transport['phi_tang_bo'],
+                'add_score_real'   => $transport['add_score'],
 
-            $one->note         = $transport['note'];
-            $one->updated_by   = $this->user->id;
-            $one->updated_date = date('Y-m-d H:i:s');
-            $one->active       = true;
-            $one->truck_id     = $transport['truck_id'];
-            $one->product_id   = $transport['product_id'];
-            $one->customer_id  = $transport['customer_id'];
-            $one->postage_id   = $transport['postage_id'];
-            $one->fuel_id      = $transport['fuel_id'];
+                'voucher_number'             => $transport['voucher_number'],
+                'quantum_product_on_voucher' => $transport['quantum_product_on_voucher'],
+                'receiver'                   => $transport['receiver'],
 
-            if (!$one->update()) {
+                'note'         => $transport['note'],
+                'updated_by'   => $this->user->id,
+                'updated_date' => date('Y-m-d'),
+                'active'       => true,
+                'truck_id'     => $transport['truck_id'],
+                'product_id'   => $transport['product_id'],
+                'customer_id'  => $transport['customer_id'],
+                'postage_id'   => $transport['postage_id'],
+                'fuel_id'      => $transport['fuel_id']
+            ];
+
+            $one = $this->transportRepo->find($transport['id']);
+
+            $one = $this->transportRepo->update($one, $input);
+            if (!$one) {
                 DB::rollBack();
                 return false;
             }
@@ -365,16 +375,17 @@ class TransportController extends Controller implements ICrud, IValidate
     {
         try {
             DB::beginTransaction();
-            $one         = Transport::find($id);
-            $one->active = false;
-            if (!$one->update()) {
+
+            $one = $this->transportRepo->deactivate($id) ? true : false;
+
+            if (!$one) {
                 DB::rollBack();
                 return false;
             }
 
             # Deactivate TransportVoucher
             $transport_vouchers_delete = TransportVoucher::whereActive(true)
-                ->where('transport_id', $one->id)
+                ->where('transport_id', $id)
                 ->get();
 
             $transport_vouchers_delete->each(function ($item) {
@@ -384,7 +395,7 @@ class TransportController extends Controller implements ICrud, IValidate
 
             # Deactivate TransportFormula
             $transport_formulas_delete = TransportFormula::whereActive(true)
-                ->where('transport_id', $one->id)
+                ->where('transport_id', $id)
                 ->get();
 
             $transport_formulas_delete->each(function ($item) {
@@ -404,7 +415,12 @@ class TransportController extends Controller implements ICrud, IValidate
     {
         try {
             DB::beginTransaction();
-            Transport::destroy($id);
+
+            $one = $this->transportRepo->destroy($id) ? true : false;
+            if (!$one) {
+                DB::rollBack();
+                return false;
+            }
 
             # Delete TransportVoucher
             $transport_vouchers_delete = TransportVoucher::whereActive(true)
@@ -440,9 +456,9 @@ class TransportController extends Controller implements ICrud, IValidate
 
         $transports = $this->skeleton;
 
-        $transports = $this->transportRepo->searchFromDateToDate($transports, 'transports.created_date', $from_date, $to_date);
+        $transports = $this->transportRepo->filterFromDateToDate($transports, 'transports.created_date', $from_date, $to_date);
 
-        $transports = $this->transportRepo->searchRangeDate($transports, 'transports.created_date', $range);
+        $transports = $this->transportRepo->filterRangeDate($transports, 'transports.created_date', $range);
 
         return [
             'transports' => $transports->get()

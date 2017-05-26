@@ -6,7 +6,7 @@ use App\Repositories\PostageRepositoryInterface;
 use App\Postage;
 use App\Formula;
 
-class EloquentPostageRepository extends EloquentBaseRepository implements PostageRepositoryInterface
+class PostageEloquentRepository extends EloquentBaseRepository implements PostageRepositoryInterface
 {
     /**
      * Khai báo Model

@@ -8,5 +8,7 @@ interface TransportRepositoryInterface
      * Lấy danh sách các post đã active
      * @return object
      */
-    public function allActive();
+    public function allSkeleton();
+
+    public function oneSkeleton($id);
 }
