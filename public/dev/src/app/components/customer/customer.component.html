@@ -110,8 +110,11 @@
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Loại</label>
                               <div class="col-lg-10">
-                                <autocomplete [data]="customer_types" [name]="'name'" [model_name]="'id'"
-                                              [(ngModel)]="customer.customer_type_id"></autocomplete>
+                                <xautocomplete [data]="customer_types"
+                                               [name]="'name'"
+                                               [model_name]="'id'"
+                                               [(value)]="customer.customer_type_id">
+                                </xautocomplete>
                               </div>
                             </div>
                             <div class="form-group">

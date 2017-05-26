@@ -7,19 +7,16 @@ use Illuminate\Http\Request;
 use App\Repositories\PostageRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
-use App\Traits\UserHelper;
 use App\Common\DateTimeHelper;
+use App\Common\AuthHelper;
 use Route;
 
 class PostageController extends Controller implements ICrud, IValidate
 {
-    use UserHelper;
-
     private $first_day, $last_day, $today;
     private $user;
     private $table_name;
     private $skeleton;
-    private $dateTimeHelper;
 
     protected $postageRepo = '';
 
@@ -27,21 +24,20 @@ class PostageController extends Controller implements ICrud, IValidate
     {
         $this->postageRepo = $postageRepo;
 
-        $jwt_data = $this->getCurrentUser();
+        $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
-            $user_data = $this->getInfoCurrentUser($jwt_data['user']);
+            $user_data = AuthHelper::getInfoCurrentUser($jwt_data['user']);
             if ($user_data['status'])
                 $this->user = $user_data['user'];
         }
 
-        $this->dateTimeHelper = new DateTimeHelper();
-        $current_month        = $this->dateTimeHelper->getFirstDayLastDay();
-        $this->first_day      = $current_month['first_day'];
-        $this->last_day       = $current_month['last_day'];
-        $this->today          = $current_month['today'];
+        $current_month   = DateTimeHelper::getFirstDayLastDay();
+        $this->first_day = $current_month['first_day'];
+        $this->last_day  = $current_month['last_day'];
+        $this->today     = $current_month['today'];
 
         $this->table_name = 'postage';
-        $this->skeleton   = $this->postageRepo->allActive();
+        $this->skeleton   = $this->postageRepo->allSkeleton();
     }
 
     /** ===== API METHOD ===== */
@@ -114,14 +110,19 @@ class PostageController extends Controller implements ICrud, IValidate
     {
         $all = $this->skeleton->get();
 
+        $customers = [];
+        $units     = [];
+
         return [
-            'postages' => $all
+            'postages'  => $all,
+            'customers' => $customers,
+            'units'     => $units
         ];
     }
 
     public function readOne($id)
     {
-        $one = $this->postageRepo->filterColumn($this->skeleton, 'postages.id', $id)->first();
+        $one = $this->postageRepo->oneSkeleton($id)->first();
 
         return [
             'postage' => $one
@@ -130,7 +131,7 @@ class PostageController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
-        $one = [
+        $input = [
             'code'             => $this->postageRepo->generateCode('POSTAGE'),
             'unit_price'       => $data['unit_price'],
             'delivery_percent' => $data['delivery_percent'],
@@ -147,7 +148,7 @@ class PostageController extends Controller implements ICrud, IValidate
             'fuel_id'          => $data['fuel_id']
         ];
 
-        return $this->postageRepo->create($one) ? true : false;
+        return $this->postageRepo->create($input) ? true : false;
     }
 
     public function updateOne($data)
@@ -226,11 +227,4 @@ class PostageController extends Controller implements ICrud, IValidate
     }
 
     /** ===== MY FUNCTION ===== */
-    private function readByCustomer($customer_id)
-    {
-        $postages = $this->postageRepo->filterColumn($this->skeleton, 'customer_id', $customer_id);
-        return [
-            'postages' => $postages
-        ];
-    }
 }

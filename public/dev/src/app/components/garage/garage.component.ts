@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
@@ -7,21 +6,17 @@ import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
 
 @Component({
-    selector: 'app-postage',
-    templateUrl: './postage.component.html',
+    selector: 'app-garage',
+    templateUrl: './garage.component.html',
     styles: []
 })
-export class PostageComponent implements OnInit
+export class GarageComponent implements OnInit
     , ICommon, ICrud, IDatePicker, ISearch {
 
     /** ===== MY VARIABLES ===== **/
-    public postages: any[] = [];
-    public postage: any;
-    public customers: any[] = [];
-    public units: any[] = [];
-
-    public apply_date: Date = new Date();
-    public apply_time: Date = new Date();
+    public garages: any[] = [];
+    public garage: any;
+    public garage_types: any[] = [];
 
     /** ===== ICOMMON ===== **/
     title: string;
@@ -46,28 +41,24 @@ export class PostageComponent implements OnInit
     /** ===== ISEARCH ===== **/
     filtering: any;
 
-    constructor( private fb: FormBuilder
-        , private httpClientService: HttpClientService
+    constructor(private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
         , private domHelperService: DomHelperService) {
     }
 
     ngOnInit(): void {
-        this.initFormulaFormGroup();
-
-        this.title = 'Cước phí';
-        this.prefix_url = 'postages';
+        this.title = 'Nhà xe';
+        this.prefix_url = 'garages';
         this.range_date = this.dateHelperService.range_date;
-
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
-            code: {
-                title: 'Mã'
-            },
             name: {
                 title: 'Tên'
+            },
+            description: {
+                title: 'Mô tả'
             }
         };
 
@@ -95,7 +86,7 @@ export class PostageComponent implements OnInit
     }
 
     reloadData(arr_data: any[]): void {
-        this.postages = [];
+        this.garages = [];
     }
 
     refreshData(): void {
@@ -111,28 +102,25 @@ export class PostageComponent implements OnInit
 
     /** ===== ICRUD ===== **/
     loadOne(id: number): void {
-        this.postage = this.postages.find(o => o.id == id);
+        this.garage = this.garages.find(o => o.id == id);
     }
 
     clearOne(): void {
-        this.postage = {
-            customer_id: '',
-            unit_id: '',
-            delvery_percent: '',
-            unit_price: '',
-            apply_date: '',
-            apply_time: '',
-            note: ''
+        this.garage = {
+            name: '',
+            description: '',
+            address: '',
+            contactor: '',
+            phone: '',
+            note: '',
+            garage_type_id: 0
         };
     }
 
     addOne(): void {
-        console.log('Saved: ' + JSON.stringify(this.formulaFormArray.value));
-        console.log('Saved: ' + JSON.stringify(this.postage));
-
         if (!this.validateOne()) return;
 
-        this.httpClientService.post(this.prefix_url, {"postage": this.postage}).subscribe(
+        this.httpClientService.post(this.prefix_url, {"garage": this.garage}).subscribe(
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();
@@ -149,7 +137,7 @@ export class PostageComponent implements OnInit
     updateOne(): void {
         if (!this.validateOne()) return;
 
-        this.httpClientService.put(this.prefix_url, {"postage": this.postage}).subscribe(
+        this.httpClientService.put(this.prefix_url, {"garage": this.garage}).subscribe(
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();
@@ -196,13 +184,13 @@ export class PostageComponent implements OnInit
 
     validateOne(): boolean {
         let flag: boolean = true;
-        if (this.postage.code == '') {
+        if (this.garage.name == '') {
             flag = false;
-            this.toastrHelperService.showToastr('warning', `Mã ${this.title} không được để trống!`);
+            this.toastrHelperService.showToastr('warning', `Tên ${this.title} không được để trống!`);
         }
-        if (this.postage.name == '') {
+        if (this.garage.garage_type_id == 0) {
             flag = false;
-            this.toastrHelperService.showToastr('warning', `Tên  ${this.title} không được để trống!`);
+            this.toastrHelperService.showToastr('warning', `Loại ${this.title} không được để trống!`);
         }
         return flag;
     }
@@ -290,7 +278,7 @@ export class PostageComponent implements OnInit
     }
 
     reloadDataSearch(arr_data: any[]): void {
-        this.postages = arr_data['postages'];
+        this.garages = arr_data['garages'];
     }
 
     clearSearch(): void {
@@ -304,9 +292,7 @@ export class PostageComponent implements OnInit
     }
 
     displayColumn(): void {
-        let setting = {
-
-        };
+        let setting = {};
         for (let parent in setting) {
             for (let child of setting[parent]) {
                 if (!!this.header[child])
@@ -316,68 +302,6 @@ export class PostageComponent implements OnInit
     }
 
     /** ===== FUNCTION ACTION ===== **/
-
-    /** ===== FORM FORMULA ===== **/
-    public formulaFormGroup: FormGroup;
-
-    private initFormulaFormGroup(): void {
-        this.formulaFormGroup = this.fb.group({
-            formulas: this.fb.array([])
-        });
-    }
-
-    get formulaFormArray(): FormArray{
-        return <FormArray>this.formulaFormGroup.get('formulas');
-        // return <FormArray>this.formulaFormGroup.controls['formulas'];
-    }
-
-    private buildFormula(type: string): FormGroup {
-        let formula;
-        switch (type) {
-            case 'SINGLE':
-                formula = this.fb.group({
-                    type: type,
-                    name: ['', [Validators.required]],
-                    value1: ['', [Validators.required]],
-                    value2: ''
-                });
-                break;
-            case 'RANGE':
-                formula = this.fb.group({
-                    type: type,
-                    name: ['', [Validators.required]],
-                    value1: [0, [Validators.pattern('[0-9].*'), Validators.required]],
-                    value2: [0, [Validators.pattern('[0-9].*'), Validators.required]]
-                });
-                break;
-            case 'PAIR':
-                formula = this.fb.group({
-                    type: type,
-                    name: ['', [Validators.required]],
-                    value1: ['', [Validators.pattern('[a-zA-Z].*'), Validators.required]],
-                    value2: ['', [Validators.pattern('[a-zA-Z].*'), Validators.required]]
-                });
-                break;
-            default:
-                break;
-        }
-        return formula;
-    }
-
-    private addFormula(type: string): void {
-        this.formulaFormArray.push(this.buildFormula(type));
-    }
-
-    private removeFormula(index: number) {
-        this.formulaFormArray.removeAt(index);
-    }
-
-    private clearFormula(): void {
-        let length: number = this.formulaFormArray.length;
-        for (let i = length; i--;) {
-            this.removeFormula(i);
-        }
-    }
 
     /** ===== FUNCTION ===== **/
 }

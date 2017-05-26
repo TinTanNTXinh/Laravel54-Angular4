@@ -50,8 +50,7 @@
                                 <label>Từ</label>
                                 <datetime [ngModel]="datepicker_from" name="datepicker_from"
                                           (dateChange)="clearDate($event, 'from')"
-                                          (ngModelChange)="handleDateFromChange($event)"
-                                          [timepicker]="false"
+                                          (ngModelChange)="handleDateFromChange($event)" [timepicker]="false"
                                           [datepicker]="datepickerSettings"></datetime>
                               </div>
                               <div class="col-md-3">
@@ -66,7 +65,8 @@
                         </div>
                         <div class="row">
                           <div class="col-md-4">
-                            <button type="button" class="btn m-b-xs w-xs btn-info btn-rounded"
+                            <button class="btn m-b-xs w-xs btn-info btn-rounded"
+                                    type="button"
                                     (click)="search()">Tìm kiếm
                             </button>
                           </div>
@@ -84,10 +84,8 @@
                     </div>
                     <div class="panel-body">
                       <spinner-fb [isLoading]="isLoading"></spinner-fb>
-                      <xdatatable [body]="postages"
-                                  [header]="header"
-                                  (onClicked)="actionCrud($event)">
-                      </xdatatable>
+                      <xdatatable [body]="cost_oils" [header]="header"
+                                  (onClicked)="actionCrud($event)"></xdatatable>
                     </div>
                   </div>
                 </div>
@@ -101,104 +99,77 @@
                     <div class="panel-body">
                       <form class="bs-example form-horizontal">
                         <div class="row">
+                          <div class="col-md-1">
+
+                          </div>
                           <div class="col-md-6">
                             <div class="row">
                               <div class="col-md-6">
-                                <label>Khách hàng</label>
-                                <xautocomplete [data]="customers"
-                                               [name]="'fullname'"
+                                <label>Xe</label>
+                                <xautocomplete [data]="trucks"
+                                               [name]="'area_code_number_plate'"
                                                [model_name]="'id'"
-                                               [(value)]="postage.customer_id">
+                                               [(value)]="cost_oil.truck_id">
                                 </xautocomplete>
                               </div>
-                              <div class="col-md-6">
-                                <label>Phí giao xe</label>
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="postage.delivery_percent" name="delivery_percent">
-                              </div>
+                              <div class="col-md-6"></div>
                             </div>
                             <div class="row">
+                              <div class="col-md-6">
+                                <label>Ngày đổ</label>
+                                <datetime [timepicker]="false"
+                                          [datepicker]="datepickerSettings"
+                                          [(ngModel)]="refuel_date"
+                                          name="refuel_date"></datetime>
+                              </div>
+                              <div class="col-md-6">
+                                <label>Giờ đổ</label>
+                                <datetime [timepicker]="timepickerSettings"
+                                          [datepicker]="false"
+                                          [(ngModel)]="refuel_time"
+                                          name="refuel_time"></datetime>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label>Số lít</label>
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="cost_oil.quantum_liter" name="quantum_liter">
+                              </div>
                               <div class="col-md-6">
                                 <label>Đơn giá</label>
-                                <currency [numberData]="postage.unit_price" [(ngModel)]="postage.unit_price" name="unit_price"></currency>
+                                <currency [ngModel]="cost_oil.unit_price" name="unit_price"></currency>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label>Thành tiền</label>
+                                <currency [(ngModel)]="cost_oil.money" name="money"></currency>
                               </div>
                               <div class="col-md-6">
-                                <label>Đơn vị tính</label>
-                                <xautocomplete [data]="units"
-                                               [name]="'name'"
-                                               [model_name]="'id'"
-                                               [(value)]="postage.unit_id">
-                                </xautocomplete>
+                                <label>VAT</label>
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="cost_oil.vat" name="vat">
                               </div>
                             </div>
                             <div class="row">
                               <div class="col-md-6">
-                                <label>Ngày áp dụng</label>
-                                <datetime [(ngModel)]="apply_date" name="apply_date"
-                                          [timepicker]="false"
-                                          [datepicker]="datepickerSettings">
-                                </datetime>
+                                <label>Tiền trả</label>
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="cost_oil.after_vat" name="after_vat">
                               </div>
                               <div class="col-md-6">
-                                <label>Giờ áp dụng</label>
-                                <datetime [(ngModel)]="apply_time" name="apply_time"
-                                          [timepicker]="timepickerSettings"
-                                          [datepicker]="false">
-                                </datetime>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-md-12">
                                 <label>Ghi chú</label>
                                 <input type="text" class="form-control"
-                                       [(ngModel)]="postage.note" name="note">
+                                       [(ngModel)]="cost_oil.note" name="note">
                               </div>
                             </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="m-b-sm">
-                              <div class="btn-group">
-                                <button [disabled]="!formulaFormArray.valid"
-                                        (click)="addFormula('SINGLE')" type="button" class="btn btn-info">Giá trị</button>
-                                <button [disabled]="!formulaFormArray.valid"
-                                        (click)="addFormula('RANGE')" type="button" class="btn btn-success">Khoảng</button>
-                                <button [disabled]="!formulaFormArray.valid"
-                                        (click)="addFormula('PAIR')" type="button" class="btn btn-primary">Cặp</button>
-                              </div>
-                            </div>
-                            <!--Reactive form-->
-                            <form class="form-horizontal"
-                                  novalidate
-                                  [formGroup]="formulaFormGroup">
-                              <div formArrayName="formulas" *ngFor="let formula of formulaFormArray.controls; let i=index">
-                                <div class="panel-heading">
-                                  <span>Công thức {{i + 1}}</span>
-                                  <span class="glyphicon glyphicon-remove pull-right" (click)="removeFormula(i)"></span>
-                                </div>
-                                <div class="panel-body" [formGroupName]="i">
-                                  <formula [group]="formulaFormArray.controls[i]"></formula>
-                                </div>
-                              </div>
-                              <!--<div class="form-group">-->
-                                <!--<div class="col-md-4 col-md-offset-2">-->
-                                  <!--<button class="col-md-6 btn btn-primary"-->
-                                          <!--type="submit"-->
-                                          <!--[disabled]="!formulaForm.valid">-->
-                                    <!--Lưu-->
-                                  <!--</button>-->
-                                <!--</div>-->
-                              <!--</div>-->
-                            </form>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-12">
-                            <div class="form-group">
-                              <div class="col-lg-offset-2 col-lg-10">
+                            <div class="row">
+                              <div class="col-md-offset-2 col-md-10">
                                 <br>
-                                <button *ngIf="!isEdit"
-                                        [disabled]="!formulaFormGroup.valid"
-                                        type="button"
+                                <button *ngIf="!isEdit" type="button"
                                         class="btn m-b-xs w-xs btn-primary btn-rounded"
                                         (click)="addOne()">Thêm
                                 </button>
@@ -219,6 +190,7 @@
                               </div>
                             </div>
                           </div>
+                          <div class="col-md-5"></div>
                         </div>
                       </form>
                     </div>

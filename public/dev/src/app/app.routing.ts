@@ -14,6 +14,8 @@ import {LubeComponent} from './components/lube/lube.component';
 import {OilComponent} from './components/oil/oil.component';
 import {CustomerComponent} from './components/customer/customer.component';
 import {DriverComponent} from './components/driver/driver.component';
+import {GarageComponent} from './components/garage/garage.component';
+import {CostOilComponent} from './components/cost-oil/cost-oil.component';
 
 // My middleware
 
@@ -30,14 +32,14 @@ const APP_ROUTES: Routes = [
     {path: 'postages', component: PostageComponent},
     {path: 'transports', component: TransportComponent},
 
-    // {path: 'garages', component: null},
+    {path: 'garages', component: GarageComponent},
     // {path: 'trucks', component: null},
     {path: 'drivers', component: DriverComponent},
 
     {path: 'oils', component: OilComponent},
     {path: 'lubes', component: LubeComponent},
 
-    // {path: 'cost-oils', component: null},
+    {path: 'cost-oils', component: CostOilComponent},
     // {path: 'cost-lubes', component: null},
     // {path: 'cost-parks', component: null},
     // {path: 'cost-others', component: null},
