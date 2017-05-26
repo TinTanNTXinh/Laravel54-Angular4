@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Traits\DBHelper;
+use App\Traits\Common\DBHelper;
 
 class FormulasTableSeeder extends Seeder
 {

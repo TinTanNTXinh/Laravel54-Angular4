@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 
 class UnitPriceParksTableSeeder extends Seeder
 {
-    use \App\Traits\DBHelper;
+    use \App\Traits\Common\DBHelper;
 
     /**
      * Run the database seeds.
