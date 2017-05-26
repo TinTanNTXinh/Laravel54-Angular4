@@ -50,7 +50,8 @@
                                 <label>Từ</label>
                                 <datetime [ngModel]="datepicker_from" name="datepicker_from"
                                           (dateChange)="clearDate($event, 'from')"
-                                          (ngModelChange)="handleDateFromChange($event)" [timepicker]="false"
+                                          (ngModelChange)="handleDateFromChange($event)"
+                                          [timepicker]="false"
                                           [datepicker]="datepickerSettings"></datetime>
                               </div>
                               <div class="col-md-3">
@@ -65,8 +66,7 @@
                         </div>
                         <div class="row">
                           <div class="col-md-4">
-                            <button class="btn m-b-xs w-xs btn-info btn-rounded"
-                                    type="button"
+                            <button type="button" class="btn m-b-xs w-xs btn-info btn-rounded"
                                     (click)="search()">Tìm kiếm
                             </button>
                           </div>
@@ -84,8 +84,10 @@
                     </div>
                     <div class="panel-body">
                       <spinner-fb [isLoading]="isLoading"></spinner-fb>
-                      <xdatatable [body]="postages" [header]="header"
-                                  (onClicked)="actionCrud($event)"></xdatatable>
+                      <xdatatable [body]="postages"
+                                  [header]="header"
+                                  (onClicked)="actionCrud($event)">
+                      </xdatatable>
                     </div>
                   </div>
                 </div>
@@ -103,8 +105,11 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <label>Khách hàng</label>
-                                <autocomplete [data]="customers" [name]="'fullname'" [model_name]="'id'"
-                                              [(ngModel)]="postage.customer_id"></autocomplete>
+                                <xautocomplete [data]="customers"
+                                               [name]="'fullname'"
+                                               [model_name]="'id'"
+                                               [(value)]="postage.customer_id">
+                                </xautocomplete>
                               </div>
                               <div class="col-md-6">
                                 <label>Phí giao xe</label>
@@ -119,8 +124,11 @@
                               </div>
                               <div class="col-md-6">
                                 <label>Đơn vị tính</label>
-                                <autocomplete [data]="units" [name]="'name'" [model_name]="'id'"
-                                              [(ngModel)]="postage.unit_id"></autocomplete>
+                                <xautocomplete [data]="units"
+                                               [name]="'name'"
+                                               [model_name]="'id'"
+                                               [(value)]="postage.unit_id">
+                                </xautocomplete>
                               </div>
                             </div>
                             <div class="row">
@@ -159,14 +167,14 @@
                             <!--Reactive form-->
                             <form class="form-horizontal"
                                   novalidate
-                                  [formGroup]="formulaForm">
-                              <div formArrayName="formulas" *ngFor="let formula of formulas.controls; let i=index">
+                                  [formGroup]="formulaFormGroup">
+                              <div formArrayName="formulas" *ngFor="let formula of formulaFormArray.controls; let i=index">
                                 <div class="panel-heading">
                                   <span>Công thức {{i + 1}}</span>
                                   <span class="glyphicon glyphicon-remove pull-right" (click)="removeFormula(i)"></span>
                                 </div>
                                 <div class="panel-body" [formGroupName]="i">
-                                  <formula [group]="formulaForm.controls.formulas.controls[i]"></formula>
+                                  <formula [group]="formulaFormArray.controls[i]"></formula>
                                 </div>
                               </div>
                               <!--<div class="form-group">-->

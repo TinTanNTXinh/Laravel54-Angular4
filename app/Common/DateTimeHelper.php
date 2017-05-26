@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Traits\Common;
+namespace App\Common;
 
 use Carbon\Carbon;
 
-trait DateHelper
+class DateTimeHelper
 {
-    public function getFirstDayLastDay($month, $year, $pattern = 'd-m-Y')
+    public function getFirstDayLastDay($month = null, $year = null, $pattern = 'd-m-Y')
     {
         if(!isset($month))
             $month = date('m');

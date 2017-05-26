@@ -6,17 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Repositories\BaseRepositoryInterface;
 
+use App\Common\DateTimeHelper;
 use Carbon\Carbon;
-
-use App\Traits\Common\DateHelper;
-
 
 /**
  * Class EloquentBaseRepository
  */
 abstract class EloquentBaseRepository implements BaseRepositoryInterface
 {
-    use DateHelper;
+    private $dateTimeHelper;
 
     /**
      * @var \Illuminate\Database\Eloquent\Model An instance of the Eloquent Model
@@ -29,6 +27,7 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
     public function __construct()
     {
         $this->getModel();
+        $this->dateTimeHelper = new DateTimeHelper();
     }
 
     /**
@@ -97,11 +96,6 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
         return $this->model->destroy($id);
     }
 
-    public function get($query)
-    {
-        return $query->get();
-    }
-
     public function generateCode($prefix)
     {
         $code = $prefix . date('ymd');
@@ -110,23 +104,23 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
         return $code;
     }
 
-    public function searchFromDateToDate($query, $field_name, $from_date, $to_date)
+    public function filterFromDateToDate($query, $field_name, $from_date, $to_date)
     {
         if ($from_date && $to_date) {
             $from_date = Carbon::createFromFormat('d/m/Y', $from_date)->toDateString();
             $to_date   = Carbon::createFromFormat('d/m/Y', $to_date)->toDateString();
-            return $query->whereBetween($field_name, [$this->addTimeForDate($from_date, 'min'), $this->addTimeForDate($to_date, 'max')]);
+            return $query->whereBetween($field_name, [$this->dateTimeHelper->addTimeForDate($from_date, 'min'), $this->dateTimeHelper->addTimeForDate($to_date, 'max')]);
         }
         return $query;
     }
 
-    public function searchRangeDate($query, $field_name, $range)
+    public function filterRangeDate($query, $field_name, $range)
     {
         if ($range && $range != 'none') {
             switch ($range) {
                 case 'yesterday':
                     $query = $query
-                        ->whereDate($field_name, $this->getYesterday('Y-m-d')['yesterday']);
+                        ->whereDate($field_name, $this->dateTimeHelper->getYesterday('Y-m-d')['yesterday']);
                     break;
                 case 'today':
                     $query = $query
@@ -136,7 +130,7 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
                     $start_of_week = Carbon::now()->startOfWeek()->toDateString();
                     $end_of_week   = Carbon::now()->endOfWeek()->toDateString();
                     $query         = $query
-                        ->whereBetween($field_name, [$this->addTimeForDate($start_of_week, 'min'), $this->addTimeForDate($end_of_week, 'max')]);
+                        ->whereBetween($field_name, [$this->dateTimeHelper->addTimeForDate($start_of_week, 'min'), $this->dateTimeHelper->addTimeForDate($end_of_week, 'max')]);
                     break;
                 case 'month':
                     $query = $query
@@ -154,7 +148,7 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
         return $query;
     }
 
-    public function searchFieldName($query, $field_name, $value, $operator = '=')
+    public function filterColumn($query, $field_name, $value, $operator = '=')
     {
         if ($value)
             return $query->where($field_name, $operator, $value);

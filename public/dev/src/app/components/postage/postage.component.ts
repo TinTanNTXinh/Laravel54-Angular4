@@ -14,14 +14,13 @@ import {DomHelperService} from '../../services/helpers/dom.helper';
 export class PostageComponent implements OnInit
     , ICommon, ICrud, IDatePicker, ISearch {
 
-    /** My Variables **/
+    /** ===== MY VARIABLES ===== **/
     public postages: any[] = [];
-    public postages_search: any[] = [];
     public postage: any;
     public customers: any[] = [];
     public units: any[] = [];
 
-    /** ICommon **/
+    /** ===== ICOMMON ===== **/
     title: string;
     placeholder_code: string;
     prefix_url: string;
@@ -29,11 +28,11 @@ export class PostageComponent implements OnInit
     header: any;
     action_data: any;
 
-    /** ICrud **/
+    /** ===== ICRUD ===== **/
     modal: any;
     isEdit: boolean;
 
-    /** IDatePicker **/
+    /** ===== IDATEPICKER ===== **/
     range_date: any[];
     datepickerSettings: any;
     timepickerSettings: any;
@@ -41,7 +40,7 @@ export class PostageComponent implements OnInit
     datepicker_to: Date;
     datepickerToOpts: any = {};
 
-    /** ISearch **/
+    /** ===== ISEARCH ===== **/
     filtering: any;
 
     constructor( private fb: FormBuilder
@@ -52,10 +51,12 @@ export class PostageComponent implements OnInit
     }
 
     ngOnInit(): void {
+        this.initFormulaFormGroup();
+
         this.title = 'Cước phí';
         this.prefix_url = 'postages';
         this.range_date = this.dateHelperService.range_date;
-        this.refreshData();
+
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
@@ -74,16 +75,10 @@ export class PostageComponent implements OnInit
             footer: ''
         };
 
-        this.formulaForm = this.fb.group({
-            formulas: this.fb.array([])
-            // Them moi
-            // formulas: this.fb.array([ this.buildFormula('Single') ])
-            // Chinh sua
-            // formulas: this.fb.array([ this.buildFormulaEdit() ])
-        });
+        this.refreshData();
     }
 
-    /** ICommon **/
+    /** ===== ICOMMON ===== **/
     loadData(): void {
         this.httpClientService.get(this.prefix_url).subscribe(
             (success: any) => {
@@ -111,13 +106,9 @@ export class PostageComponent implements OnInit
         this.isLoading = status;
     }
 
-    /** ICrud **/
+    /** ===== ICRUD ===== **/
     loadOne(id: number): void {
-        this.postage = this.postages.find(function (o) {
-            return o['id'] == id;
-        });
-        this.isEdit = true;
-        this.domHelperService.showTab('menu2');
+        this.postage = this.postages.find(o => o.id == id);
     }
 
     clearOne(): void {
@@ -133,7 +124,7 @@ export class PostageComponent implements OnInit
     }
 
     addOne(): void {
-        console.log('Saved: ' + JSON.stringify(this.formulaForm.value));
+        console.log('Saved: ' + JSON.stringify(this.formulaFormArray.value));
         console.log('Saved: ' + JSON.stringify(this.postage));
 
         if (!this.validateOne()) return;
@@ -227,12 +218,14 @@ export class PostageComponent implements OnInit
     actionCrud(obj: any): void {
         switch (obj.mode) {
             case 'add':
-                this.displayEditBtn(false);
                 this.clearOne();
+                this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
             case 'edit':
                 this.loadOne(obj.data.id);
+                this.displayEditBtn(true);
+                this.domHelperService.showTab('menu2');
                 break;
             case 'delete':
                 this.fillDataModal(obj.data.id);
@@ -242,7 +235,7 @@ export class PostageComponent implements OnInit
         }
     }
 
-    /** IDatePicker **/
+    /** ===== IDATEPICKER ===== **/
     handleDateFromChange(dateFrom: Date): void {
         this.datepicker_from = dateFrom;
         this.datepickerToOpts = {
@@ -271,7 +264,7 @@ export class PostageComponent implements OnInit
         }
     }
 
-    /** ISearch **/
+    /** ===== ISEARCH ===== **/
     search(): void {
         if (this.datepicker_from != null && this.datepicker_to != null) {
             let from_date = this.dateHelperService.getDate(this.datepicker_from);
@@ -295,7 +288,6 @@ export class PostageComponent implements OnInit
 
     reloadDataSearch(arr_data: any[]): void {
         this.postages = arr_data['postages'];
-        this.postages_search = arr_data['postages'];
     }
 
     clearSearch(): void {
@@ -320,19 +312,23 @@ export class PostageComponent implements OnInit
         }
     }
 
-    /** My Function **/
+    /** ===== FUNCTION ACTION ===== **/
 
-    formulaForm: FormGroup;
+    /** ===== FORM FORMULA ===== **/
+    public formulaFormGroup: FormGroup;
 
-    get formulas(): FormArray{
-        return <FormArray>this.formulaForm.get('formulas');
+    private initFormulaFormGroup(): void {
+        this.formulaFormGroup = this.fb.group({
+            formulas: this.fb.array([])
+        });
     }
 
-    addFormula(type: string): void {
-        this.formulas.push(this.buildFormula(type));
+    get formulaFormArray(): FormArray{
+        return <FormArray>this.formulaFormGroup.get('formulas');
+        // return <FormArray>this.formulaFormGroup.controls['formulas'];
     }
 
-    buildFormula(type: string): FormGroup {
+    private buildFormula(type: string): FormGroup {
         let formula;
         switch (type) {
             case 'Single':
@@ -365,11 +361,22 @@ export class PostageComponent implements OnInit
         return formula;
     }
 
-    removeFormula(i: number) {
-        const control = <FormArray>this.formulaForm.controls['formulas'];
-        control.removeAt(i);
+    private addFormula(type: string): void {
+        this.formulaFormArray.push(this.buildFormula(type));
     }
 
+    private removeFormula(index: number) {
+        this.formulaFormArray.removeAt(index);
+    }
+
+    private clearFormula(): void {
+        let length: number = this.formulaFormArray.length;
+        for (let i = length; i--;) {
+            this.removeFormula(i);
+        }
+    }
+
+    /** ===== FUNCTION ===== **/
     public date3: Date;
     public getTime(dt: Date): number {
         return dt && dt.getTime();

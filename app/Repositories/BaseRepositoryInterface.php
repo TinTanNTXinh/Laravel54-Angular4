@@ -46,9 +46,13 @@ interface BaseRepositoryInterface
      */
     public function destroy($id);
 
-    public function get($query);
+    public function generateCode($prefix);
 
-    public function searchFromDateToDate($query, $field_name, $from_date, $to_date);
+    public function filterFromDateToDate($query, $field_name, $from_date, $to_date);
 
-    public function searchRangeDate($query, $field_name, $range);
+    public function filterRangeDate($query, $field_name, $range);
+
+    public function filterColumn($query, $field_name, $value, $operator = '=');
+
+    public function checkExistValue($field_name, $value, $skip_id = []);
 }

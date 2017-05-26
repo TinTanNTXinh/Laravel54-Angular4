@@ -22,6 +22,8 @@
     "autoload": {
         "classmap": [
             "database",
+            "app/Common",
+            "app/Traits",
             "app/Repositories",
             "app/Repositories/Eloquent",
             "app/Repositories/MongoDB"

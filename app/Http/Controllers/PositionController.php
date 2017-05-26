@@ -2,39 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Position;
 use Illuminate\Http\Request;
 
 use App\Repositories\PositionRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Traits\UserHelper;
+use App\Common\DateTimeHelper;
 use Route;
-use DB;
 
 class PositionController extends Controller implements ICrud, IValidate
 {
     use UserHelper;
 
     private $first_day, $last_day, $today;
-    private $format_date, $format_time;
     private $user;
     private $table_name;
     private $skeleton;
+    private $dateTimeHelper;
 
-    protected $positionRepository  = '';
-    public function __construct(PositionRepositoryInterface $positionRepository)
+    protected $positionRepo = '';
+
+    public function __construct(PositionRepositoryInterface $positionRepo)
     {
-        $this->positionRepository = $positionRepository;
-
-//        $format_date_time  = $this->getFormatDateTime();
-//        $this->format_date = $format_date_time['date'];
-//        $this->format_time = $format_date_time['time'];
-//
-//        $current_month   = $this->getFirstDayLastDay();
-//        $this->first_day = $current_month['first_day'];
-//        $this->last_day  = $current_month['last_day'];
-//        $this->today     = $current_month['today'];
+        $this->positionRepo = $positionRepo;
 
         $jwt_data = $this->getCurrentUser();
         if ($jwt_data['status']) {
@@ -43,8 +34,14 @@ class PositionController extends Controller implements ICrud, IValidate
                 $this->user = $user_data['user'];
         }
 
+        $this->dateTimeHelper = new DateTimeHelper();
+        $current_month   = $this->dateTimeHelper->getFirstDayLastDay();
+        $this->first_day = $current_month['first_day'];
+        $this->last_day  = $current_month['last_day'];
+        $this->today     = $current_month['today'];
+
         $this->table_name = 'position';
-        $this->skeleton = $this->positionRepository->allActive();
+        $this->skeleton   = $this->positionRepo->allActive();
     }
 
     /** ===== API METHOD ===== */
@@ -115,7 +112,7 @@ class PositionController extends Controller implements ICrud, IValidate
     /** ===== LOGIC METHOD ===== */
     public function readAll()
     {
-        $all = $this->positionRepository->get($this->skeleton);
+        $all = $this->skeleton->get();
 
         return [
             'positions' => $all
@@ -124,7 +121,7 @@ class PositionController extends Controller implements ICrud, IValidate
 
     public function readOne($id)
     {
-        $one = $this->skeleton->where('positions.id', $id)->first();
+        $one = $this->positionRepo->filterColumn($this->skeleton, 'positions.id', $id)->first();
 
         return [
             'position' => $one
@@ -134,35 +131,35 @@ class PositionController extends Controller implements ICrud, IValidate
     public function createOne($data)
     {
         $one = [
-            'code' => $this->generateCode(Position::class, 'POSITION'),
-            'name' => $data['name'],
+            'code'        => $this->positionRepo->generateCode('POSITION'),
+            'name'        => $data['name'],
             'description' => $data['description'],
-            'active' => true
+            'active'      => true
         ];
 
-        return $this->positionRepository->create($one) ? true : false;
+        return $this->positionRepo->create($one) ? true : false;
     }
 
     public function updateOne($data)
     {
-        $one = $this->positionRepository->find($data['id']);
+        $one = $this->positionRepo->find($data['id']);
 
         $input = [
-            'name' => $data['name'],
+            'name'        => $data['name'],
             'description' => $data['description']
         ];
 
-        return $this->positionRepository->update($one, $input) ? true : false;
+        return $this->positionRepo->update($one, $input) ? true : false;
     }
 
     public function deactivateOne($id)
     {
-        return $this->positionRepository->deactivate($id) ? true : false;
+        return $this->positionRepo->deactivate($id) ? true : false;
     }
 
     public function deleteOne($id)
     {
-        return $this->positionRepository->destroy($id) ? true : false;
+        return $this->positionRepo->destroy($id) ? true : false;
     }
 
     public function searchOne($filter)
@@ -173,12 +170,12 @@ class PositionController extends Controller implements ICrud, IValidate
 
         $filtered = $this->skeleton;
 
-        $filtered = $this->positionRepository->searchFromDateToDate($filtered, 'positions.created_at', $from_date, $to_date);
+        $filtered = $this->positionRepo->filterFromDateToDate($filtered, 'positions.created_at', $from_date, $to_date);
 
-        $filtered = $this->positionRepository->searchRangeDate($filtered, 'positions.created_at', $range);
+        $filtered = $this->positionRepo->filterRangeDate($filtered, 'positions.created_at', $range);
 
         return [
-            'positions' => $this->positionRepository->get($filtered)
+            'positions' => $filtered->get()
         ];
     }
 

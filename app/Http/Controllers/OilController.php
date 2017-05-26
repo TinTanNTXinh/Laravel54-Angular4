@@ -14,7 +14,7 @@ use DB;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Traits\UserHelper;
-use App\Traits\DBHelper;
+use App\Traits\Common\DBHelper;
 use App\Traits\Domain\FuelHelper;
 
 class OilController extends Controller implements ICrud, IValidate
