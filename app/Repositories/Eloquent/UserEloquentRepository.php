@@ -22,6 +22,6 @@ class UserEloquentRepository extends EloquentBaseRepository implements UserRepos
 
     public function oneSkeleton($id)
     {
-        return $this->allSkeleton()->where('.id', $id);
+        return $this->allSkeleton()->where('users.id', $id);
     }
 }

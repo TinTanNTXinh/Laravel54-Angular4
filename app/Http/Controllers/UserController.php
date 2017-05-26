@@ -9,14 +9,12 @@ use App\Repositories\PositionRepositoryInterface;
 use App\Repositories\RoleRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
-use App\Traits\UserHelper;
+use App\Common\AuthHelper;
 use App\Common\DateTimeHelper;
 use Route;
 
 class UserController extends Controller implements ICrud, IValidate
 {
-    use UserHelper;
-
     private $first_day, $last_day, $today;
     private $user;
     private $table_name;
@@ -32,9 +30,9 @@ class UserController extends Controller implements ICrud, IValidate
         $this->positionRepo = $positionRepo;
         $this->roleRepo     = $roleRepo;
 
-        $jwt_data = $this->getCurrentUser();
+        $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
-            $user_data = $this->getInfoCurrentUser($jwt_data['user']);
+            $user_data = AuthHelper::getInfoCurrentUser($jwt_data['user']);
             if ($user_data['status'])
                 $this->user = $user_data['user'];
         }
@@ -45,7 +43,7 @@ class UserController extends Controller implements ICrud, IValidate
         $this->today     = $current_month['today'];
 
         $this->table_name = 'user';
-        $this->skeleton   = $this->userRepo->allActive();
+        $this->skeleton   = $this->userRepo->allSkeleton();
     }
 
     /** ===== API METHOD ===== */
@@ -118,9 +116,9 @@ class UserController extends Controller implements ICrud, IValidate
     {
         $all = $this->skeleton->get();
 
-        $positions = $this->positionRepo->allActive()->get();
+        $positions = $this->positionRepo->allActive();
 
-        $roles = $this->roleRepo->allActive()->get();
+        $roles = $this->roleRepo->allActive();
 
         return [
             'users'     => $all,
@@ -131,7 +129,7 @@ class UserController extends Controller implements ICrud, IValidate
 
     public function readOne($id)
     {
-        $one = $this->userRepo->filterColumn($this->skeleton, 'users.id', $id)->first();
+        $one = $this->userRepo->oneSkeleton($id)->first();
 
         return [
             $this->table_name => $one
