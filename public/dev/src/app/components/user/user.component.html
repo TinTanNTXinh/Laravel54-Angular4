@@ -61,60 +61,6 @@
                                           [datepicker]="datepickerToOpts"></datetime>
                               </div>
                             </div>
-                            <div class="row">
-                              <div class="col-md-3">
-                                <label>Loại</label>
-                                <select [(ngModel)]="filtering.dis_or_sup" name="dis_or_sup" class="form-control m-b">
-                                  <option value="sup">Khách hàng</option>
-                                  <option value="dis">Đại lý</option>
-                                </select>
-                              </div>
-                              <div class="col-md-3" *ngIf="filtering.dis_or_sup == 'sup'">
-                                <label>Khách hàng</label>
-                                <autocomplete [data]="suppliers" [name]="'name'" [model_name]="'id'" [(ngModel)]="filtering.supplier_id"></autocomplete>
-                              </div>
-                              <div class="col-md-3" *ngIf="filtering.dis_or_sup == 'dis'">
-                                <label>Đại lý</label>
-                                <autocomplete [data]="distributors" [name]="'name'" [model_name]="'id'" [(ngModel)]="filtering.distributor_id"></autocomplete>
-                              </div>
-                              <div class="col-md-3">
-                                <label>Chức vụ</label>
-                                <select [(ngModel)]="filtering.position_id"
-                                        name="position_id" class="form-control m-b">
-                                  <ng-container *ngIf="filtering.dis_or_sup == 'sup'; then renderSup else renderDis"></ng-container>
-                                  <ng-template #renderSup>
-                                    <option *ngFor="let position of positions_sup"
-                                            value="{{ position.id }}">
-                                      {{ position.name }}
-                                    </option>
-                                  </ng-template>
-                                  <ng-template #renderDis>
-                                    <option *ngFor="let position of positions_dis"
-                                            value="{{ position.id }}">
-                                      {{ position.name }}
-                                    </option>
-                                  </ng-template>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-md-3">
-                                <label>Mã</label>
-                                <autocomplete [data]="users_search" [name]="'code'" [model_name]="'code'" [(ngModel)]="filtering.code"></autocomplete>
-                              </div>
-                              <div class="col-md-3">
-                                <label>Tên</label>
-                                <autocomplete [data]="users_search" [name]="'fullname'" [model_name]="'fullname'" [(ngModel)]="filtering.fullname"></autocomplete>
-                              </div>
-                              <div class="col-md-3">
-                                <label>Tài khoản</label>
-                                <autocomplete [data]="users_search" [name]="'username'" [model_name]="'username'" [(ngModel)]="filtering.username"></autocomplete>
-                              </div>
-                              <div class="col-md-3">
-                                <label>Điện thoại</label>
-                                <autocomplete [data]="users_search" [name]="'phone'" [model_name]="'phone'" [(ngModel)]="filtering.phone"></autocomplete>
-                              </div>
-                            </div>
                           </div>
                         </div>
                         <div class="row">
@@ -154,20 +100,13 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group">
-                              <label class="col-lg-2 control-label">Mã</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="user.code" name="code" [placeholder]="placeholder_code">
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Tên</label>
+                              <label class="col-lg-2 control-label">Họ tên</label>
                               <div class="col-lg-10">
                                 <input type="text" class="form-control"
                                        [(ngModel)]="user.fullname" name="fullname">
                               </div>
                             </div>
-                            <div class="form-group" *ngIf="auth">
+                            <div class="form-group">
                               <label class="col-lg-2 control-label">Tài khoản</label>
                               <div class="col-lg-10">
                                 <input type="text" class="form-control"
@@ -175,7 +114,7 @@
                                        name="username">
                               </div>
                             </div>
-                            <div class="form-group" *ngIf="auth">
+                            <div class="form-group">
                               <label class="col-lg-2 control-label">Mật khẩu</label>
                               <div class="col-lg-10">
                                 <input type="password" class="form-control"
@@ -199,23 +138,15 @@
                                        name="phone">
                               </div>
                             </div>
-                            <!--<div class="form-group">-->
-                            <!--<label class="col-lg-2 control-label">Ngày sinh</label>-->
-                            <!--<div class="col-lg-10">-->
-                            <!--<datetime [timepicker]="false"-->
-                            <!--[datepicker]="utilitiesService.datepickerSettings"-->
-                            <!--[(ngModel)]="birthday"-->
-                            <!--name="birthday"></datetime>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="form-group">-->
-                            <!--<label class="col-sm-2 control-label">Ảnh đại diện</label>-->
-                            <!--<div class="col-sm-10">-->
-                            <!--<input type="file" accept="image/*">-->
-                            <!--</div>-->
-                            <!--</div>-->
-                          </div>
-                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Ngày sinh</label>
+                              <div class="col-lg-10">
+                                <datetime [timepicker]="false"
+                                          [datepicker]="datepickerSettings"
+                                          [(ngModel)]="birthday"
+                                          name="birthday"></datetime>
+                              </div>
+                            </div>
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Giới tính</label>
                               <div class="col-lg-10">
@@ -242,61 +173,26 @@
                                        name="note">
                               </div>
                             </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Chức vụ</label>
-                              <div class="col-lg-10">
-                                <select [(ngModel)]="user.position_id"
-                                        name="position_id" class="form-control m-b">
-                                  <ng-container *ngIf="user.dis_or_sup == 'sup'; then renderSup else renderDis"></ng-container>
-                                  <ng-template #renderSup>
-                                    <option *ngFor="let position of positions_sup"
-                                            value="{{ position.id }}">
-                                      {{ position.name }}
-                                    </option>
-                                  </ng-template>
-                                  <ng-template #renderDis>
-                                    <option *ngFor="let position of positions_dis"
-                                            value="{{ position.id }}">
-                                      {{ position.name }}
-                                    </option>
-                                  </ng-template>
-                                </select>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="panel panel-success">
+                              <div class="panel-heading">
+                                <span>Chức vụ</span>
+                              </div>
+                              <div class="panel-body">
+                                <div class="checkbox" *ngFor="let position of positions">
+                                  <label class="i-checks">
+                                    <input #traycb type="checkbox" (change)="checkPosition(traycb.checked, position.id)">
+                                    <i></i>
+                                    {{ position.name }}
+                                  </label>
+                                </div>
                               </div>
                             </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Loại khách hàng</label>
-                              <div class="col-lg-10">
-                                <select [(ngModel)]="user.dis_or_sup"
-                                        name="dis_or_sup" class="form-control m-b">
-                                  <option value="sup">Khách hàng</option>
-                                  <option value="dis">Đại lý</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="form-group" *ngIf="user.dis_or_sup == 'sup'">
-                              <label class="col-lg-2 control-label">Khách hàng</label>
-                              <div class="col-lg-10">
-                                <select [(ngModel)]="user.dis_or_sup_id"
-                                        name="dis_or_sup_id" class="form-control m-b">
-                                  <option *ngFor="let supplier of suppliers"
-                                          value="{{ supplier.id }}">
-                                    {{ supplier.name }}
-                                  </option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="form-group" *ngIf="user.dis_or_sup == 'dis'">
-                              <label class="col-lg-2 control-label">Đại lý</label>
-                              <div class="col-lg-10">
-                                <select [(ngModel)]="user.dis_or_sup_id"
-                                        name="dis_or_sup_id" class="form-control m-b">
-                                  <option *ngFor="let distributor of distributors"
-                                          value="{{ distributor.id }}">
-                                    {{ distributor.name }}
-                                  </option>
-                                </select>
-                              </div>
-                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-12">
                             <div class="form-group">
                               <div class="col-lg-offset-2 col-lg-10">
                                 <button *ngIf="!isEdit" type="submit"

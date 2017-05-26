@@ -33,7 +33,6 @@ class PositionController extends Controller implements ICrud, IValidate
                 $this->user = $user_data['user'];
         }
 
-        $this->dateTimeHelper = new DateTimeHelper();
         $current_month   = DateTimeHelper::getFirstDayLastDay();
         $this->first_day = $current_month['first_day'];
         $this->last_day  = $current_month['last_day'];
@@ -123,7 +122,7 @@ class PositionController extends Controller implements ICrud, IValidate
         $one = $this->positionRepo->filterColumn($this->skeleton, 'positions.id', $id)->first();
 
         return [
-            'position' => $one
+            $this->table_name => $one
         ];
     }
 

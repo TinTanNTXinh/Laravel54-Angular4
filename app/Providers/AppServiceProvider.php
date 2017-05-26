@@ -25,15 +25,22 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Transport
         $this->app->bind(
             'App\Repositories\TransportRepositoryInterface',
             'App\Repositories\Eloquent\TransportEloquentRepository'
         );
 
+        // Position
         $this->app->bind(
             'App\Repositories\PositionRepositoryInterface',
             'App\Repositories\Eloquent\PositionEloquentRepository'
+        );
+
+        // User
+        $this->app->bind(
+            'App\Repositories\UserRepositoryInterface',
+            'App\Repositories\Eloquent\UserEloquentRepository'
         );
     }
 }

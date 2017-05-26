@@ -15,16 +15,12 @@ export class UserComponent implements OnInit
 
     /** My Variables **/
     public positions: any[] = [];
-    public positions_sup: any[] = [];
-    public positions_dis: any[] = [];
-    public distributors: any[] = [];
-    public suppliers: any[] = [];
+    public roles: any[] = [];
     public users: any[] = [];
     public users_search: any[] = [];
     public user: any;
     public birthday: Date;
     public fake_pwd: string = '';
-    public auth: boolean = false;
 
     /** ICommon **/
     title: string;
@@ -59,24 +55,15 @@ export class UserComponent implements OnInit
         this.title = 'Người dùng';
         this.prefix_url = 'users';
         this.range_date = this.dateHelperService.range_date;
-        this.refreshData();
+
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
-            code: {
-                title: 'Mã'
-            },
             fullname: {
                 title: 'Tên'
             },
-            position_name: {
-                title: 'Chức vụ'
-            },
             username: {
                 title: 'Tài khoản'
-            },
-            fc_total_money: {
-                title: 'Số dư TK'
             },
             address: {
                 title: 'Địa chỉ'
@@ -92,12 +79,6 @@ export class UserComponent implements OnInit
             },
             note: {
                 title: 'Ghi chú'
-            },
-            supplier_name: {
-                title: 'Khách hàng'
-            },
-            distributor_name: {
-                title: 'Đại lý'
             }
         };
         this.modal = {
@@ -106,6 +87,8 @@ export class UserComponent implements OnInit
             body: '',
             footer: ''
         };
+
+        this.refreshData();
     }
 
     /** ICommon **/
@@ -122,23 +105,12 @@ export class UserComponent implements OnInit
     }
 
     reloadData(arr_data: any[]): void {
-        this.auth = arr_data['auth'];
         this.fake_pwd = arr_data['fake_pwd'];
 
         this.users = [];
         this.users_search = arr_data['users'];
 
         this.positions = arr_data['positions'];
-        this.positions_sup = this.positions.filter(function (o) {
-            return [3, 4].includes(o.id);
-        });
-        this.positions_dis = this.positions.filter(function (o) {
-            return [3, 6].includes(o.id);
-        });
-
-        this.suppliers = arr_data['suppliers'];
-
-        this.distributors = arr_data['distributors'];
 
         this.placeholder_code = arr_data['placeholder_code'];
     }
@@ -162,15 +134,10 @@ export class UserComponent implements OnInit
 
         this.birthday = this.dateHelperService.createDate(this.user.birthday);
         this.user.password = this.fake_pwd;
-
-        this.isEdit = true;
-
-        this.domHelperService.showTab('menu2');
     }
 
     clearOne(): void {
         this.user = {
-            code: '',
             fullname: '',
             username: '',
             password: '',
@@ -179,11 +146,7 @@ export class UserComponent implements OnInit
             birthday: '',
             sex: 'Nam',
             email: '',
-            note: '',
-            position_id: 0,
-            dis_or_sup: 'sup',
-            dis_or_sup_id: 0,
-            active: true
+            note: ''
         };
         this.birthday = null;
     }
@@ -191,7 +154,7 @@ export class UserComponent implements OnInit
     addOne(): void {
         if (!this.validateOne()) return;
 
-        // this.user.birthday = this.utilitiesService.getDate(this.birthday);
+        this.user.birthday = this.dateHelperService.getDate(this.birthday);
 
         this.httpClientService.post(this.prefix_url, {"user": this.user}).subscribe(
             (success: any) => {
@@ -210,7 +173,7 @@ export class UserComponent implements OnInit
     updateOne(): void {
         if (!this.validateOne()) return;
 
-        // this.user.birthday = this.utilitiesService.getDate(this.birthday);
+        this.user.birthday = this.dateHelperService.getDate(this.birthday);
 
         this.httpClientService.put(this.prefix_url, {"user": this.user}).subscribe(
             (success: any) => {
@@ -262,22 +225,10 @@ export class UserComponent implements OnInit
             flag = false;
             this.toastrHelperService.showToastr('warning', `Họ tên ${this.title} không được để trống.`);
         }
-        if (this.user.position_id == 0) {
+        if (this.birthday == null) {
             flag = false;
-            this.toastrHelperService.showToastr('warning', 'Chức vụ không được để trống.');
+            this.toastrHelperService.showToastr('warning', 'Ngày sinh không được để trống.');
         }
-        if (this.user.dis_or_sup == '') {
-            flag = false;
-            this.toastrHelperService.showToastr('warning', 'Loại khách hàng không được để trống.');
-        }
-        if (this.user.dis_or_sup_id == 0) {
-            flag = false;
-            this.toastrHelperService.showToastr('warning', 'Vui lòng chọn khách hàng hoặc đại lý.');
-        }
-        // if (this.birthday == null) {
-        //     flag = false;
-        //     this.utilitiesService.showToastr('warning', 'Ngày sinh không được để trống.');
-        // }
         return flag;
     }
 
@@ -295,12 +246,14 @@ export class UserComponent implements OnInit
     actionCrud(obj: any): void {
         switch (obj.mode) {
             case 'add':
-                this.displayEditBtn(false);
                 this.clearOne();
+                this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
             case 'edit':
                 this.loadOne(obj.data.id);
+                this.displayEditBtn(true);
+                this.domHelperService.showTab('menu2');
                 break;
             case 'delete':
                 this.fillDataModal(obj.data.id);
@@ -372,11 +325,7 @@ export class UserComponent implements OnInit
             from_date: '',
             to_date: '',
             range: '',
-            dis_or_sup: 'sup',
-            supplier_id: 0,
-            distributor_id: 0,
             position_id: 0,
-            code: '',
             fullname: '',
             username: '',
             phone: '',
@@ -385,10 +334,7 @@ export class UserComponent implements OnInit
 
     displayColumn(): void {
         let setting = {
-            supplier_id: ['supplier_name'],
-            distributor_id: ['distributor_name'],
             position_id: ['position_name'],
-            code: ['code'],
             username: ['username'],
             fullname: ['fullname'],
             phone: ['phone'],
@@ -399,9 +345,6 @@ export class UserComponent implements OnInit
                     this.header[child].visible = !(!!this.filtering[parent]);
             }
         }
-
-        this.header.supplier_name.visible = this.filtering.dis_or_sup == 'sup';
-        this.header.distributor_name.visible = this.filtering.dis_or_sup == 'dis';
     }
 
     /** My Function **/
