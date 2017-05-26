@@ -6,11 +6,16 @@ use Carbon\Carbon;
 
 class DateTimeHelper
 {
-    public function getFirstDayLastDay($month = null, $year = null, $pattern = 'd-m-Y')
+    static public $stringFormatDateTime = [
+        'date' => '%d/%m/%Y',
+        'time' => '%H:%i'
+    ];
+
+    static public function getFirstDayLastDay($month = null, $year = null, $pattern = 'd-m-Y')
     {
-        if(!isset($month))
+        if (!isset($month))
             $month = date('m');
-        if(!isset($year))
+        if (!isset($year))
             $year = date('Y');
 
         $first_day_UTS = mktime(0, 0, 0, $month, 1, $year);
@@ -22,7 +27,7 @@ class DateTimeHelper
         ];
     }
 
-    public function getYesterday($pattern = 'd-m-Y')
+    static public function getYesterday($pattern = 'd-m-Y')
     {
         $yesterday = mktime(0, 0, 0, date("m"), date("d") - 1, date("Y"));
         return [
@@ -30,15 +35,7 @@ class DateTimeHelper
         ];
     }
 
-    public function getFormatDateTime()
-    {
-        return [
-            'date' => '%d/%m/%Y',
-            'time' => '%H:%i'
-        ];
-    }
-
-    public function addTimeForDate($date, $mode)
+    static public function addTimeForDate($date, $mode)
     {
         // mark: yyyy/mm/dd hh:ii:ss
         switch ($mode) {
@@ -57,12 +54,12 @@ class DateTimeHelper
         }
     }
 
-    public function toStringDateTimeClientForDB($date, $format = 'd/m/Y H:i:s')
+    static public function toStringDateTimeClientForDB($date, $format = 'd/m/Y H:i:s')
     {
         return Carbon::createFromFormat($format, $date)->toDateTimeString();
     }
 
-    public function compareDateTime($d1, $fd1, $d2, $fd2)
+    static public function compareDateTime($d1, $fd1, $d2, $fd2)
     {
         $a = Carbon::createFromFormat($fd1, $d1);
         $b = Carbon::createFromFormat($fd2, $d2);

@@ -5,12 +5,13 @@ namespace App\Common;
 class DBHelper
 {
     private $currencySignal;
-    private $dateTimeHelper;
+    private $format_date, $format_time;
 
     public function __construct()
     {
-        $this->dateTimeHelper = new DateTimeHelper();
-        $this->currencySignal = CurrencyHelper::getCurrencySignal();
+        $this->currencySignal = CurrencyHelper::$currencySignal;
+        $this->format_date    = DateTimeHelper::$stringFormatDateTime['date'];
+        $this->format_time    = DateTimeHelper::$stringFormatDateTime['time'];
     }
 
     public function getWithCurrencyFormat($field_name, $name_output)
@@ -20,16 +21,16 @@ class DBHelper
 
     public function getWithDateFormat($field_name, $name_output)
     {
-        return "DATE_FORMAT($field_name, '{$this->dateTimeHelper->getFormatDateTime()['date']}') as {$name_output}";
+        return "DATE_FORMAT($field_name, '{$this->format_date}') as {$name_output}";
     }
 
     public function getWithTimeFormat($field_name, $name_output)
     {
-        return "DATE_FORMAT($field_name, '{$this->dateTimeHelper->getFormatDateTime()['time']}') as {$name_output}";
+        return "DATE_FORMAT($field_name, '{$this->format_time}') as {$name_output}";
     }
 
     public function getWithDateTimeFormat($field_name, $name_output)
     {
-        return "DATE_FORMAT($field_name, '{$this->dateTimeHelper->getFormatDateTime()['date']} - {$this->dateTimeHelper->getFormatDateTime()['time']}') as {$name_output}";
+        return "DATE_FORMAT($field_name, '{$this->format_date} - {$this->format_time}') as {$name_output}";
     }
 }

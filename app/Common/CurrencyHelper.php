@@ -4,8 +4,5 @@ namespace App\Common;
 
 class CurrencyHelper
 {
-    public static function getCurrencySignal()
-    {
-        return 'đ';
-    }
+    static public $currencySignal = 'đ';
 }
