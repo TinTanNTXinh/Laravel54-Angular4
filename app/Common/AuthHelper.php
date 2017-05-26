@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace App\Common;
 
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -8,10 +8,10 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use App\User;
 
-trait UserHelper
+class AuthHelper
 {
     /** USER HELPER */
-    public function getCurrentUser()
+    static public function getCurrentUser()
     {
         try {
             $user = JWTAuth::parseToken()->authenticate();
@@ -52,7 +52,7 @@ trait UserHelper
         }
     }
 
-    public function getInfoCurrentUser($user)
+    static public function getInfoCurrentUser($user)
     {
         $user = User::where([['users.active', true], ['users.id', $user->id]])
             ->leftJoin('files', 'files.table_id', '=', 'users.id')

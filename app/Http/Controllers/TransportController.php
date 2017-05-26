@@ -17,17 +17,11 @@ use App\Repositories\ProductRepositoryInterface;
 use App\Repositories\VoucherRepositoryInterface;
 use App\Repositories\TransportFormulaRepositoryInterface;
 use App\Repositories\TransportVoucherRepositoryInterface;
-use App\Traits\UserHelper;
 use App\Common\DateTimeHelper;
-use App\Transport;
-use App\TransportFormula;
-use App\Voucher;
-use App\TransportVoucher;
+use App\Common\AuthHelper;
 
 class TransportController extends Controller implements ICrud, IValidate
 {
-    use UserHelper;
-
     private $first_day, $last_day, $today;
     private $user;
     private $table_name;
@@ -62,9 +56,9 @@ class TransportController extends Controller implements ICrud, IValidate
         $this->last_day  = $current_month['last_day'];
         $this->today     = $current_month['today'];
 
-        $jwt_data = $this->getCurrentUser();
+        $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
-            $user_data = $this->getInfoCurrentUser($jwt_data['user']);
+            $user_data = AuthHelper::getInfoCurrentUser($jwt_data['user']);
             if ($user_data['status'])
                 $this->user = $user_data['user'];
         }
