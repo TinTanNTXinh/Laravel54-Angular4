@@ -15,7 +15,7 @@ class CreateTransportFormulasTable extends Migration
     {
         Schema::create('transport_formulas', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('rule', ['Single', 'Range', 'Pair', 'Oil']);
+            $table->enum('rule', ['SINGLE', 'RANGE', 'PAIR', 'OIL']);
             $table->string('name');
             $table->string('value1');
             $table->string('value2')->nullable();

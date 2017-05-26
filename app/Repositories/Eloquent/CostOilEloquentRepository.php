@@ -17,7 +17,8 @@ class CostOilEloquentRepository extends EloquentBaseRepository implements CostOi
 
     public function allSkeleton()
     {
-        return $this->model->whereActive(true);
+        return $this->model->whereActive(true)
+            ->where('costs.type', 'OIL');
     }
 
     public function oneSkeleton($id)

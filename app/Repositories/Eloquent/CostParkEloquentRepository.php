@@ -17,7 +17,8 @@ class CostParkEloquentRepository extends EloquentBaseRepository implements CostP
 
     public function allSkeleton()
     {
-        return $this->model->whereActive(true);
+        return $this->model->whereActive(true)
+            ->where('costs.type', 'PARK');
     }
 
     public function oneSkeleton($id)

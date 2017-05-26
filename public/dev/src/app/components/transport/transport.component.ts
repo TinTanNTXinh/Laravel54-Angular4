@@ -479,7 +479,7 @@ export class TransportComponent implements OnInit
     private buildFormula(rule: string, name: string, value1: any, value2: any): FormGroup {
         let formula: FormGroup;
         switch (rule) {
-            case 'Single':
+            case 'SINGLE':
                 formula = this.fb.group({
                     rule: rule,
                     name: name,
@@ -487,8 +487,8 @@ export class TransportComponent implements OnInit
                     value2: ''
                 });
                 break;
-            case 'Range':
-            case 'Oil':
+            case 'RANGE':
+            case 'OIL':
                 formula = this.fb.group({
                     rule: rule,
                     name: name,
@@ -496,7 +496,7 @@ export class TransportComponent implements OnInit
                     value2: 0
                 });
                 break;
-            case 'Pair':
+            case 'PAIR':
                 formula = this.fb.group({
                     rule: rule,
                     name: name,
@@ -596,14 +596,14 @@ export class TransportComponent implements OnInit
                 let formulas = success['formulas'];
                 for (let formula of formulas) {
                     switch (formula.rule) {
-                        case 'Single':
+                        case 'SINGLE':
                             this.addFormula(formula.rule, formula.name, '', '');
                             break;
-                        case 'Range':
-                        case 'Oil':
+                        case 'RANGE':
+                        case 'OIL':
                             this.addFormula(formula.rule, formula.name, 0, 0);
                             break;
-                        case 'Pair':
+                        case 'PAIR':
                             this.addFormula(formula.rule, formula.name, '', '');
                             break;
                         default:

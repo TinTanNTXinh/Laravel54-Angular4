@@ -19,7 +19,7 @@ class FormulasTableSeeder extends Seeder
         foreach ($FORMOSA_VALUE as $key => $value) {
             \App\Formula::create([
                 'code'         => $this->generateCode(\App\Formula::class, 'FORMULA'),
-                'rule'         => 'Single',
+                'rule'         => 'SINGLE',
                 'name'         => 'Tỉnh',
                 'value1'       => $value,
                 'value2'       => null,
@@ -40,7 +40,7 @@ class FormulasTableSeeder extends Seeder
         foreach ($ACHAU_VALUE1 as $key => $value) {
             \App\Formula::create([
                 'code'         => $this->generateCode(\App\Formula::class, 'FORMULA'),
-                'rule'         => 'Single',
+                'rule'         => 'SINGLE',
                 'name'         => $ACHAU_NAME[$key],
                 'value1'       => $value,
                 'value2'       => null,

@@ -45,7 +45,7 @@ class PostageEloquentRepository extends EloquentBaseRepository implements Postag
         foreach ($i_formulas as $key => $i_formula) {
             $found = null;
             switch ($i_formula->rule) {
-                case 'Single':
+                case 'SINGLE':
                     $found = $formulas
                         ->where('rule', $i_formula->rule)
                         ->where('name', $i_formula->name)
@@ -54,8 +54,8 @@ class PostageEloquentRepository extends EloquentBaseRepository implements Postag
                         ->toArray();
                     array_push($founds, $found);
                     break;
-                case 'Range':
-                case 'Oil':
+                case 'RANGE':
+                case 'OIL':
                     // Convert to decimal
                     $found = $formulas
                         ->where('rule', $i_formula->rule)
@@ -66,7 +66,7 @@ class PostageEloquentRepository extends EloquentBaseRepository implements Postag
                         ->toArray();
                     array_push($founds, $found);
                     break;
-                case 'Pair':
+                case 'PAIR':
                     $found = $formulas
                         ->where('rule', $i_formula->rule)
                         ->where('name', $i_formula->name)

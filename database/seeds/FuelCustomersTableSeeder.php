@@ -19,7 +19,7 @@ class FuelCustomersTableSeeder extends Seeder
                 'fuel_id'      => $fuels[0]->id,
                 'customer_id'  => $customer->id,
                 'price'        => $fuels[0]->price,
-                'type'         => 'oil',
+                'type'         => 'OIL',
                 'apply_date'   => $fuels[0]->apply_date,
                 'note'         => '',
                 'created_by'   => 1,

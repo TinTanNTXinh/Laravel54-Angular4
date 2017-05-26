@@ -18,7 +18,7 @@ class CreateFuelCustomersTable extends Migration
             $table->integer('fuel_id')->unsigned();
             $table->integer('customer_id')->unsigned();
             $table->decimal('price', 18, 0)->comment('Giá dầu làm mốc của khách hàng');
-            $table->enum('type', ['oil', 'lube']);
+            $table->enum('type', ['OIL', 'LUBE']);
             $table->dateTime('apply_date');
             $table->text('note')->nullable()->comment('Ghi chú');
             $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');

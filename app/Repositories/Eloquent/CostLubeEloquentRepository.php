@@ -17,11 +17,12 @@ class CostLubeEloquentRepository extends EloquentBaseRepository implements CostL
 
     public function allSkeleton()
     {
-        return $this->model->whereActive(true);
+        return $this->model->whereActive(true)
+            ->where('costs.type', 'LUBE');
     }
 
     public function oneSkeleton($id)
     {
-        return $this->allSkeleton()->where('.id', $id);
+        return $this->allSkeleton()->where('costs.id', $id);
     }
 }

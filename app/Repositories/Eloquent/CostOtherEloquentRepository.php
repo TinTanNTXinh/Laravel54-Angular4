@@ -17,7 +17,8 @@ class CostOtherEloquentRepository extends EloquentBaseRepository implements Cost
 
     public function allSkeleton()
     {
-        return $this->model->whereActive(true);
+        return $this->model->whereActive(true)
+            ->where('costs.type', 'OTHER');
     }
 
     public function oneSkeleton($id)

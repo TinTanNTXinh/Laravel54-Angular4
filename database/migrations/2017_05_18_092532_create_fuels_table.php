@@ -17,7 +17,7 @@ class CreateFuelsTable extends Migration
             $table->increments('id');
             $table->string('code')->unique()->comment('Mã');
             $table->decimal('price', 18, 0)->default(0)->comment('Giá nhiên liệu');
-            $table->enum('type', ['oil', 'lube']);
+            $table->enum('type', ['OIL', 'LUBE']);
             $table->dateTime('apply_date');
             $table->text('note')->nullable()->comment('Ghi chú');
             $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');

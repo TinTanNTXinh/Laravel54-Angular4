@@ -16,7 +16,7 @@ class CreateFormulasTable extends Migration
         Schema::create('formulas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->unique()->comment('Mã');
-            $table->enum('rule', ['Single', 'Range', 'Pair', 'Oil']);
+            $table->enum('rule', ['SINGLE', 'RANGE', 'PAIR', 'OIL']);
             $table->string('name');
             $table->string('value1');
             $table->string('value2')->nullable();

@@ -19,7 +19,7 @@ class CreateCostsTable extends Migration
             $table->decimal('money', 18, 0)->default(0)->comment('Chi phí');
             $table->decimal('vat')->default(0)->comment();
             $table->decimal('after_vat', 18, 0)->default(0)->comment('Chi phí sau khi có vat');
-            $table->enum('type', ['Dầu', 'Nhớt', 'Đậu bãi', 'Khác']);
+            $table->enum('type', ['OIL', 'LUBE', 'PARK', 'OTHER']);
 
             $table->integer('fuel_id')->unsigned();
             $table->decimal('quantum_liter')->default(0)->comment('Số lít dầu/nhớt');

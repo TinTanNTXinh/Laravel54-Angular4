@@ -15,7 +15,7 @@ class TransportFormulasTableSeeder extends Seeder
         $FORMOSA_VALUE = ['Đồng Nai', 'Tp HCM'];
         foreach ($FORMOSA_VALUE as $key => $value) {
             \App\TransportFormula::create([
-                'rule'         => 'Single',
+                'rule'         => 'SINGLE',
                 'name'         => 'Tỉnh',
                 'value1'       => $value,
                 'value2'       => null,
@@ -29,7 +29,7 @@ class TransportFormulasTableSeeder extends Seeder
         $ACHAU_NAME   = ['Tỉnh', 'Địa chỉ giao hàng', 'Cự ly', 'Mã SP'];
         foreach ($ACHAU_VALUE1 as $key => $value) {
             \App\TransportFormula::create([
-                'rule'         => 'Single',
+                'rule'         => 'SINGLE',
                 'name'         => $ACHAU_NAME[$key],
                 'value1'       => $value,
                 'value2'       => null,

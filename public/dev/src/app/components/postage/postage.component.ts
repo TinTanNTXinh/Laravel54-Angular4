@@ -331,7 +331,7 @@ export class PostageComponent implements OnInit
     private buildFormula(type: string): FormGroup {
         let formula;
         switch (type) {
-            case 'Single':
+            case 'SINGLE':
                 formula = this.fb.group({
                     type: type,
                     name: ['', [Validators.required]],
@@ -339,7 +339,7 @@ export class PostageComponent implements OnInit
                     value2: ''
                 });
                 break;
-            case 'Range':
+            case 'RANGE':
                 formula = this.fb.group({
                     type: type,
                     name: ['', [Validators.required]],
@@ -347,7 +347,7 @@ export class PostageComponent implements OnInit
                     value2: [0, [Validators.pattern('[0-9].*'), Validators.required]]
                 });
                 break;
-            case 'Pair':
+            case 'PAIR':
                 formula = this.fb.group({
                     type: type,
                     name: ['', [Validators.required]],
