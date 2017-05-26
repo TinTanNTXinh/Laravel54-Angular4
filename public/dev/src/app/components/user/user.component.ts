@@ -4,6 +4,7 @@ import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
+import {ArrayHelperService} from '../../services/helpers/array.helper';
 
 @Component({
     selector: 'app-user',
@@ -48,7 +49,8 @@ export class UserComponent implements OnInit
     constructor(private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
-        , private domHelperService: DomHelperService) {
+        , private domHelperService: DomHelperService
+        , private arrayHelperService: ArrayHelperService) {
     }
 
     ngOnInit(): void {
@@ -111,6 +113,7 @@ export class UserComponent implements OnInit
         this.users_search = arr_data['users'];
 
         this.positions = arr_data['positions'];
+        this.roles = arr_data['roles'];
 
         this.placeholder_code = arr_data['placeholder_code'];
     }

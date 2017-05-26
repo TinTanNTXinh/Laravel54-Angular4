@@ -173,8 +173,7 @@
                                        name="note">
                               </div>
                             </div>
-                          </div>
-                          <div class="col-md-6">
+
                             <div class="panel panel-success">
                               <div class="panel-heading">
                                 <span>Chức vụ</span>
@@ -182,9 +181,26 @@
                               <div class="panel-body">
                                 <div class="checkbox" *ngFor="let position of positions">
                                   <label class="i-checks">
-                                    <input #traycb type="checkbox" (change)="checkPosition(traycb.checked, position.id)">
+                                    <input #positioncb type="checkbox"
+                                           (change)="checkPosition(positioncb.checked, position.id)">
                                     <i></i>
                                     {{ position.name }}
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="panel panel-info">
+                              <div class="panel-heading">
+                                <span>Danh mục</span>
+                              </div>
+                              <div class="panel-body">
+                                <div class="checkbox" *ngFor="let role of roles">
+                                  <label class="i-checks">
+                                    <input #rolecb type="checkbox" (change)="checkRole(rolecb.checked, role.id)">
+                                    <i></i>
+                                    {{ role.description }}
                                   </label>
                                 </div>
                               </div>

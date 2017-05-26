@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Repositories\UserRepositoryInterface;
 use App\Repositories\PositionRepositoryInterface;
+use App\Repositories\RoleRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Traits\UserHelper;
@@ -21,12 +22,15 @@ class UserController extends Controller implements ICrud, IValidate
     private $table_name;
     private $skeleton;
 
-    protected $userRepo, $positionRepo;
+    protected $userRepo, $positionRepo, $roleRepo;
 
-    public function __construct(UserRepositoryInterface $userRepo, PositionRepositoryInterface $positionRepo)
+    public function __construct(UserRepositoryInterface $userRepo
+        , PositionRepositoryInterface $positionRepo
+        , RoleRepositoryInterface $roleRepo)
     {
         $this->userRepo     = $userRepo;
         $this->positionRepo = $positionRepo;
+        $this->roleRepo     = $roleRepo;
 
         $jwt_data = $this->getCurrentUser();
         if ($jwt_data['status']) {
@@ -116,9 +120,12 @@ class UserController extends Controller implements ICrud, IValidate
 
         $positions = $this->positionRepo->allActive()->get();
 
+        $roles = $this->roleRepo->allActive()->get();
+
         return [
             'users'     => $all,
-            'positions' => $positions
+            'positions' => $positions,
+            'roles'     => $roles
         ];
     }
 

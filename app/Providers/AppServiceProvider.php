@@ -42,5 +42,11 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\UserRepositoryInterface',
             'App\Repositories\Eloquent\UserEloquentRepository'
         );
+
+        // Role
+        $this->app->bind(
+            'App\Repositories\RoleRepositoryInterface',
+            'App\Repositories\Eloquent\RoleEloquentRepository'
+        );
     }
 }
