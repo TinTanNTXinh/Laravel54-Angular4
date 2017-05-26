@@ -93,6 +93,11 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
         return $this->model->destroy($id);
     }
 
+    public function allActive()
+    {
+        return $this->model->whereActive(true);
+    }
+
     public function generateCode($prefix)
     {
         $code = $prefix . date('ymd');

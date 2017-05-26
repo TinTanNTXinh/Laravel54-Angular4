@@ -14,9 +14,4 @@ class PositionEloquentRepository extends EloquentBaseRepository implements Posit
     {
         return Position::class;
     }
-
-    public function allActive()
-    {
-        return $this->model->whereActive(true);
-    }
 }

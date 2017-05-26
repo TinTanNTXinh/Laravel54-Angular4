@@ -14,9 +14,4 @@ class UserEloquentRepository extends EloquentBaseRepository implements UserRepos
     {
         return User::class;
     }
-
-    public function allActive()
-    {
-        return $this->model->whereActive(true);
-    }
 }

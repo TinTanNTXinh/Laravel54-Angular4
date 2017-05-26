@@ -50,6 +50,9 @@ interface BaseRepositoryInterface
      * @param $prefix
      * @return mixed
      */
+
+    public function allActive();
+
     public function generateCode($prefix);
 
     /**
