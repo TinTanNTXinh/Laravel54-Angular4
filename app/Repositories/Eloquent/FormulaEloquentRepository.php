@@ -16,6 +16,16 @@ class FormulaEloquentRepository extends EloquentBaseRepository implements Formul
         return Formula::class;
     }
 
+    public function allSkeleton()
+    {
+        return $this->model->whereActive(true);
+    }
+
+    public function oneSkeleton($id)
+    {
+        return $this->allSkeleton()->where('.id', $id);
+    }
+
     public function readByCustomerId($customer_id, $transport_date = null)
     {
         if(!isset($transport_date))

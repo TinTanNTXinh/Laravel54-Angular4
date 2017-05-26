@@ -14,4 +14,14 @@ class RoleEloquentRepository extends EloquentBaseRepository implements RoleRepos
     {
         return Role::class;
     }
+
+    public function allSkeleton()
+    {
+        return $this->model->whereActive(true);
+    }
+
+    public function oneSkeleton($id)
+    {
+        return $this->allSkeleton()->where('.id', $id);
+    }
 }

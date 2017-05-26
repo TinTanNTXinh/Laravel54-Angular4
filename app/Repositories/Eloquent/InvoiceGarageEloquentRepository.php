@@ -14,4 +14,14 @@ class InvoiceGarageEloquentRepository extends EloquentBaseRepository implements 
     {
         return Invoice::class;
     }
+
+    public function allSkeleton()
+    {
+        return $this->model->whereActive(true);
+    }
+
+    public function oneSkeleton($id)
+    {
+        return $this->allSkeleton()->where('.id', $id);
+    }
 }

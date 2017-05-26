@@ -15,6 +15,16 @@ class TransportFormulaEloquentRepository extends EloquentBaseRepository implemen
         return TransportFormula::class;
     }
 
+    public function allSkeleton()
+    {
+        return $this->model->whereActive(true);
+    }
+
+    public function oneSkeleton($id)
+    {
+        return $this->allSkeleton()->where('.id', $id);
+    }
+
     public function readByTransportId($transport_id)
     {
         return $this->model->whereActive(true)

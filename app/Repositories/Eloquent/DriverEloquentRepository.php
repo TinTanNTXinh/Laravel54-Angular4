@@ -14,4 +14,14 @@ class DriverEloquentRepository extends EloquentBaseRepository implements DriverR
     {
         return Driver::class;
     }
+
+    public function allSkeleton()
+    {
+        return $this->model->whereActive(true);
+    }
+
+    public function oneSkeleton($id)
+    {
+        return $this->allSkeleton()->where('.id', $id);
+    }
 }

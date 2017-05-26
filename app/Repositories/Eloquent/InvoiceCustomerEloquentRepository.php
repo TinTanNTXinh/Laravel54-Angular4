@@ -14,4 +14,14 @@ class InvoiceCustomerEloquentRepository extends EloquentBaseRepository implement
     {
         return Invoice::class;
     }
+
+    public function allSkeleton()
+    {
+        return $this->model->whereActive(true);
+    }
+
+    public function oneSkeleton($id)
+    {
+        return $this->allSkeleton()->where('.id', $id);
+    }
 }

@@ -15,6 +15,16 @@ class TransportVoucherEloquentRepository extends EloquentBaseRepository implemen
         return TransportVoucher::class;
     }
 
+    public function allSkeleton()
+    {
+        return $this->model->whereActive(true);
+    }
+
+    public function oneSkeleton($id)
+    {
+        return $this->allSkeleton()->where('.id', $id);
+    }
+
     public function readByTransportId($transport_id)
     {
         return $this->model->whereActive(true)

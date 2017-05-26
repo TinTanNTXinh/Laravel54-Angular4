@@ -17,6 +17,16 @@ class PostageEloquentRepository extends EloquentBaseRepository implements Postag
         return Postage::class;
     }
 
+    public function allSkeleton()
+    {
+        return $this->model->whereActive(true);
+    }
+
+    public function oneSkeleton($id)
+    {
+        return $this->allSkeleton()->where('.id', $id);
+    }
+
     public function readByCustomerIdFormulas($i_formulas, $i_customer_id, $i_transport_date = null)
     {
         if(!isset($i_transport_date))

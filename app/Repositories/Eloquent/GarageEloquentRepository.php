@@ -14,4 +14,14 @@ class GarageEloquentRepository extends EloquentBaseRepository implements GarageR
     {
         return Garage::class;
     }
+
+    public function allSkeleton()
+    {
+        return $this->model->whereActive(true);
+    }
+
+    public function oneSkeleton($id)
+    {
+        return $this->allSkeleton()->where('.id', $id);
+    }
 }

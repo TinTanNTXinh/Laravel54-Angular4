@@ -14,4 +14,14 @@ class PositionEloquentRepository extends EloquentBaseRepository implements Posit
     {
         return Position::class;
     }
+
+    public function allSkeleton()
+    {
+        return $this->model->whereActive(true);
+    }
+
+    public function oneSkeleton($id)
+    {
+        return $this->allSkeleton()->where('.id', $id);
+    }
 }
