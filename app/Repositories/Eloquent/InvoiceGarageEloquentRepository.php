@@ -22,6 +22,6 @@ class InvoiceGarageEloquentRepository extends EloquentBaseRepository implements 
 
     public function oneSkeleton($id)
     {
-        return $this->allSkeleton()->where('.id', $id);
+        return $this->allSkeleton()->where('invoice_garages.id', $id);
     }
 }

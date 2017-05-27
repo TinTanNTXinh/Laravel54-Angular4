@@ -22,7 +22,7 @@ class TransportFormulaEloquentRepository extends EloquentBaseRepository implemen
 
     public function oneSkeleton($id)
     {
-        return $this->allSkeleton()->where('.id', $id);
+        return $this->allSkeleton()->where('transport_formulas.id', $id);
     }
 
     public function readByTransportId($transport_id)

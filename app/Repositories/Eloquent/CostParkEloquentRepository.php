@@ -23,6 +23,6 @@ class CostParkEloquentRepository extends EloquentBaseRepository implements CostP
 
     public function oneSkeleton($id)
     {
-        return $this->allSkeleton()->where('.id', $id);
+        return $this->allSkeleton()->where('costs.id', $id);
     }
 }

@@ -22,6 +22,6 @@ class DriverEloquentRepository extends EloquentBaseRepository implements DriverR
 
     public function oneSkeleton($id)
     {
-        return $this->allSkeleton()->where('.id', $id);
+        return $this->allSkeleton()->where('drivers.id', $id);
     }
 }
