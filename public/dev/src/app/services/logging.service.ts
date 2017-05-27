@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class LoggingService {
@@ -10,22 +10,22 @@ export class LoggingService {
     }
 
     public consoleLog(data: any, color?: string): void {
-        if(this.env === 'dev')
+        if (this.env === 'dev')
             console.log(data, color);
     }
 
     public consoleTable(data: any[]): void {
-        if(this.env === 'dev')
+        if (this.env === 'dev')
             console.table(data);
     }
 
     public consoleInfo(data: any): void {
-        if(this.env === 'dev')
+        if (this.env === 'dev')
             console.info(data);
     }
 
     public consoleError(data: any): void {
-        if(this.env === 'dev')
+        if (this.env === 'dev')
             console.error(data);
     }
 
@@ -33,7 +33,7 @@ export class LoggingService {
         // Pure Ajax
         let config;
         let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
+        xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 config = JSON.parse(this.responseText);
             }

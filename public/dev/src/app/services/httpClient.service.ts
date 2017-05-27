@@ -22,9 +22,9 @@ export class HttpClientService {
     private apiVersion: string = '';
 
     constructor(private http: Http
-            , private authenticationService: AuthenticationService
-            , private router: Router
-            , private loggingService: LoggingService) {
+        , private authenticationService: AuthenticationService
+        , private router: Router
+        , private loggingService: LoggingService) {
         let config: any = this.getConfig();
         this.apiHost = config.apiHost;
         this.apiUrl = config.apiUrl;
@@ -85,7 +85,7 @@ export class HttpClientService {
         // Pure Ajax
         let config;
         let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
+        xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 config = JSON.parse(this.responseText);
             }
@@ -144,17 +144,17 @@ export class HttpClientService {
         return this.http.get(`${this.apiHost}/${this.apiUrl}/${this.apiVersion}/${url}`, {
             headers: this._headers
         })
-            // .toPromise()
-            // .then();
+        // .toPromise()
+        // .then();
             .map((res: Response) => {
-                if(res.status == 401) {
+                if (res.status == 401) {
                     this.authenticationService.clearAuthLocalStorage();
                     this.authenticationService.notifyAuthenticate(false);
                     this.router.navigate(['/login']);
                 }
-                if(mode == 'json')
+                if (mode == 'json')
                     return res.json();
-                else if(mode == 'text')
+                else if (mode == 'text')
                     return res.text();
                 else
                     return res;
@@ -195,9 +195,9 @@ export class HttpClientService {
             headers: this._headers
         })
             .map((res: Response) => {
-                if(mode == 'json')
+                if (mode == 'json')
                     return res.json();
-                else if(mode == 'text')
+                else if (mode == 'text')
                     return res.text();
                 else
                     return res;

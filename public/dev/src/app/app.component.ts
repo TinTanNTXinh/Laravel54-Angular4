@@ -14,7 +14,9 @@ export class AppComponent implements OnInit {
     private authenticate: boolean = false;
     private _authSubscription: Subscription;
 
-    constructor(private router: Router, private authenticationService: AuthenticationService, private loggingService: LoggingService) {
+    constructor(private router: Router
+        , private authenticationService: AuthenticationService
+        , private loggingService: LoggingService) {
         this._authSubscription = this.authenticationService.authenticate$.subscribe(
             status => {
                 this.loggingService.consoleLog("%c AppComponent", "color: blue");
