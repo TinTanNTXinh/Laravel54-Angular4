@@ -62,6 +62,12 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\GarageEloquentRepository'
         );
 
+        // Truck Type
+        $this->app->bind(
+            'App\Repositories\TruckTypeRepositoryInterface',
+            'App\Repositories\Eloquent\TruckTypeEloquentRepository'
+        );
+
         // Truck
         $this->app->bind(
             'App\Repositories\TruckRepositoryInterface',

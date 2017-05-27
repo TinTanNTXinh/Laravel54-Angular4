@@ -17,6 +17,15 @@ export class TruckComponent implements OnInit
     public trucks: any[] = [];
     public truck: any;
 
+    public truck_types: any[] = [];
+    public garages: any[] = [];
+    public statuses: any[] = [
+        'Chưa phân tài',
+        'Đang giao hàng',
+        'Đã giao hàng',
+        'Không giao được'
+    ];
+
     /** ===== ICOMMON ===== **/
     title: string;
     placeholder_code: string;
@@ -86,6 +95,8 @@ export class TruckComponent implements OnInit
 
     reloadData(arr_data: any[]): void {
         this.trucks = [];
+        this.truck_types = arr_data['truck_types'];
+        this.garages = arr_data['garages'];
     }
 
     refreshData(): void {
@@ -106,8 +117,7 @@ export class TruckComponent implements OnInit
 
     clearOne(): void {
         this.truck = {
-            name: '',
-            description: ''
+            status: '',
         };
     }
 

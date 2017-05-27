@@ -101,22 +101,103 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group">
-                              <label class="col-lg-2 control-label">Tên</label>
+                              <label class="col-lg-2 control-label">Mã vùng</label>
                               <div class="col-lg-10">
                                 <input type="text" class="form-control"
-                                       [(ngModel)]="truck.name" name="name">
+                                       [(ngModel)]="truck.area_code" name="area_code">
                               </div>
                             </div>
                             <div class="form-group">
-                              <label class="col-lg-2 control-label">Mô tả</label>
+                              <label class="col-lg-2 control-label">Số xe</label>
                               <div class="col-lg-10">
                                 <input type="text" class="form-control"
-                                       [(ngModel)]="truck.description" name="description">
+                                       [(ngModel)]="truck.number_plate" name="number_plate">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Loại xe</label>
+                              <div class="col-lg-10">
+                                <xautocomplete [data]="truck_types"
+                                               [name]="'name'"
+                                               [model_name]="'id'"
+                                               [(value)]="truck.truck_type_id">
+                                </xautocomplete>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Nhà xe</label>
+                              <div class="col-lg-10">
+                                <xautocomplete [data]="garages"
+                                               [name]="'name'"
+                                               [model_name]="'id'"
+                                               [(value)]="truck.garage_id">
+                                </xautocomplete>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Hãng xe</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="truck.trademark" name="trademark">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Năm sản xuất</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="truck.year_of_manufacture" name="year_of_manufacture">
                               </div>
                             </div>
                           </div>
                           <div class="col-md-6">
-
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Dài</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="truck.length" name="length">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Rộng</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="truck.width" name="width">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Cao</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="truck.height" name="height">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Chủ xe</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="truck.owner" name="owner">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Trạng thái</label>
+                              <div class="col-lg-10">
+                                <select [(ngModel)]="truck.status"
+                                        name="sup_id" class="form-control m-b">
+                                  <option disabled selected value> -- Chọn trạng thái -- </option>
+                                  <option *ngFor="let status of statuses"
+                                          value="{{ status }}">
+                                    {{ status }}
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Ghi chú</label>
+                              <div class="col-lg-10">
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="truck.note" name="note">
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div class="row">

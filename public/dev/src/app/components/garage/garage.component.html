@@ -110,8 +110,13 @@
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Loại</label>
                               <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="garage.garage_type_id" name="garage_type_id">
+                                <select [(ngModel)]="garage.garage_type_id"
+                                        name="sup_id" class="form-control m-b">
+                                  <option *ngFor="let garage_type of garage_types"
+                                          value="{{ garage_type.id }}">
+                                    {{ garage_type.name }}
+                                  </option>
+                                </select>
                               </div>
                             </div>
                             <div class="form-group">

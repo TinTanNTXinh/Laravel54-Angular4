@@ -117,7 +117,7 @@ class PositionController extends Controller implements ICrud, IValidate
 
     public function readOne($id)
     {
-        $one = $this->positionRepo->filterColumn($this->skeleton, 'positions.id', $id)->first();
+        $one = $this->positionRepo->oneSkeleton($id)->first();
 
         return [
             $this->table_name => $one
