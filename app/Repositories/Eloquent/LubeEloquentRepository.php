@@ -17,7 +17,8 @@ class LubeEloquentRepository extends EloquentBaseRepository implements LubeRepos
 
     public function allSkeleton()
     {
-        return $this->model->whereActive(true);
+        return $this->model->whereActive(true)
+            ->where('type', 'LUBE');
     }
 
     public function oneSkeleton($id)

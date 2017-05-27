@@ -100,20 +100,25 @@
                       <form class="bs-example form-horizontal">
                         <div class="row">
                           <div class="col-md-6">
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Ngày áp dụng</label>
-                              <div class="col-lg-10">
-                                <datetime [(ngModel)]="oil.apply_date" name="apply_date"
-                                          [timepicker]="false"
-                                          [datepicker]="datepickerToOpts"></datetime>
+                            <div class="row">
+                              <div class="col-md-2"></div>
+                              <div class="col-md-5">
+                                <div class="form-group">
+                                  <label>Ngày áp dụng</label>
+                                  <datetime [(ngModel)]="apply_date" name="apply_date"
+                                            [timepicker]="false"
+                                            [datepicker]="datepickerToOpts">
+                                  </datetime>
+                                </div>
                               </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Giờ áp dụng</label>
-                              <div class="col-lg-10">
-                                <datetime [(ngModel)]="oil.apply_time" name="apply_time"
-                                          [timepicker]="timepickerSettings"
-                                          [datepicker]="false"></datetime>
+                              <div class="col-md-5">
+                                <div class="form-group">
+                                  <label>Giờ áp dụng</label>
+                                  <datetime [(ngModel)]="apply_time" name="apply_time"
+                                            [timepicker]="timepickerSettings"
+                                            [datepicker]="false">
+                                  </datetime>
+                                </div>
                               </div>
                             </div>
                             <div class="form-group">
@@ -125,8 +130,7 @@
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Ghi chú</label>
                               <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="oil.note" name="note">
+                                <textarea [(ngModel)]="oil.note" name="note" cols="30" rows="3" class="form-control"></textarea>
                               </div>
                             </div>
                           </div>

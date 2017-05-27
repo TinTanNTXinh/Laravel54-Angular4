@@ -17,7 +17,8 @@ class OilEloquentRepository extends EloquentBaseRepository implements OilReposit
 
     public function allSkeleton()
     {
-        return $this->model->whereActive(true);
+        return $this->model->whereActive(true)
+            ->where('type', 'OIL');
     }
 
     public function oneSkeleton($id)

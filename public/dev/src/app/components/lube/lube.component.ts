@@ -15,8 +15,10 @@ export class LubeComponent implements OnInit
 
     /** My Variables **/
     public lubes: any[] = [];
-    public lubes_search: any[] = [];
     public lube: any;
+
+    public apply_date: Date = new Date();
+    public apply_time: Date = new Date();
 
     /** ICommon **/
     title: string;
@@ -270,7 +272,6 @@ export class LubeComponent implements OnInit
 
     reloadDataSearch(arr_data: any[]): void {
         this.lubes = arr_data['lubes'];
-        this.lubes_search = arr_data['lubes'];
     }
 
     clearSearch(): void {
