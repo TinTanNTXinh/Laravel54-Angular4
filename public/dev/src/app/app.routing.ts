@@ -23,6 +23,7 @@ import {CostParkComponent} from './components/cost-park/cost-park.component';
 import {CostOtherComponent} from './components/cost-other/cost-other.component';
 import {InvoiceCustomerComponent} from './components/invoice-customer/invoice-customer.component';
 import {InvoiceGarageComponent} from './components/invoice-garage/invoice-garage.component';
+import {CanActivateViaPosition} from "./middlewares/CanActivateViaPosition";
 
 // My middleware
 
@@ -32,7 +33,7 @@ const APP_ROUTES: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'change-password', component: ChangePasswordComponent},
 
-    {path: 'positions', component: PositionComponent},
+    {path: 'positions', component: PositionComponent, canActivate: [CanActivateViaPosition]},
     {path: 'users', component: UserComponent},
 
     {path: 'customers', component: CustomerComponent},

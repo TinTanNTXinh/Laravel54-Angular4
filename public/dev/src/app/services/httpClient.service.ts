@@ -1,13 +1,13 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers, Response} from "@angular/http";
+import {Router} from "@angular/router";
 import {Subscription, Observable} from "rxjs";
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 
 import {AuthenticationService} from "./authentication.service";
 import {LoggingService} from "./logging.service";
-import {Router} from "@angular/router";
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class HttpClientService {
@@ -149,7 +149,14 @@ export class HttpClientService {
         return this.http.get(`${this.apiHost}/${this.apiUrl}/${this.apiVersion}/${url}`, {
             headers: this._headers
         })
+            // .toPromise()
+            // .then();
             .map((res: Response) => {
+                if(res.status == 401) {
+                    this.authenticationService.clearAuthLocalStorage();
+                    this.authenticationService.notifyAuthenticate(false);
+                    this.router.navigate(['/login']);
+                }
                 if(mode == 'json')
                     return res.json();
                 else if(mode == 'text')

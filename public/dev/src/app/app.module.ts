@@ -34,11 +34,10 @@ import {ChangePasswordComponent} from './layout-components/change-password/chang
 import {AppComponent} from './app.component';
 
 // My middlewares
+import {CanActivateViaPosition} from "./middlewares/CanActivateViaPosition";
 
 // My share modules
 import { SharedModule } from './shared.module';
-
-
 
 @NgModule({
   declarations: [
@@ -74,7 +73,8 @@ import { SharedModule } from './shared.module';
     PaginationHelperService,
     StringHelperService,
     ToastrHelperService,
-    DeviceCaptionService
+    DeviceCaptionService,
+    CanActivateViaPosition
   ],
   bootstrap: [AppComponent]
 })
