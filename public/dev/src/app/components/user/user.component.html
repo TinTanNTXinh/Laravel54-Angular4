@@ -228,6 +228,41 @@
                                 </div>
                               </div>
                             </div>
+                            <div class="panel panel-warning">
+                              <div class="panel-heading">
+                                <span>Phân quyền chi tiết</span>
+                              </div>
+                              <div class="panel-body">
+                                <div class="row">
+                                  <div class="col-md-3"></div>
+                                  <div class="col-md-3">Xem</div>
+                                  <div class="col-md-3">Thêm</div>
+                                  <div class="col-md-3">Sửa</div>
+                                </div>
+                                <div class="row" *ngFor="let field of fields">
+                                  <div class="col-md-3">
+                                    <label class="checkbox-inline i-checks">
+                                      {{field}}
+                                    </label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <label class="checkbox-inline i-checks">
+                                      <input #fieldcb type="checkbox" (change)="checkField(fieldcb.checked, field, 'Xem')"><i></i>
+                                    </label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <label class="checkbox-inline i-checks">
+                                      <input #fieldcb type="checkbox" (change)="checkField(fieldcb.checked, field, 'Them')"><i></i>
+                                    </label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <label class="checkbox-inline i-checks">
+                                      <input #fieldcb type="checkbox" (change)="checkField(fieldcb.checked, field, 'Sua')"><i></i>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div class="row">
