@@ -22,6 +22,6 @@ class ProductEloquentRepository extends EloquentBaseRepository implements Produc
 
     public function oneSkeleton($id)
     {
-        return $this->allSkeleton()->where('.id', $id);
+        return $this->allSkeleton()->where('products.id', $id);
     }
 }

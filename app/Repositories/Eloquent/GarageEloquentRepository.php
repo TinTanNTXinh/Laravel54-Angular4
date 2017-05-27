@@ -22,6 +22,6 @@ class GarageEloquentRepository extends EloquentBaseRepository implements GarageR
 
     public function oneSkeleton($id)
     {
-        return $this->allSkeleton()->where('.id', $id);
+        return $this->allSkeleton()->where('garages.id', $id);
     }
 }

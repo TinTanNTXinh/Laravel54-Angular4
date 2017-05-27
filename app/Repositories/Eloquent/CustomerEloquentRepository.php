@@ -22,6 +22,6 @@ class CustomerEloquentRepository extends EloquentBaseRepository implements Custo
 
     public function oneSkeleton($id)
     {
-        return $this->allSkeleton()->where('.id', $id);
+        return $this->allSkeleton()->where('customers.id', $id);
     }
 }

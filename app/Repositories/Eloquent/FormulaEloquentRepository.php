@@ -23,7 +23,7 @@ class FormulaEloquentRepository extends EloquentBaseRepository implements Formul
 
     public function oneSkeleton($id)
     {
-        return $this->allSkeleton()->where('.id', $id);
+        return $this->allSkeleton()->where('formulas.id', $id);
     }
 
     public function readByCustomerId($customer_id, $transport_date = null)
