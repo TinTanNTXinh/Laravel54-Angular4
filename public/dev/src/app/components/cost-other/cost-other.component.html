@@ -100,18 +100,45 @@
                       <form class="bs-example form-horizontal">
                         <div class="row">
                           <div class="col-md-6">
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Tên</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="cost_other.name" name="name">
+                            <div class="row">
+                              <div class="col-md-1"></div>
+                              <div class="col-md-5">
+                                <label>Ngày tạo</label>
+                                <datetime [timepicker]="false"
+                                          [datepicker]="datepickerSettings"
+                                          [(ngModel)]="created_date"
+                                          name="refuel_date">
+                                </datetime>
+                              </div>
+                              <div class="col-md-6">
+                                <label>Giờ tạo</label>
+                                <datetime [timepicker]="timepickerSettings"
+                                          [datepicker]="false"
+                                          [(ngModel)]="created_time"
+                                          name="refuel_time">
+                                </datetime>
                               </div>
                             </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Mô tả</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="cost_other.description" name="description">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label>Xe</label>
+                                <xautocomplete [data]="trucks"
+                                               [name]="'area_code_number_plate'"
+                                               [model_name]="'id'"
+                                               [(value)]="cost_other.truck_id">
+                                </xautocomplete>
+                              </div>
+                              <div class="col-md-6">
+                                <label>Tổng chi phí</label>
+                                <currency [(ngModel)]="cost_other.after_vat" name="after_vat"
+                                          [readonly]="true">
+                                </currency>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <label>Ghi chú</label>
+                                <textarea [(ngModel)]="cost_other.note" name="note" cols="30" rows="3" class="form-control"></textarea>
                               </div>
                             </div>
                           </div>
@@ -120,29 +147,26 @@
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-sm-12">
-                            <div class="form-group">
-                              <div class="col-lg-offset-2 col-lg-10">
-                                <button *ngIf="!isEdit" type="button"
-                                        class="btn m-b-xs w-xs btn-primary btn-rounded"
-                                        (click)="addOne()">Thêm
-                                </button>
-                                <button *ngIf="isEdit" type="button"
-                                        class="btn m-b-xs w-xs btn-warning btn-rounded"
-                                        (click)="updateOne()">Cập nhật
-                                </button>
-                                <button *ngIf="isEdit" type="button"
-                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
-                                        (click)="displayEditBtn(false)"><i
-                                    class="fa fa-ban"></i>Hủy
-                                </button>
-                                <button *ngIf="!isEdit" type="button"
-                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
-                                        (click)="clearOne()"><i
-                                    class="fa fa-eraser"></i>Làm mới
-                                </button>
-                              </div>
-                            </div>
+                          <div class="col-lg-offset-2 col-lg-10">
+                            <br>
+                            <button *ngIf="!isEdit" type="button"
+                                    class="btn m-b-xs w-xs btn-primary btn-rounded"
+                                    (click)="addOne()">Thêm
+                            </button>
+                            <button *ngIf="isEdit" type="button"
+                                    class="btn m-b-xs w-xs btn-warning btn-rounded"
+                                    (click)="updateOne()">Cập nhật
+                            </button>
+                            <button *ngIf="isEdit" type="button"
+                                    class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                    (click)="displayEditBtn(false)"><i
+                                class="fa fa-ban"></i>Hủy
+                            </button>
+                            <button *ngIf="!isEdit" type="button"
+                                    class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                    (click)="clearOne()"><i
+                                class="fa fa-eraser"></i>Làm mới
+                            </button>
                           </div>
                         </div>
                       </form>

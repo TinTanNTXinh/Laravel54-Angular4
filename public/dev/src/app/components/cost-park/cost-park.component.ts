@@ -4,6 +4,7 @@ import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
+import {ArrayHelperService} from '../../services/helpers/array.helper';
 
 @Component({
     selector: 'app-cost-park',
@@ -17,6 +18,11 @@ export class CostParkComponent implements OnInit
     public cost_parks: any[] = [];
     public cost_park: any;
     public trucks: any[] = [];
+
+    public checkin_date: Date = new Date();
+    public checkin_time: Date = new Date();
+    public checkout_date: Date = new Date();
+    public checkout_time: Date = new Date();
 
     /** ===== ICOMMON ===== **/
     title: string;
@@ -44,7 +50,8 @@ export class CostParkComponent implements OnInit
     constructor(private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
-        , private domHelperService: DomHelperService) {
+        , private domHelperService: DomHelperService
+        , private arrayHelperService: ArrayHelperService) {
     }
 
     ngOnInit(): void {
@@ -88,6 +95,8 @@ export class CostParkComponent implements OnInit
     reloadData(arr_data: any[]): void {
         this.cost_parks = [];
         this.trucks = arr_data['trucks'];
+
+        this.trucks = this.arrayHelperService.setAreaCodeNumberPlate(this.trucks);
     }
 
     refreshData(): void {

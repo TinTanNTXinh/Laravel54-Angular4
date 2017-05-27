@@ -4,6 +4,7 @@ import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
+import {ArrayHelperService} from '../../services/helpers/array.helper';
 
 @Component({
     selector: 'app-cost-oil',
@@ -44,7 +45,8 @@ export class CostOilComponent implements OnInit
     constructor(private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
-        , private domHelperService: DomHelperService) {
+        , private domHelperService: DomHelperService
+        , private arrayHelperService: ArrayHelperService) {
     }
 
     ngOnInit(): void {
@@ -89,7 +91,7 @@ export class CostOilComponent implements OnInit
         this.cost_oils = [];
         this.trucks = arr_data['trucks'];
 
-        this.setAreaCodeNumberPlate();
+        this.trucks = this.arrayHelperService.setAreaCodeNumberPlate(this.trucks);
     }
 
     refreshData(): void {
@@ -298,10 +300,4 @@ export class CostOilComponent implements OnInit
     /** ===== FUNCTION ACTION ===== **/
 
     /** ===== FUNCTION ===== **/
-    private setAreaCodeNumberPlate(): void {
-        this.trucks.map(function (item) {
-            item.area_code_number_plate = `${item.area_code}-${item.number_plate}`;
-            return item;
-        });
-    }
 }

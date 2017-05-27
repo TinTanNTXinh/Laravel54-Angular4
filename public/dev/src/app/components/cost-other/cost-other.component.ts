@@ -4,6 +4,7 @@ import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
+import {ArrayHelperService} from '../../services/helpers/array.helper';
 
 @Component({
     selector: 'app-cost-other',
@@ -44,7 +45,8 @@ export class CostOtherComponent implements OnInit
     constructor(private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
-        , private domHelperService: DomHelperService) {
+        , private domHelperService: DomHelperService
+        , private arrayHelperService: ArrayHelperService) {
     }
 
     ngOnInit(): void {
@@ -87,6 +89,9 @@ export class CostOtherComponent implements OnInit
 
     reloadData(arr_data: any[]): void {
         this.cost_others = [];
+        this.trucks = arr_data['trucks'];
+
+        this.trucks = this.arrayHelperService.setAreaCodeNumberPlate(this.trucks);
     }
 
     refreshData(): void {

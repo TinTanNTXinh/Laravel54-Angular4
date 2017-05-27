@@ -107,14 +107,16 @@
                                 <datetime [timepicker]="false"
                                           [datepicker]="datepickerSettings"
                                           [(ngModel)]="refuel_date"
-                                          name="refuel_date"></datetime>
+                                          name="refuel_date">
+                                </datetime>
                               </div>
                               <div class="col-md-6">
                                 <label>Giờ đổ</label>
                                 <datetime [timepicker]="timepickerSettings"
                                           [datepicker]="false"
                                           [(ngModel)]="refuel_time"
-                                          name="refuel_time"></datetime>
+                                          name="refuel_time">
+                                </datetime>
                               </div>
                             </div>
                             <div class="row">
@@ -149,9 +151,10 @@
                                        [(ngModel)]="cost_oil.vat" name="vat">
                               </div>
                               <div class="col-md-6">
-                                <label>Tiền trả</label>
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="cost_oil.after_vat" name="after_vat">
+                                <label>Tổng chi phí</label>
+                                <currency [(ngModel)]="cost_oil.after_vat" name="after_vat"
+                                          [readonly]="true">
+                                </currency>
                               </div>
                             </div>
                             <div class="row">

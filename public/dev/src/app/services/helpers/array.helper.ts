@@ -56,4 +56,11 @@ export class ArrayHelperService {
 
         return results;
     }
+
+    public setAreaCodeNumberPlate(trucks: any[]): any[] {
+        return trucks.map(function (item) {
+            item.area_code_number_plate = `${item.area_code}-${item.number_plate}`;
+            return item;
+        });
+    }
 }
