@@ -50,7 +50,7 @@ export class CostLubeComponent implements OnInit
     }
 
     ngOnInit(): void {
-        this.title = 'Chi phi dau';
+        this.title = 'Chi phí nhớt';
         this.prefix_url = 'cost-lubes';
         this.range_date = this.dateHelperService.range_date;
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
