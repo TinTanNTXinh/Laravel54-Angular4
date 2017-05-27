@@ -25,17 +25,25 @@ import {CounterComponent} from './dynamic-components/counter/counter.component';
 // My components
 import {PositionComponent} from './components/position/position.component';
 import {UserComponent} from './components/user/user.component';
+import {CustomerComponent} from './components/customer/customer.component';
+import {StaffCustomerComponent} from './components/staff-customer/staff-customer.component';
 import {PostageComponent} from './components/postage/postage.component';
 import {TransportComponent} from './components/transport/transport.component';
-import {FormulaComponent} from './components/postage/formula.component';
-import {FormulaTransportComponent} from './components/transport/formula-transport.component';
+import {GarageComponent} from './components/garage/garage.component';
+import {TruckComponent} from './components/truck/truck.component';
+import {DriverComponent} from './components/driver/driver.component';
 import {LubeComponent} from './components/lube/lube.component';
 import {OilComponent} from './components/oil/oil.component';
-import {CustomerComponent} from './components/customer/customer.component';
-import {DriverComponent} from './components/driver/driver.component';
-import {VoucherComponent} from './components/voucher/voucher.component';
-import {GarageComponent} from './components/garage/garage.component';
 import {CostOilComponent} from './components/cost-oil/cost-oil.component';
+import {CostLubeComponent} from './components/cost-lube/cost-lube.component';
+import {CostParkComponent} from './components/cost-park/cost-park.component';
+import {CostOtherComponent} from './components/cost-other/cost-other.component';
+import {InvoiceCustomerComponent} from './components/invoice-customer/invoice-customer.component';
+import {InvoiceGarageComponent} from './components/invoice-garage/invoice-garage.component';
+
+import {FormulaComponent} from './components/postage/formula.component';
+import {FormulaTransportComponent} from './components/transport/formula-transport.component';
+import {VoucherComponent} from './components/voucher/voucher.component';
 
 @NgModule({
     imports: [
@@ -64,17 +72,24 @@ import {CostOilComponent} from './components/cost-oil/cost-oil.component';
 
         PositionComponent,
         UserComponent,
+        CustomerComponent,
+        StaffCustomerComponent,
         PostageComponent,
         TransportComponent,
-        FormulaComponent,
-        FormulaTransportComponent,
+        GarageComponent,
+        TruckComponent,
+        DriverComponent,
         LubeComponent,
         OilComponent,
-        CustomerComponent,
-        DriverComponent,
+        CostOilComponent,
+        CostLubeComponent,
+        CostParkComponent,
+        CostOtherComponent,
+        InvoiceCustomerComponent,
+        InvoiceGarageComponent,
+        FormulaComponent,
+        FormulaTransportComponent,
         VoucherComponent,
-        GarageComponent,
-        CostOilComponent
     ],
     exports: [
         CommonModule,
@@ -101,17 +116,24 @@ import {CostOilComponent} from './components/cost-oil/cost-oil.component';
 
         PositionComponent,
         UserComponent,
+        CustomerComponent,
+        StaffCustomerComponent,
         PostageComponent,
         TransportComponent,
-        FormulaComponent,
-        FormulaTransportComponent,
+        GarageComponent,
+        TruckComponent,
+        DriverComponent,
         LubeComponent,
         OilComponent,
-        CustomerComponent,
-        DriverComponent,
+        CostOilComponent,
+        CostLubeComponent,
+        CostParkComponent,
+        CostOtherComponent,
+        InvoiceCustomerComponent,
+        InvoiceGarageComponent,
+        FormulaComponent,
+        FormulaTransportComponent,
         VoucherComponent,
-        GarageComponent,
-        CostOilComponent
     ]
 })
 export class SharedModule {

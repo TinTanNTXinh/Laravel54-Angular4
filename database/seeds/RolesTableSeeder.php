@@ -30,8 +30,8 @@ class RolesTableSeeder extends Seeder
             'CostPark',
             'CostOther',
             'Postage',
-            'FuelOil',
-            'FuelLube',
+            'Oil',
+            'Lube',
             'ReportRevenue',
             'HistoryTransport'
         ];
