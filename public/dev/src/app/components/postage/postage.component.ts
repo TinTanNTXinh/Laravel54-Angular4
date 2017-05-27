@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import {FormGroup, FormBuilder, FormArray, Validators} from '@angular/forms';
 
 import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
@@ -19,6 +19,7 @@ export class PostageComponent implements OnInit
     public postage: any;
     public customers: any[] = [];
     public units: any[] = [];
+    public formula_samples: any[] = [];
 
     public apply_date: Date = new Date();
     public apply_time: Date = new Date();
@@ -46,7 +47,7 @@ export class PostageComponent implements OnInit
     /** ===== ISEARCH ===== **/
     filtering: any;
 
-    constructor( private fb: FormBuilder
+    constructor(private fb: FormBuilder
         , private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
@@ -96,6 +97,9 @@ export class PostageComponent implements OnInit
 
     reloadData(arr_data: any[]): void {
         this.postages = [];
+        this.customers = arr_data['customers'];
+        this.units = arr_data['units'];
+        this.formula_samples = arr_data['formula_samples'];
     }
 
     refreshData(): void {
@@ -304,9 +308,7 @@ export class PostageComponent implements OnInit
     }
 
     displayColumn(): void {
-        let setting = {
-
-        };
+        let setting = {};
         for (let parent in setting) {
             for (let child of setting[parent]) {
                 if (!!this.header[child])
@@ -326,34 +328,35 @@ export class PostageComponent implements OnInit
         });
     }
 
-    get formulaFormArray(): FormArray{
+    get formulaFormArray(): FormArray {
         return <FormArray>this.formulaFormGroup.get('formulas');
         // return <FormArray>this.formulaFormGroup.controls['formulas'];
     }
 
-    private buildFormula(type: string): FormGroup {
+    private buildFormula(rule: string, name: string = ''): FormGroup {
         let formula;
-        switch (type) {
+        switch (rule) {
             case 'SINGLE':
                 formula = this.fb.group({
-                    type: type,
-                    name: ['', [Validators.required]],
+                    rule: rule,
+                    name: [name, [Validators.required]],
                     value1: ['', [Validators.required]],
                     value2: ''
                 });
                 break;
             case 'RANGE':
+            case 'OIL':
                 formula = this.fb.group({
-                    type: type,
-                    name: ['', [Validators.required]],
+                    rule: rule,
+                    name: [name, [Validators.required]],
                     value1: [0, [Validators.pattern('[0-9].*'), Validators.required]],
                     value2: [0, [Validators.pattern('[0-9].*'), Validators.required]]
                 });
                 break;
             case 'PAIR':
                 formula = this.fb.group({
-                    type: type,
-                    name: ['', [Validators.required]],
+                    rule: rule,
+                    name: [name, [Validators.required]],
                     value1: ['', [Validators.pattern('[a-zA-Z].*'), Validators.required]],
                     value2: ['', [Validators.pattern('[a-zA-Z].*'), Validators.required]]
                 });
@@ -364,8 +367,8 @@ export class PostageComponent implements OnInit
         return formula;
     }
 
-    private addFormula(type: string): void {
-        this.formulaFormArray.push(this.buildFormula(type));
+    private addFormula(rule: string, name: string = ''): void {
+        this.formulaFormArray.push(this.buildFormula(rule, name));
     }
 
     private removeFormula(index: number) {
@@ -380,4 +383,8 @@ export class PostageComponent implements OnInit
     }
 
     /** ===== FUNCTION ===== **/
+    public selectFormulaSample(formula_sample_id: number): void {
+        let formula_sample = this.formula_samples.find(o => o.id == formula_sample_id);
+        this.addFormula(formula_sample.rule, formula_sample.name);
+    }
 }

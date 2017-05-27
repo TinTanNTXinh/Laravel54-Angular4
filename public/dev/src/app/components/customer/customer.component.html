@@ -110,11 +110,13 @@
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Loại</label>
                               <div class="col-lg-10">
-                                <xautocomplete [data]="customer_types"
-                                               [name]="'name'"
-                                               [model_name]="'id'"
-                                               [(value)]="customer.customer_type_id">
-                                </xautocomplete>
+                                <select [(ngModel)]="customer.customer_type_id"
+                                        name="sup_id" class="form-control m-b">
+                                  <option *ngFor="let customer_type of customer_types"
+                                          value="{{ customer_type.id }}">
+                                    {{ customer_type.name }}
+                                  </option>
+                                </select>
                               </div>
                             </div>
                             <div class="form-group">

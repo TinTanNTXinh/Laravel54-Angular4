@@ -166,6 +166,16 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\TransportFormulaEloquentRepository'
         );
 
+        // Formula Sample
+        $this->app->bind(
+            'App\Repositories\FormulaSampleRepositoryInterface',
+            'App\Repositories\Eloquent\FormulaSampleEloquentRepository'
+        );
 
+        // Unit
+        $this->app->bind(
+            'App\Repositories\UnitRepositoryInterface',
+            'App\Repositories\Eloquent\UnitEloquentRepository'
+        );
     }
 }

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Repositories\PostageRepositoryInterface;
+use App\Repositories\FormulaSampleRepositoryInterface;
+use App\Repositories\CustomerRepositoryInterface;
+use App\Repositories\UnitRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
@@ -18,11 +21,17 @@ class PostageController extends Controller implements ICrud, IValidate
     private $table_name;
     private $skeleton;
 
-    protected $postageRepo = '';
+    protected $postageRepo, $formulaSampleRepo, $customerRepo, $unitRepo;
 
-    public function __construct(PostageRepositoryInterface $postageRepo)
+    public function __construct(PostageRepositoryInterface $postageRepo
+        , FormulaSampleRepositoryInterface $formulaSampleRepo
+        , CustomerRepositoryInterface $customerRepo
+        , UnitRepositoryInterface $unitRepo)
     {
-        $this->postageRepo = $postageRepo;
+        $this->postageRepo       = $postageRepo;
+        $this->formulaSampleRepo = $formulaSampleRepo;
+        $this->customerRepo      = $customerRepo;
+        $this->unitRepo          = $unitRepo;
 
         $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
@@ -110,13 +119,15 @@ class PostageController extends Controller implements ICrud, IValidate
     {
         $all = $this->skeleton->get();
 
-        $customers = [];
-        $units     = [];
+        $customers       = $this->customerRepo->allActive();
+        $units           = $this->unitRepo->allActive();
+        $formula_samples = $this->formulaSampleRepo->allActive();
 
         return [
-            'postages'  => $all,
-            'customers' => $customers,
-            'units'     => $units
+            'postages'        => $all,
+            'customers'       => $customers,
+            'units'           => $units,
+            'formula_samples' => $formula_samples
         ];
     }
 

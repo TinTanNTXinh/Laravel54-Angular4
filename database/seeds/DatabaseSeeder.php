@@ -61,6 +61,7 @@ class DatabaseSeeder extends Seeder
             # Nhom Don hang - Cuoc phi
             $this->call(VouchersTableSeeder::class);
             $this->call(UnitsTableSeeder::class);
+            $this->call(FormulaSamplesTableSeeder::class);
             // $this->call(PostagesTableSeeder::class);
             // $this->call(FormulasTableSeeder::class);
             // $this->call(TransportsTableSeeder::class);
@@ -119,6 +120,7 @@ class DatabaseSeeder extends Seeder
             # Nhom Don hang - Cuoc phi
             $this->call(VouchersTableSeeder::class);
             $this->call(UnitsTableSeeder::class);
+            $this->call(FormulaSamplesTableSeeder::class);
             $this->call(PostagesTableSeeder::class);
             $this->call(FormulasTableSeeder::class);
             $this->call(TransportsTableSeeder::class);

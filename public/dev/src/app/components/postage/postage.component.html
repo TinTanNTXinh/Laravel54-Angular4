@@ -166,6 +166,25 @@
                                         (click)="addFormula('PAIR')" type="button" class="btn btn-primary">Cặp</button>
                               </div>
                             </div>
+
+                            <div class="row">
+                              <div class="col-md-8">
+                                <select (change)="selectFormulaSample($event.target.value)"
+                                        name="sup_id" class="form-control m-b">
+                                  <option disabled selected value> -- Chọn công thức mẫu -- </option>
+                                  <option *ngFor="let formula_sample of formula_samples"
+                                          value="{{ formula_sample.id }}">
+                                    {{ formula_sample.name }}
+                                  </option>
+                                </select>
+                              </div>
+                              <div class="col-md-4">
+                                <button type="button" data-toggle="modal" data-target="#modal-transport-voucher" class="btn m-b-xs btn-sm btn-default btn-addon">
+                                  <i class="fa fa-plus"></i>Thêm
+                                </button>
+                              </div>
+                            </div>
+
                             <!--Reactive form-->
                             <form class="form-horizontal"
                                   novalidate

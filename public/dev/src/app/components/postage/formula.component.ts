@@ -9,13 +9,13 @@ export class FormulaComponent implements OnInit{
     @Input('group')
     public formulaForm: FormGroup;
 
-    public type: string;
+    public rule: string;
 
     constructor() {
     }
 
     ngOnInit() {
-        this.type = this.formulaForm.get('type').value;
+        this.rule = this.formulaForm.get('rule').value
     }
 
 }

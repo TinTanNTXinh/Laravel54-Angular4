@@ -15,9 +15,9 @@ class UnitsTableSeeder extends Seeder
     public function run()
     {
         $array_name = [
+            'đ/Chuyến',
             'đ/Kg',
             'đ/Tấn',
-            'đ/Chuyến',
             'đ/Pallet',
             'đ/Khối',
             'đ/Thùng',
