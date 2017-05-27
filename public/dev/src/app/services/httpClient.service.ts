@@ -86,7 +86,7 @@ export class HttpClientService {
         );
     }
 
-    private getConfig(): any {
+    public getConfig(): any {
         // Pure Ajax
         let config;
         let xhttp = new XMLHttpRequest();

@@ -17,11 +17,12 @@ class InvoiceCustomerEloquentRepository extends EloquentBaseRepository implement
 
     public function allSkeleton()
     {
-        return $this->model->whereActive(true);
+        return $this->model->whereActive(true)
+            ->where('invoices.type2', 'like', 'CUSTOMER-%');
     }
 
     public function oneSkeleton($id)
     {
-        return $this->allSkeleton()->where('invoice_customers.id', $id);
+        return $this->allSkeleton()->where('invoices.id', $id);
     }
 }

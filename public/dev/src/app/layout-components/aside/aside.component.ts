@@ -60,9 +60,7 @@ export class AsideComponent implements OnInit {
      * slice roles with group_role_id
      */
     public sliceRoles(group_role_id: number) {
-        return this.roles.filter(function (o) {
-            return o['group_role_id'] == group_role_id;
-        });
+        return this.roles.filter(o => o.group_role_id == group_role_id);
     }
 
 }

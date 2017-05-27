@@ -11,21 +11,9 @@ export class FooterComponent implements OnInit {
     public version: string;
 
     constructor(private httpClientService: HttpClientService) {
+        this.version = this.httpClientService.getConfig().version;
     }
 
     ngOnInit() {
-        this.getConfig();
-    }
-
-    private getConfig(): void {
-        this.httpClientService.pureGet('./assets/config/app.config.json').subscribe(
-            (success: any) => {
-                let config = success;
-                this.version = config.version;
-            },
-            (error: any) => {
-
-            }
-        );
     }
 }
