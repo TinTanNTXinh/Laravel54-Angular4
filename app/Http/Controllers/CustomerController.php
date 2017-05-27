@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Repositories\CustomerRepositoryInterface;
+use App\Repositories\CustomerTypeRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
@@ -18,11 +19,13 @@ class CustomerController extends Controller implements ICrud, IValidate
     private $table_name;
     private $skeleton;
 
-    protected $customerRepo;
+    protected $customerRepo, $customerTypeRepo;
 
-    public function __construct(CustomerRepositoryInterface $customerRepo)
+    public function __construct(CustomerRepositoryInterface $customerRepo
+        , CustomerTypeRepositoryInterface $customerTypeRepo)
     {
-        $this->customerRepo = $customerRepo;
+        $this->customerRepo     = $customerRepo;
+        $this->customerTypeRepo = $customerTypeRepo;
 
         $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
@@ -110,8 +113,11 @@ class CustomerController extends Controller implements ICrud, IValidate
     {
         $all = $this->skeleton->get();
 
+        $customer_types = $this->customerTypeRepo->allActive();
+
         return [
-            'customers' => $all
+            'customers'      => $all,
+            'customer_types' => $customer_types
         ];
     }
 

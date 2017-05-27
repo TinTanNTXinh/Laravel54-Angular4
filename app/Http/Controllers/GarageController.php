@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Repositories\GarageRepositoryInterface;
+use App\Repositories\GarageTypeRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
@@ -18,11 +19,13 @@ class GarageController extends Controller implements ICrud, IValidate
     private $table_name;
     private $skeleton;
 
-    protected $garageRepo;
+    protected $garageRepo, $garageTypeRepo;
 
-    public function __construct(GarageRepositoryInterface $garageRepo)
+    public function __construct(GarageRepositoryInterface $garageRepo
+        , GarageTypeRepositoryInterface $garageTypeRepo)
     {
-        $this->garageRepo = $garageRepo;
+        $this->garageRepo     = $garageRepo;
+        $this->garageTypeRepo = $garageTypeRepo;
 
         $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
@@ -110,8 +113,11 @@ class GarageController extends Controller implements ICrud, IValidate
     {
         $all = $this->skeleton->get();
 
+        $garage_types = $this->garageTypeRepo->allActive();
+
         return [
-            'garages' => $all
+            'garages'      => $all,
+            'garage_types' => $garage_types
         ];
     }
 

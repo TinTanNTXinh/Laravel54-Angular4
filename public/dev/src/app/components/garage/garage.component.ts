@@ -87,6 +87,8 @@ export class GarageComponent implements OnInit
 
     reloadData(arr_data: any[]): void {
         this.garages = [];
+
+        this.garage_types = arr_data['garage_types'];
     }
 
     refreshData(): void {

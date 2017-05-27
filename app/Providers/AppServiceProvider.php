@@ -183,5 +183,17 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\UnitRepositoryInterface',
             'App\Repositories\Eloquent\UnitEloquentRepository'
         );
+
+        // Customer Type
+        $this->app->bind(
+            'App\Repositories\CustomerTypeRepositoryInterface',
+            'App\Repositories\Eloquent\CustomerTypeEloquentRepository'
+        );
+
+        // Garage Type
+        $this->app->bind(
+            'App\Repositories\GarageTypeRepositoryInterface',
+            'App\Repositories\Eloquent\GarageTypeEloquentRepository'
+        );
     }
 }

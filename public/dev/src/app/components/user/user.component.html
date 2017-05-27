@@ -99,99 +99,96 @@
                       <form class="bs-example form-horizontal">
                         <div class="row">
                           <div class="col-md-6">
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Họ tên</label>
-                              <div class="col-lg-10">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label>Họ tên</label>
                                 <input type="text" class="form-control"
                                        [(ngModel)]="user.fullname" name="fullname">
                               </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Tài khoản</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="user.username"
-                                       name="username">
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Mật khẩu</label>
-                              <div class="col-lg-10">
-                                <input type="password" class="form-control"
-                                       [(ngModel)]="user.password"
-                                       name="password">
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Địa chỉ</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="user.address"
-                                       name="address">
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Điện thoại</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="user.phone"
-                                       name="phone">
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Ngày sinh</label>
-                              <div class="col-lg-10">
+                              <div class="col-md-6">
+                                <label>Ngày sinh</label>
                                 <datetime [timepicker]="false"
                                           [datepicker]="datepickerSettings"
                                           [(ngModel)]="birthday"
                                           name="birthday"></datetime>
                               </div>
                             </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Giới tính</label>
-                              <div class="col-lg-10">
+
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label>Tài khoản</label>
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="user.username"
+                                       name="username">
+                              </div>
+                              <div class="col-md-6">
+                                <label>Mật khẩu</label>
+                                <input type="password" class="form-control"
+                                       [(ngModel)]="user.password"
+                                       name="password">
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label>Địa chỉ</label>
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="user.address"
+                                       name="address">
+                              </div>
+                              <div class="col-md-6">
+                                <label>Điện thoại</label>
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="user.phone"
+                                       name="phone">
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label>Giới tính</label>
                                 <select [(ngModel)]="user.sex"
                                         name="sex" class="form-control m-b">
                                   <option value="Nam">Nam</option>
                                   <option value="Nữ">Nữ</option>
                                 </select>
                               </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Email</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
+                              <div class="col-md-6">
+                                <label>Email</label>
+                                <input type="email" class="form-control"
                                        [(ngModel)]="user.email"
                                        name="email">
                               </div>
                             </div>
-                            <div class="form-group">
-                              <label class="col-lg-2 control-label">Ghi chú</label>
-                              <div class="col-lg-10">
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="user.note"
-                                       name="note">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <label>Ghi chú</label>
+                                <textarea [(ngModel)]="user.note" name="note" cols="30" rows="3" class="form-control"></textarea>
                               </div>
                             </div>
 
-                            <div class="panel panel-success">
-                              <div class="panel-heading">
-                                <span>Chức vụ</span>
-                              </div>
-                              <div class="panel-body">
-                                <div class="row">
-                                  <ng-container *ngFor="let chunked of chunk(positions, 3)">
-                                    <div class="col-md-4">
-                                      <div class="checkbox" *ngFor="let position of chunked">
-                                        <label class="i-checks">
-                                          <input #positioncb type="checkbox"
-                                                 (change)="checkPosition(positioncb.checked, position.id)">
-                                          <i></i>
-                                          {{ position.name }}
-                                        </label>
-                                      </div>
+                            <br>
+
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="panel panel-success">
+                                  <div class="panel-heading">
+                                    <span>Chức vụ</span>
+                                  </div>
+                                  <div class="panel-body">
+                                    <div class="row">
+                                      <ng-container *ngFor="let chunked of chunk(positions, 3)">
+                                        <div class="col-md-4">
+                                          <div class="checkbox" *ngFor="let position of chunked">
+                                            <label class="i-checks">
+                                              <input #positioncb type="checkbox"
+                                                     (change)="checkPosition(positioncb.checked, position.id)">
+                                              <i></i>
+                                              {{ position.name }}
+                                            </label>
+                                          </div>
+                                        </div>
+                                      </ng-container>
                                     </div>
-                                  </ng-container>
+                                  </div>
                                 </div>
                               </div>
                             </div>

@@ -84,6 +84,8 @@ export class CustomerComponent implements OnInit
 
     reloadData(arr_data: any[]): void {
         this.customers = [];
+
+        this.customer_types = arr_data['customer_types'];
     }
 
     refreshData(): void {
