@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import {LoggingService} from './logging.service';
+import {Router} from "@angular/router";
 
 @Injectable()
 export class AuthenticationService {
@@ -12,7 +13,8 @@ export class AuthenticationService {
     public authenticateUser: any = null;
     public authenticateToken: string;
 
-    constructor(private loggingService: LoggingService) {
+    constructor(private loggingService: LoggingService
+        , private router: Router) {
         this.checkAuthLocalStorage();
     }
 
@@ -59,6 +61,12 @@ export class AuthenticationService {
 
     notifyAuthenticate(status: Boolean): void {
         this.authenticate.next(status);
+    }
+
+    public logOut(): void {
+        this.clearAuthLocalStorage();
+        this.notifyAuthenticate(false);
+        this.router.navigate(['/login']);
     }
 
 }

@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
 import {Subscription} from 'rxjs';
 
 import {AuthenticationService} from '../../services/authentication.service';
@@ -21,7 +20,9 @@ export class AsideComponent implements OnInit {
 
     public nav_lv0: string = 'Danh mục';
 
-    constructor(private httpClientService: HttpClientService, private authenticationService: AuthenticationService, private router: Router, private loggingService: LoggingService) {
+    constructor(private httpClientService: HttpClientService
+        , private authenticationService: AuthenticationService
+        , private loggingService: LoggingService) {
         this._httpClientSubscription = this.httpClientService.httpClient$.subscribe(
             status => {
                 this.loggingService.consoleLog("%c Navigation", "background: green; color: white");
@@ -51,9 +52,7 @@ export class AsideComponent implements OnInit {
     }
 
     public logOut(): void {
-        this.authenticationService.clearAuthLocalStorage();
-        this.authenticationService.notifyAuthenticate(false);
-        this.router.navigate(['/login']);
+        this.authenticationService.logOut();
     }
 
     /**

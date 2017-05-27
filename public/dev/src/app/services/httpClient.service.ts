@@ -21,13 +21,16 @@ export class HttpClientService {
     private apiUrl: string = '';
     private apiVersion: string = '';
 
-    constructor(private http: Http, private authenticationService: AuthenticationService, private router: Router, private loggingService: LoggingService) {
+    constructor(private http: Http
+            , private authenticationService: AuthenticationService
+            , private router: Router
+            , private loggingService: LoggingService) {
         let config: any = this.getConfig();
         this.apiHost = config.apiHost;
         this.apiUrl = config.apiUrl;
         this.apiVersion = config.apiVersion;
 
-        this._authSubscription = authenticationService.authenticate$.subscribe(
+        this._authSubscription = this.authenticationService.authenticate$.subscribe(
             status => {
                 this.loggingService.consoleLog("%c HttpClientService", "color: green");
                 this.loggingService.consoleLog(status);
@@ -35,46 +38,38 @@ export class HttpClientService {
                     this.createHeader();
                     this.loggingService.consoleLog("%c Tạo header", "color: green");
                     this.loggingService.consoleLog("%c Role", "color: green");
-                    this.loggingService.consoleTable(authenticationService.authenticateRole);
+                    this.loggingService.consoleTable(this.authenticationService.authenticateRole);
                     this.loggingService.consoleLog("%c User", "color: green");
-                    this.loggingService.consoleLog(authenticationService.authenticateUser);
+                    this.loggingService.consoleLog(this.authenticationService.authenticateUser);
                     this.get('authorization').subscribe(
                         (success: any) => {
                             /* SAVE USER */
-                            authenticationService.authenticateUser = success['user'];
+                            this.authenticationService.authenticateUser = success['user'];
 
                             /* SAVE ROLE */
-                            let array_role = success['roles'];
-                            authenticationService.authenticateRole = [];
-                            for (let i = 0; i < array_role.length; i++) {
-                                authenticationService.authenticateRole.push(array_role[i]);
-                            }
+                            this.authenticationService.authenticateRole = success['roles'];
 
                             /* SAVE GROUP ROLE */
-                            let array_group_role = success['group_roles'];
-                            authenticationService.authenticateGroupRole = [];
-                            for (let i = 0; i < array_group_role.length; i++) {
-                                authenticationService.authenticateGroupRole.push(array_group_role[i]);
-                            }
+                            this.authenticationService.authenticateGroupRole = success['group_roles'];
 
                             /* SAVE AUTH */
-                            authenticationService.createAuthLocalStorage();
+                            this.authenticationService.createAuthLocalStorage();
                             // this.authenticationService.notifyAuthenticate(true);
 
                             this.notifyHttpClient(true);
 
                             this.loggingService.consoleLog("%c Role", "color: green");
-                            this.loggingService.consoleTable(authenticationService.authenticateRole);
+                            this.loggingService.consoleTable(this.authenticationService.authenticateRole);
                             this.loggingService.consoleLog("%c User", "color: green");
-                            this.loggingService.consoleLog(authenticationService.authenticateUser);
+                            this.loggingService.consoleLog(this.authenticationService.authenticateUser);
 
-                            this.loggingService.consoleLog("%c Current URL: " + router.url, "color: yellow; background: black");
+                            this.loggingService.consoleLog("%c Current URL: " + this.router.url, "color: yellow; background: black");
                             this.loggingService.consoleLog("%c -----------------", "color: green");
-                            router.navigate([router.url]);
+                            this.router.navigate([this.router.url]);
                         },
                         (error: any) => {
-                            authenticationService.clearAuthLocalStorage();
-                            authenticationService.notifyAuthenticate(false);
+                            this.authenticationService.clearAuthLocalStorage();
+                            this.authenticationService.notifyAuthenticate(false);
                             this.notifyHttpClient(false);
                         }
                     );

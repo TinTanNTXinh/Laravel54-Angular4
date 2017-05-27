@@ -21,7 +21,10 @@ export class HeaderComponent implements OnInit {
     private nav_have_not_user: boolean = true;
     private _httpClientSubscription: Subscription;
 
-    constructor(private httpClientService: HttpClientService, private authenticationService: AuthenticationService, private router: Router, private loggingService: LoggingService) {
+    constructor(private httpClientService: HttpClientService
+        , private authenticationService: AuthenticationService
+        , private router: Router
+        , private loggingService: LoggingService) {
         this._httpClientSubscription = this.httpClientService.httpClient$.subscribe(
             status => {
                 this.loggingService.consoleLog("%c Header", "background: yellow; color: lime");
@@ -52,9 +55,7 @@ export class HeaderComponent implements OnInit {
     }
 
     public logOut(): void {
-        this.authenticationService.clearAuthLocalStorage();
-        this.authenticationService.notifyAuthenticate(false);
-        this.router.navigate(['/login']);
+        this.authenticationService.logOut();
     }
 
     public changeDisplayNav(): void {
