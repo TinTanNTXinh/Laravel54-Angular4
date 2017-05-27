@@ -87,6 +87,9 @@ export class CostLubeComponent implements OnInit
 
     reloadData(arr_data: any[]): void {
         this.cost_lubes = [];
+        this.trucks = arr_data['trucks'];
+
+        this.setAreaCodeNumberPlate();
     }
 
     refreshData(): void {
@@ -296,4 +299,10 @@ export class CostLubeComponent implements OnInit
     /** ===== FUNCTION ACTION ===== **/
 
     /** ===== FUNCTION ===== **/
+    private setAreaCodeNumberPlate(): void {
+        this.trucks.map(function (item) {
+            item.area_code_number_plate = `${item.area_code}-${item.number_plate}`;
+            return item;
+        });
+    }
 }

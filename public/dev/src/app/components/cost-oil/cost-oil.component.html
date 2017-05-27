@@ -99,23 +99,10 @@
                     <div class="panel-body">
                       <form class="bs-example form-horizontal">
                         <div class="row">
-                          <div class="col-md-1">
-
-                          </div>
                           <div class="col-md-6">
                             <div class="row">
-                              <div class="col-md-6">
-                                <label>Xe</label>
-                                <xautocomplete [data]="trucks"
-                                               [name]="'area_code_number_plate'"
-                                               [model_name]="'id'"
-                                               [(value)]="cost_oil.truck_id">
-                                </xautocomplete>
-                              </div>
-                              <div class="col-md-6"></div>
-                            </div>
-                            <div class="row">
-                              <div class="col-md-6">
+                              <div class="col-md-1"></div>
+                              <div class="col-md-5">
                                 <label>Ngày đổ</label>
                                 <datetime [timepicker]="false"
                                           [datepicker]="datepickerSettings"
@@ -130,67 +117,76 @@
                                           name="refuel_time"></datetime>
                               </div>
                             </div>
-
                             <div class="row">
+                              <div class="col-md-6">
+                                <label>Xe</label>
+                                <xautocomplete [data]="trucks"
+                                               [name]="'area_code_number_plate'"
+                                               [model_name]="'id'"
+                                               [(value)]="cost_oil.truck_id">
+                                </xautocomplete>
+                              </div>
                               <div class="col-md-6">
                                 <label>Số lít</label>
                                 <input type="text" class="form-control"
                                        [(ngModel)]="cost_oil.quantum_liter" name="quantum_liter">
                               </div>
+                            </div>
+                            <div class="row">
                               <div class="col-md-6">
                                 <label>Đơn giá</label>
                                 <currency [ngModel]="cost_oil.unit_price" name="unit_price"></currency>
                               </div>
-                            </div>
-
-                            <div class="row">
                               <div class="col-md-6">
                                 <label>Thành tiền</label>
                                 <currency [(ngModel)]="cost_oil.money" name="money"></currency>
                               </div>
+                            </div>
+                            <div class="row">
                               <div class="col-md-6">
                                 <label>VAT</label>
                                 <input type="text" class="form-control"
                                        [(ngModel)]="cost_oil.vat" name="vat">
                               </div>
-                            </div>
-                            <div class="row">
                               <div class="col-md-6">
                                 <label>Tiền trả</label>
                                 <input type="text" class="form-control"
                                        [(ngModel)]="cost_oil.after_vat" name="after_vat">
                               </div>
-                              <div class="col-md-6">
-                                <label>Ghi chú</label>
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="cost_oil.note" name="note">
-                              </div>
                             </div>
                             <div class="row">
-                              <div class="col-md-offset-2 col-md-10">
-                                <br>
-                                <button *ngIf="!isEdit" type="button"
-                                        class="btn m-b-xs w-xs btn-primary btn-rounded"
-                                        (click)="addOne()">Thêm
-                                </button>
-                                <button *ngIf="isEdit" type="button"
-                                        class="btn m-b-xs w-xs btn-warning btn-rounded"
-                                        (click)="updateOne()">Cập nhật
-                                </button>
-                                <button *ngIf="isEdit" type="button"
-                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
-                                        (click)="displayEditBtn(false)"><i
-                                    class="fa fa-ban"></i>Hủy
-                                </button>
-                                <button *ngIf="!isEdit" type="button"
-                                        class="btn m-b-xs btn-rounded btn-default btn-addon"
-                                        (click)="clearOne()"><i
-                                    class="fa fa-eraser"></i>Làm mới
-                                </button>
+                              <div class="col-md-12">
+                                <label>Ghi chú</label>
+                                <textarea [(ngModel)]="cost_oil.note" name="note" cols="30" rows="3" class="form-control"></textarea>
                               </div>
                             </div>
                           </div>
-                          <div class="col-md-5"></div>
+                          <div class="col-md-6">
+
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-offset-2 col-md-10">
+                            <br>
+                            <button *ngIf="!isEdit" type="button"
+                                    class="btn m-b-xs w-xs btn-primary btn-rounded"
+                                    (click)="addOne()">Thêm
+                            </button>
+                            <button *ngIf="isEdit" type="button"
+                                    class="btn m-b-xs w-xs btn-warning btn-rounded"
+                                    (click)="updateOne()">Cập nhật
+                            </button>
+                            <button *ngIf="isEdit" type="button"
+                                    class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                    (click)="displayEditBtn(false)"><i
+                                class="fa fa-ban"></i>Hủy
+                            </button>
+                            <button *ngIf="!isEdit" type="button"
+                                    class="btn m-b-xs btn-rounded btn-default btn-addon"
+                                    (click)="clearOne()"><i
+                                class="fa fa-eraser"></i>Làm mới
+                            </button>
+                          </div>
                         </div>
                       </form>
                     </div>
