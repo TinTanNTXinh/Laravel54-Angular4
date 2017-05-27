@@ -11,15 +11,14 @@ class RulesTableSeeder extends Seeder
      */
     public function run()
     {
-        $CODEs = ['S', 'R', 'P', 'O', 'PC'];
-        $NAMEs = ['Single', 'Range', 'Pair', 'Oil', 'ProductCode'];
-        $DESCRIPTIONs = ['Giá trị', 'Một khoảng', 'Một cặp', 'Giá dầu', 'Mã hàng'];
+        $CODEs = ['SINGLE', 'RANGE', 'PAIR', 'OIL'];
+        $NAMEs = ['Giá trị', 'Một khoảng', 'Một cặp', 'Giá dầu'];
 
         foreach ($CODEs as $key => $code) {
             \App\Rule::create([
                 'code'        => $code,
                 'name'        => $NAMEs[$key],
-                'description' => $DESCRIPTIONs[$key],
+                'description' => '',
                 'active'      => true
             ]);
         }
