@@ -82,37 +82,55 @@ export class TransportComponent implements OnInit
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
             fd_transport_date: {
-                title: 'Ngày vận chuyển'
+                title: 'Ngày vận chuyển',
+                data_type: 'DATETIME',
+                prop_name: 'transport_date'
             },
             customer_fullname: {
-                title: 'Khách hàng'
+                title: 'Khách hàng',
+                data_type: 'TEXT'
             },
             truck_area_code_number_plate: {
-                title: 'Xe'
+                title: 'Xe',
+                data_type: 'TEXT'
             },
             quantum_product: {
-                title: 'Lượng hàng'
+                title: 'Lượng hàng',
+                data_type: 'NUMBER'
             },
             fc_receive: {
-                title: 'Nhận'
+                title: 'Nhận',
+                data_type: 'NUMBER',
+                prop_name: 'receive'
             },
             fc_carrying: {
-                title: 'Bốc xếp'
+                title: 'Bốc xếp',
+                data_type: 'NUMBER',
+                prop_name: 'carrying'
             },
             fc_parking: {
-                title: 'Neo đêm'
+                title: 'Neo đêm',
+                data_type: 'NUMBER',
+                prop_name: 'parking'
             },
             fc_fine: {
-                title: 'Công an'
+                title: 'Công an',
+                data_type: 'NUMBER',
+                prop_name: 'fine'
             },
             fc_phi_tang_bo: {
-                title: 'Phí tăng bo'
+                title: 'Phí tăng bo',
+                data_type: 'NUMBER',
+                prop_name: 'phi_tang_bo'
             },
             fc_add_score: {
-                title: 'Thêm điểm'
+                title: 'Thêm điểm',
+                data_type: 'NUMBER',
+                prop_name: 'add_score'
             },
             receiver: {
-                title: 'Người nhận'
+                title: 'Người nhận',
+                data_type: 'TEXT'
             }
         };
 
@@ -368,17 +386,17 @@ export class TransportComponent implements OnInit
 
     actionCrud(obj: any): void {
         switch (obj.mode) {
-            case 'add':
+            case 'ADD':
                 this.clearOne();
                 this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'edit':
+            case 'EDIT':
                 this.loadOne(obj.data.id);
                 this.displayEditBtn(true);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'delete':
+            case 'DELETE':
                 this.fillDataModal(obj.data.id);
                 break;
             default:

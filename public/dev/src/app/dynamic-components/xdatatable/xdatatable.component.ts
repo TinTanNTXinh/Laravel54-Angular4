@@ -87,10 +87,10 @@ export class XDatatableComponent implements OnInit {
         if (typeof data !== 'undefined') {
             this.onClicked.emit({index: index, mode: mode, data: data});
             switch (mode) {
-                case 'add':
-                case 'edit':
+                case 'ADD':
+                case 'EDIT':
                     break;
-                case 'delete':
+                case 'DELETE':
                     this.domHelperService.getElementById('btn-show-modal').click();
                     break;
                 default:
@@ -99,11 +99,11 @@ export class XDatatableComponent implements OnInit {
         }
         else {
             switch (mode) {
-                case 'add':
+                case 'ADD':
                     this.onClicked.emit({index: 0, mode: mode, data: {}});
                     break;
-                case 'edit':
-                case 'delete':
+                case 'EDIT':
+                case 'DELETE':
                     this.toastrHelperService.showToastr('warning', 'Vui lòng chọn một dòng dữ liệu!');
                     break;
                 default:
@@ -113,10 +113,8 @@ export class XDatatableComponent implements OnInit {
     }
 
     /** Visible column */
-    public visible(value): boolean {
-        if (typeof value === "undefined")
-            return true;
-        return value;
+    public visible(key): boolean {
+        return 'visible' in this.header[key] ? this.header[key]['visible'] : true;
     }
 
     /** Sort */
@@ -126,21 +124,22 @@ export class XDatatableComponent implements OnInit {
         this.body_data.reverse();
     }
 
-    public sortPropName(data_type: string, sort: string, prop_name: string): void {
+    public sortPropName(data_type: string, sort: string, key: string): void {
+        let prop_name = ('prop_name' in this.header[key]) ? this.header[key].prop_name : key;
         let isDesc: number = 0;
         let isAsc: number = 0;
         switch (sort) {
             case 'DESC':
                 isDesc = -1;
                 isAsc = 1;
-                this.header[prop_name].isDesc = false;
-                this.header[prop_name].isAsc = true;
+                this.header[key].isDesc = false;
+                this.header[key].isAsc = true;
                 break;
             case 'ASC':
                 isDesc = 1;
                 isAsc = -1;
-                this.header[prop_name].isDesc = true;
-                this.header[prop_name].isAsc = false;
+                this.header[key].isDesc = true;
+                this.header[key].isAsc = false;
                 break;
             default:
                 break;
