@@ -57,7 +57,6 @@ export class XAutoCompleteComponent implements OnChanges {
     @Output() onClicked: EventEmitter<any> = new EventEmitter();
 
     /** ===== FUCTION HANDLE ===== **/
-
     // Handle outside click to close suggestions
     handleClick(event: any): void {
         let clickedComponent = event.target;

@@ -8,7 +8,7 @@ import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 @Component({
     selector: 'xdatatable',
     templateUrl: './xdatatable.component.html',
-    styles: []
+    styleUrls: ['./xdatatable.component.css']
 })
 export class XDatatableComponent {
 

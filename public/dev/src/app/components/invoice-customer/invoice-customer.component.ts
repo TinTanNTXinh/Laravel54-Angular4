@@ -17,6 +17,8 @@ export class InvoiceCustomerComponent implements OnInit
     public invoice_customers: any[] = [];
     public invoice_customer: any;
 
+    public transports: any[] = [];
+
     /** ===== ICOMMON ===== **/
     title: string;
     placeholder_code: string;
@@ -86,6 +88,8 @@ export class InvoiceCustomerComponent implements OnInit
 
     reloadData(arr_data: any[]): void {
         this.invoice_customers = [];
+
+        this.transports = arr_data['transports'];
     }
 
     refreshData(): void {

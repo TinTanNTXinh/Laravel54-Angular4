@@ -10,12 +10,10 @@ use Hash;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Traits\UserHelper;
+use App\Common\AuthHelper;
 
 class AuthController extends Controller
 {
-    use UserHelper;
-
     /** API METHOD */
     public function postAuthentication(Request $request)
     {
@@ -57,7 +55,7 @@ class AuthController extends Controller
 
     public function authorization()
     {
-        $jwt_data = $this->getCurrentUser();
+        $jwt_data = AuthHelper::getCurrentUser();
         if (!$jwt_data['status']) {
             return [
                 'error'    => $jwt_data['error'],
@@ -66,7 +64,7 @@ class AuthController extends Controller
             ];
         }
 
-        $user_data = $this->getInfoCurrentUser($jwt_data['user']);
+        $user_data = AuthHelper::getInfoCurrentUser($jwt_data['user']);
         if (!$user_data['status']) {
             return [
                 'error'    => $user_data['error'],

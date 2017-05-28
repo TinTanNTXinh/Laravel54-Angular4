@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Repositories\InvoiceCustomerRepositoryInterface;
+use App\Repositories\TransportRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
@@ -18,11 +19,13 @@ class InvoiceCustomerController extends Controller implements ICrud, IValidate
     private $table_name;
     private $skeleton;
 
-    protected $invoiceCustomerRepo;
+    protected $invoiceCustomerRepo, $transportRepo;
 
-    public function __construct(InvoiceCustomerRepositoryInterface $invoiceCustomerRepo)
+    public function __construct(InvoiceCustomerRepositoryInterface $invoiceCustomerRepo
+        , TransportRepositoryInterface $transportRepo)
     {
         $this->invoiceCustomerRepo = $invoiceCustomerRepo;
+        $this->transportRepo       = $transportRepo;
 
         $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
@@ -110,8 +113,15 @@ class InvoiceCustomerController extends Controller implements ICrud, IValidate
     {
         $all = $this->skeleton->get();
 
+        $transports = $this->transportRepo->allSkeleton()
+            ->where('transports.type2', '')
+            ->orWhere('transports.type2', 'CUSTOMER-HD-NOTFULL')
+            ->orWhere('transports.type2', 'CUSTOMER-PTT-NOTFULL')
+            ->get();
+
         return [
-            'invoice_customers' => $all
+            'invoice_customers' => $all,
+            'transports'        => $transports
         ];
     }
 
