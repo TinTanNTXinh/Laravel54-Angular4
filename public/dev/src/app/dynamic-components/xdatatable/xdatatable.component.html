@@ -10,6 +10,9 @@
 <button class="btn m-b-xs btn-sm btn-danger btn-addon" (click)="clicked('DELETE')" *ngIf="action.DELETE.visible">
   <i [class]="action.DELETE.icon"></i>{{action.DELETE.caption}}
 </button>
+<button class="btn m-b-xs btn-sm btn-info btn-addon" (click)="changeSettingClass()" *ngIf="action.CHANGE.visible">
+  <i [class]="action.CHANGE.icon"></i>{{action.CHANGE.caption}}
+</button>
 <button id="btn-show-modal" data-toggle="modal" data-target="#modal-confirm" hidden></button>
 <div class="table-responsive">
   <table class="table table-striped b-t b-b">
@@ -30,28 +33,19 @@
     </tr>
     </thead>
     <tbody>
-    <!-- Use ng2-pagination -->
-    <!--<tr *ngFor="let tr of body_data | paginate: { id:id_pagination, itemsPerPage: 10, currentPage: p }; let i = index"-->
     <tr *ngFor="let tr of pagedItems; let i = index"
-        (click)="setClickedRow(i)" [class.active]="i == selectedRow">
+        (click)="setClickedRow(i)"
+        [class.active]="activeRow(i)"
+        [class.highlight]="highlightRow(i)">
       <td>{{i + 1}}</td>
       <ng-container *ngFor="let key of header | ObjNgFor">
         <td *ngIf="visible(key)" [innerHTML]="tr[key] | safeHtml"></td>
       </ng-container>
-      <!--<td *ngFor="let key of header | ObjNgFor" [innerHTML]="tr[key] | safeHtml"></td>-->
     </tr>
     </tbody>
   </table>
 </div>
 <div class="text-right">
-  <!-- Use ng2-pagination -->
-  <!--<pagination-controls [id]="id_pagination" (pageChange)="p = $event"-->
-  <!--[previousLabel]="utilitiesService.previousLabel"-->
-  <!--[nextLabel]="utilitiesService.nextLabel"-->
-  <!--[screenReaderPaginationLabel]="utilitiesService.screenReaderPaginationLabel"-->
-  <!--[screenReaderPageLabel]="utilitiesService.screenReaderPageLabel"-->
-  <!--[screenReaderCurrentLabel]="utilitiesService.screenReaderCurrentLabel">-->
-  <!--</pagination-controls>-->
   <!-- pager -->
   <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
     <li [ngClass]="{disabled:pager.currentPage === 1}">

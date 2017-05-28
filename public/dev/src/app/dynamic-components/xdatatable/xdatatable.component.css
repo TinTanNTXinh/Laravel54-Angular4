@@ -3,7 +3,7 @@
     color: white;
 }
 
-/*.table-striped tbody tr.highlight td {*/
-    /*background-color: #550055;*/
-    /*color:#eeeeee;*/
-/*}*/
+.table tbody tr.highlight td {
+    background-color: #550055;
+    color:#eeeeee;
+}

@@ -19,7 +19,7 @@ export class TruckComponent implements OnInit
 
     public truck_types: any[] = [];
     public garages: any[] = [];
-    public statuses: any[] = [
+    public statuses: string[] = [
         'Chưa phân tài',
         'Đang giao hàng',
         'Đã giao hàng',

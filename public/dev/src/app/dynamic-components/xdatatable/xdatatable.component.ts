@@ -1,7 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 import {PaginationHelperService} from '../../services/helpers/pagination.helper';
-import {StringHelperService} from '../../services/helpers/string.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DateHelperService} from '../../services/helpers/date.helper';
@@ -14,10 +13,10 @@ import {DateHelperService} from '../../services/helpers/date.helper';
 export class XDatatableComponent implements OnInit {
 
     /** Variables */
+    public highlightRows: number[] = [];
     public selectedRow: number;
     public setClickedRow: Function;
     public isAsc: boolean = true;
-    public id_pagination: string;
     private body_data: any[];
 
     /**
@@ -29,17 +28,54 @@ export class XDatatableComponent implements OnInit {
     public pagedItems: any[];
     private pageSize: number = 10;
 
-
     constructor(private paginationHelperService: PaginationHelperService
-        , private stringHelperService: StringHelperService
         , private domHelperService: DomHelperService
         , private toastrHelperService: ToastrHelperService
         , private dateHelperService: DateHelperService) {
-        this.id_pagination = this.stringHelperService.randomString();
-        this.selectedRow = 0;
+
+        this.clearSelectedAndHighlightRows();
         this.setClickedRow = function (index) {
-            this.selectedRow = index;
+            switch (this.settingClass){
+                case 'active':
+                    this.selectedRow = index;
+                    break;
+                case 'highlight':
+                    let index_in_body_data: number = index + (this.pager.currentPage * this.pageSize) - this.pageSize;
+                    let found = this.highlightRows.find(o => o == index_in_body_data);
+                    if (typeof found === "undefined")
+                        this.highlightRows.push(index_in_body_data);
+                    else {
+                        let index_in_page = this.highlightRows.indexOf(index_in_body_data);
+                        this.highlightRows.splice(index_in_page, 1);
+                    }
+                    break;
+                default:
+                    break;
+            }
         };
+    }
+
+    public activeRow(index: number): boolean {
+        if (this.settingClass == 'highlight') return false;
+        return index == this.selectedRow;
+    }
+
+    public highlightRow(index: number): boolean {
+        if (this.settingClass == 'active') return false;
+        let index_in_body_data: number = index + (this.pager.currentPage * this.pageSize) - this.pageSize;
+        let found = this.highlightRows.find(o => o == index_in_body_data);
+        return (typeof found !== "undefined");
+    }
+
+    public changeSettingClass() {
+        this.settingClass = (this.settingClass == 'active') ? 'highlight' : 'active';
+
+        this.clearSelectedAndHighlightRows();
+    }
+
+    private clearSelectedAndHighlightRows(): void {
+        this.selectedRow = 0;
+        this.highlightRows = [this.selectedRow];
     }
 
     ngOnInit() {
@@ -63,8 +99,14 @@ export class XDatatableComponent implements OnInit {
             visible: true,
             caption: 'Xóa',
             icon: 'fa fa-trash-o',
+        },
+        CHANGE: {
+            visible: true,
+            caption: 'Chọn',
+            icon: 'fa fa-refresh',
         }
     };
+    @Input() settingClass: string = 'active';
 
     @Input() get body(): any[] {
         return this.body_data;

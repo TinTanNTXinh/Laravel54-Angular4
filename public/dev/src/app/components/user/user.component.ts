@@ -23,7 +23,7 @@ export class UserComponent implements OnInit
     public user: any;
     public birthday: Date;
     public fake_pwd: string = '';
-    public fields: any[] = [
+    public fields: string[] = [
         'Doanh thu',
         'Lợi nhuận',
         'HĐ khống'
