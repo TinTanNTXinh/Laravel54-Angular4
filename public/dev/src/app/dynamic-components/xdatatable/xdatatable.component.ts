@@ -1,16 +1,17 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 import {PaginationHelperService} from '../../services/helpers/pagination.helper';
 import {StringHelperService} from '../../services/helpers/string.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
+import {DateHelperService} from '../../services/helpers/date.helper';
 
 @Component({
     selector: 'xdatatable',
     templateUrl: './xdatatable.component.html',
     styleUrls: ['./xdatatable.component.css']
 })
-export class XDatatableComponent {
+export class XDatatableComponent implements OnInit {
 
     /** Variables */
     public selectedRow: number;
@@ -22,22 +23,32 @@ export class XDatatableComponent {
     /**
      * VARIABLE PAGINATION
      */
-    // pager object
+        // pager object
     public pager: any = {};
     // paged items
     public pagedItems: any[];
     private pageSize: number = 10;
 
 
-    constructor(private paginationHelperService: PaginationHelperService,
-                private stringHelperService: StringHelperService,
-                private domHelperService: DomHelperService,
-                private toastrHelperService: ToastrHelperService) {
+    constructor(private paginationHelperService: PaginationHelperService
+        , private stringHelperService: StringHelperService
+        , private domHelperService: DomHelperService
+        , private toastrHelperService: ToastrHelperService
+        , private dateHelperService: DateHelperService) {
         this.id_pagination = this.stringHelperService.randomString();
         this.selectedRow = 0;
         this.setClickedRow = function (index) {
             this.selectedRow = index;
         };
+    }
+
+    ngOnInit() {
+        for(let key in this.header) {
+            if(this.header.hasOwnProperty(key)) {
+                this.header[key].isAsc = false;
+                this.header[key].isDesc = true;
+            }
+        }
     }
 
     /** Input */
@@ -118,6 +129,69 @@ export class XDatatableComponent {
         this.isAsc = !this.isAsc;
         this.pagedItems.reverse();
         this.body_data.reverse();
+    }
+
+    public sortPropName(data_type: string, sort: string, prop_name: string): void {
+        switch (data_type) {
+            case 'TEXT':
+                this.pagedItems.sort(function (left_side, right_side): number {
+                    let prop_left_side: string = left_side[prop_name].toUpperCase();
+                    let prop_right_side: string = right_side[prop_name].toUpperCase();
+                    if (sort == 'DESC')
+                        return (prop_left_side < prop_right_side) ? -1 : (prop_left_side > prop_right_side) ? 1 : 0;
+                    else
+                        return (prop_left_side < prop_right_side) ? 1 : (prop_left_side > prop_right_side) ? -1 : 0;
+                });
+                this.body_data.sort(function (left_side, right_side): number {
+                    let prop_left_side: string = left_side[prop_name].toUpperCase();
+                    let prop_right_side: string = right_side[prop_name].toUpperCase();
+                    return (prop_left_side < prop_right_side) ? -1 : (prop_left_side > prop_right_side) ? 1 : 0;
+                });
+                break;
+            case 'NUMBER':
+                this.pagedItems.sort(function (left_side, right_side): number {
+                    let prop_left_side: number = Number(left_side[prop_name]); // ignore upper and lowercase
+                    let prop_right_side: number = Number(right_side[prop_name]); // ignore upper and lowercase
+                    if (sort == 'DESC')
+                        return (prop_left_side < prop_right_side) ? -1 : (prop_left_side > prop_right_side) ? 1 : 0;
+                    else
+                        return (prop_left_side < prop_right_side) ? 1 : (prop_left_side > prop_right_side) ? -1 : 0;
+                });
+                this.body_data.sort(function (left_side, right_side): number {
+                    let prop_left_side: number = Number(left_side[prop_name]); // ignore upper and lowercase
+                    let prop_right_side: number = Number(right_side[prop_name]); // ignore upper and lowercase
+                    return (prop_left_side < prop_right_side) ? -1 : (prop_left_side > prop_right_side) ? 1 : 0;
+                });
+                break;
+            case 'DATETIME':
+                this.pagedItems.sort(function (left_side, right_side): number {
+                    let sort_o1_before_o2: any = this.dateHelperService.isBefore(left_side[prop_name], 'YYYY-MM-DD HH:mm:ss', right_side[prop_name], 'YYYY-MM-DD HH:mm:ss');
+                    let sort_o1_after_o2: any = this.dateHelperService.isAfter(left_side[prop_name], 'YYYY-MM-DD HH:mm:ss', right_side[prop_name], 'YYYY-MM-DD HH:mm:ss');
+                    if (sort == 'DESC')
+                        return sort_o1_before_o2 ? -1 : sort_o1_after_o2 ? 1 : 0;
+                    else
+                        return sort_o1_before_o2 ? 1 : sort_o1_after_o2 ? -1 : 0;
+                }.bind(this));
+                this.body_data.sort(function (left_side, right_side): number {
+                    let sort_o1_before_o2: any = this.dateHelperService.isBefore(left_side[prop_name], 'YYYY-MM-DD HH:mm:ss', right_side[prop_name], 'YYYY-MM-DD HH:mm:ss');
+                    let sort_o1_after_o2: any = this.dateHelperService.isAfter(left_side[prop_name], 'YYYY-MM-DD HH:mm:ss', right_side[prop_name], 'YYYY-MM-DD HH:mm:ss');
+                    if (sort == 'DESC')
+                        return sort_o1_before_o2 ? -1 : sort_o1_after_o2 ? 1 : 0;
+                    else
+                        return sort_o1_before_o2 ? 1 : sort_o1_after_o2 ? -1 : 0;
+                }.bind(this));
+                break;
+            default:
+                break;
+        }
+
+        if(sort == 'DESC') {
+            this.header[prop_name].isDesc = false;
+            this.header[prop_name].isAsc = true;
+        } else {
+            this.header[prop_name].isDesc = true;
+            this.header[prop_name].isAsc = false;
+        }
     }
 
     /**
