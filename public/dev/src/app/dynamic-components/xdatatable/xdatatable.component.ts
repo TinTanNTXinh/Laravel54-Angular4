@@ -43,12 +43,7 @@ export class XDatatableComponent implements OnInit {
     }
 
     ngOnInit() {
-        for(let key in this.header) {
-            if(this.header.hasOwnProperty(key)) {
-                this.header[key].isAsc = false;
-                this.header[key].isDesc = true;
-            }
-        }
+        this.setSortProp();
     }
 
     /** Input */
@@ -132,65 +127,73 @@ export class XDatatableComponent implements OnInit {
     }
 
     public sortPropName(data_type: string, sort: string, prop_name: string): void {
+        let isDesc: number = 0;
+        let isAsc: number = 0;
+        switch (sort) {
+            case 'DESC':
+                isDesc = -1;
+                isAsc = 1;
+                this.header[prop_name].isDesc = false;
+                this.header[prop_name].isAsc = true;
+                break;
+            case 'ASC':
+                isDesc = 1;
+                isAsc = -1;
+                this.header[prop_name].isDesc = true;
+                this.header[prop_name].isAsc = false;
+                break;
+            default:
+                break;
+        }
+
         switch (data_type) {
             case 'TEXT':
                 this.pagedItems.sort(function (left_side, right_side): number {
                     let prop_left_side: string = left_side[prop_name].toUpperCase();
                     let prop_right_side: string = right_side[prop_name].toUpperCase();
-                    if (sort == 'DESC')
-                        return (prop_left_side < prop_right_side) ? -1 : (prop_left_side > prop_right_side) ? 1 : 0;
-                    else
-                        return (prop_left_side < prop_right_side) ? 1 : (prop_left_side > prop_right_side) ? -1 : 0;
+                    return (prop_left_side < prop_right_side) ? isDesc : (prop_left_side > prop_right_side) ? isAsc : 0;
                 });
                 this.body_data.sort(function (left_side, right_side): number {
                     let prop_left_side: string = left_side[prop_name].toUpperCase();
                     let prop_right_side: string = right_side[prop_name].toUpperCase();
-                    return (prop_left_side < prop_right_side) ? -1 : (prop_left_side > prop_right_side) ? 1 : 0;
+                    return (prop_left_side < prop_right_side) ? isDesc : (prop_left_side > prop_right_side) ? isAsc : 0;
                 });
                 break;
             case 'NUMBER':
                 this.pagedItems.sort(function (left_side, right_side): number {
-                    let prop_left_side: number = Number(left_side[prop_name]); // ignore upper and lowercase
-                    let prop_right_side: number = Number(right_side[prop_name]); // ignore upper and lowercase
-                    if (sort == 'DESC')
-                        return (prop_left_side < prop_right_side) ? -1 : (prop_left_side > prop_right_side) ? 1 : 0;
-                    else
-                        return (prop_left_side < prop_right_side) ? 1 : (prop_left_side > prop_right_side) ? -1 : 0;
+                    let prop_left_side: number = Number(left_side[prop_name]);
+                    let prop_right_side: number = Number(right_side[prop_name]);
+                    return (prop_left_side < prop_right_side) ? isDesc : (prop_left_side > prop_right_side) ? isAsc : 0;
                 });
                 this.body_data.sort(function (left_side, right_side): number {
-                    let prop_left_side: number = Number(left_side[prop_name]); // ignore upper and lowercase
-                    let prop_right_side: number = Number(right_side[prop_name]); // ignore upper and lowercase
-                    return (prop_left_side < prop_right_side) ? -1 : (prop_left_side > prop_right_side) ? 1 : 0;
+                    let prop_left_side: number = Number(left_side[prop_name]);
+                    let prop_right_side: number = Number(right_side[prop_name]);
+                    return (prop_left_side < prop_right_side) ? isDesc : (prop_left_side > prop_right_side) ? isAsc : 0;
                 });
                 break;
             case 'DATETIME':
                 this.pagedItems.sort(function (left_side, right_side): number {
                     let sort_o1_before_o2: any = this.dateHelperService.isBefore(left_side[prop_name], 'YYYY-MM-DD HH:mm:ss', right_side[prop_name], 'YYYY-MM-DD HH:mm:ss');
                     let sort_o1_after_o2: any = this.dateHelperService.isAfter(left_side[prop_name], 'YYYY-MM-DD HH:mm:ss', right_side[prop_name], 'YYYY-MM-DD HH:mm:ss');
-                    if (sort == 'DESC')
-                        return sort_o1_before_o2 ? -1 : sort_o1_after_o2 ? 1 : 0;
-                    else
-                        return sort_o1_before_o2 ? 1 : sort_o1_after_o2 ? -1 : 0;
+                    return sort_o1_before_o2 ? isDesc : sort_o1_after_o2 ? isAsc : 0;
                 }.bind(this));
                 this.body_data.sort(function (left_side, right_side): number {
                     let sort_o1_before_o2: any = this.dateHelperService.isBefore(left_side[prop_name], 'YYYY-MM-DD HH:mm:ss', right_side[prop_name], 'YYYY-MM-DD HH:mm:ss');
                     let sort_o1_after_o2: any = this.dateHelperService.isAfter(left_side[prop_name], 'YYYY-MM-DD HH:mm:ss', right_side[prop_name], 'YYYY-MM-DD HH:mm:ss');
-                    if (sort == 'DESC')
-                        return sort_o1_before_o2 ? -1 : sort_o1_after_o2 ? 1 : 0;
-                    else
-                        return sort_o1_before_o2 ? 1 : sort_o1_after_o2 ? -1 : 0;
+                    return sort_o1_before_o2 ? isDesc : sort_o1_after_o2 ? isAsc : 0;
                 }.bind(this));
                 break;
             default:
                 break;
         }
+    }
 
-        if(sort == 'DESC') {
-            this.header[prop_name].isDesc = false;
-            this.header[prop_name].isAsc = true;
-        } else {
-            this.header[prop_name].isDesc = true;
-            this.header[prop_name].isAsc = false;
+    private setSortProp(): void {
+        for (let key in this.header) {
+            if (this.header.hasOwnProperty(key)) {
+                this.header[key].isAsc = false;
+                this.header[key].isDesc = true;
+            }
         }
     }
 

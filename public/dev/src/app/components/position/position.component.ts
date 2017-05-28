@@ -54,10 +54,12 @@ export class PositionComponent implements OnInit
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
             name: {
-                title: 'Tên'
+                title: 'Tên',
+                data_type: 'TEXT'
             },
             description: {
-                title: 'Mô tả'
+                title: 'Mô tả',
+                data_type: 'TEXT'
             }
         };
 
