@@ -9,8 +9,7 @@
 </button>
 <button id="btn-show-modal" data-toggle="modal" data-target="#modal-confirm" hidden></button>
 <div class="table-responsive">
-  <table *ngIf="master_data" class="table table-striped b-t b-b"
-         cellpadding="2" cellspacing="2">
+  <table *ngIf="master_data" class="table table-striped b-t b-b">
     <thead>
     <tr>
       <th></th>
@@ -45,8 +44,7 @@
     <tr *ngIf="activeRow==master.id">
       <td colspan="6">
         <div class="table-responsive">
-          <table *ngIf="detail" class="table table-striped b-t b-b"
-                 cellpadding="2" cellspacing="2">
+          <table *ngIf="detail" class="table table-striped b-t b-b">
             <thead>
             <tr>
               <th style="width: 20%">
