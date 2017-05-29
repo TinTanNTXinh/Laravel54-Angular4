@@ -18,6 +18,7 @@ use App\Common\DateTimeHelper;
 use Route;
 use DB;
 use League\Flysystem\Exception;
+use Hash;
 
 class UserController extends Controller implements ICrud, IValidate
 {
@@ -25,6 +26,7 @@ class UserController extends Controller implements ICrud, IValidate
     private $user;
     private $table_name;
     private $skeleton;
+    private $fake_pwd;
 
     protected $userRepo, $positionRepo, $roleRepo, $groupRoleRepo
     , $userRoleRepo, $userPositionRepo, $fieldRepo;
@@ -56,6 +58,7 @@ class UserController extends Controller implements ICrud, IValidate
         $this->first_day = $current_month['first_day'];
         $this->last_day  = $current_month['last_day'];
         $this->today     = $current_month['today'];
+        $this->fake_pwd = substr(config('app.key'), 10);
 
         $this->table_name = 'user';
         $this->skeleton   = $this->userRepo->allSkeleton();
@@ -135,14 +138,12 @@ class UserController extends Controller implements ICrud, IValidate
         $roles       = $this->roleRepo->allActive();
         $group_roles = $this->groupRoleRepo->allActive();
 
-        $fake_pwd = substr(config('app.key'), 10);
-
         return [
             'users'       => $all,
             'positions'   => $positions,
             'roles'       => $roles,
             'group_roles' => $group_roles,
-            'fake_pwd'    => $fake_pwd
+            'fake_pwd'    => $this->fake_pwd
         ];
     }
 
@@ -256,7 +257,6 @@ class UserController extends Controller implements ICrud, IValidate
             $i_one = [
                 'fullname'     => $i_user['fullname'],
                 'username'     => $i_user['username'],
-                'password'     => $i_user['password'],
                 'address'      => $i_user['address'],
                 'phone'        => $i_user['phone'],
                 'birthday'     => DateTimeHelper::toStringDateTimeClientForDB($i_user['birthday'], 'd/m/Y'),
@@ -267,6 +267,9 @@ class UserController extends Controller implements ICrud, IValidate
                 'updated_date' => date('Y-m-d H:i:s'),
                 'active'       => true
             ];
+
+            if ($i_user['password'] != $this->fake_pwd)
+                $i_one['password'] = Hash::make($i_user['password']);
 
             $one = $this->userRepo->update($one, $i_one);
 
