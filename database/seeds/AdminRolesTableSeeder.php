@@ -20,7 +20,7 @@ class AdminRolesTableSeeder extends Seeder
                 'created_by'   => 1,
                 'updated_by'   => 0,
                 'created_date' => date('Y-m-d H:i:s'),
-                'updated_date' => date('Y-m-d H:i:s'),
+                'updated_date' => null,
                 'active'       => true
             ]);
         }
@@ -33,7 +33,7 @@ class AdminRolesTableSeeder extends Seeder
                 'created_by'   => 1,
                 'updated_by'   => 0,
                 'created_date' => date('Y-m-d H:i:s'),
-                'updated_date' => date('Y-m-d H:i:s'),
+                'updated_date' => null,
                 'active'       => true
             ]);
         }

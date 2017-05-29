@@ -179,7 +179,7 @@
                                       <div class="col-md-4">
                                         <div class="checkbox" *ngFor="let position of positions.slice(0, 3)">
                                           <label class="i-checks">
-                                            <input type="checkbox" [(ngModel)]="position.value" name="value">
+                                            <input type="checkbox" [(ngModel)]="position.value" [ngModelOptions]="ngModelOptions">
                                             <i></i>
                                             {{ position.name }}
                                           </label>
@@ -188,7 +188,7 @@
                                       <div class="col-md-4">
                                         <div class="checkbox" *ngFor="let position of positions.slice(3, 6)">
                                           <label class="i-checks">
-                                            <input type="checkbox" [(ngModel)]="position.value" name="value">
+                                            <input type="checkbox" [(ngModel)]="position.value" [ngModelOptions]="ngModelOptions">
                                             <i></i>
                                             {{ position.name }}
                                           </label>
@@ -198,7 +198,7 @@
                                         <div class="checkbox"
                                              *ngFor="let position of positions.slice(6, positions.length)">
                                           <label class="i-checks">
-                                            <input type="checkbox" [(ngModel)]="position.value" name="value">
+                                            <input type="checkbox" [(ngModel)]="position.value" [ngModelOptions]="ngModelOptions">
                                             <i></i>
                                             {{ position.name }}
                                           </label>
@@ -225,7 +225,7 @@
                                           <div class="dd3-content">
                                             <div class="checkbox" *ngFor="let role of slideRoles(group_role.id)">
                                               <label class="i-checks">
-                                                <input type="checkbox" [(ngModel)]="role.value" name="value">
+                                                <input type="checkbox" [(ngModel)]="role.value" [ngModelOptions]="ngModelOptions">
                                                 <i></i>
                                                 {{ role.description }}
                                               </label>
@@ -243,7 +243,7 @@
                                           <div class="dd3-content">
                                             <div class="checkbox" *ngFor="let role of slideRoles(group_role.id)">
                                               <label class="i-checks">
-                                                <input type="checkbox" [(ngModel)]="role.value" name="value">
+                                                <input type="checkbox" [(ngModel)]="role.value" [ngModelOptions]="ngModelOptions">
                                                 <i></i>
                                                 {{ role.description }}
                                               </label>
@@ -261,7 +261,7 @@
                                           <div class="dd3-content">
                                             <div class="checkbox" *ngFor="let role of slideRoles(group_role.id)">
                                               <label class="i-checks">
-                                                <input type="checkbox" [(ngModel)]="role.value" name="value">
+                                                <input type="checkbox" [(ngModel)]="role.value" [ngModelOptions]="ngModelOptions">
                                                 <i></i>
                                                 {{ role.description }}
                                               </label>

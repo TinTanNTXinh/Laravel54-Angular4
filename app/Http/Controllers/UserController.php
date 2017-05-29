@@ -151,12 +151,12 @@ class UserController extends Controller implements ICrud, IValidate
         $one = $this->userRepo->oneSkeleton($id)->first();
 
         $user_roles    = $this->userRoleRepo->readByUserId($one->id)->pluck('role_id')->toArray();
-        $user_position = $this->userPositionRepo->readByUserId($one->id)->pluck('position_id')->toArray();
+        $user_positions = $this->userPositionRepo->readByUserId($one->id)->pluck('position_id')->toArray();
 
         return [
             $this->table_name => $one,
             'user_roles'      => $user_roles,
-            'user_positions'   => $user_position
+            'user_positions'  => $user_positions
         ];
     }
 

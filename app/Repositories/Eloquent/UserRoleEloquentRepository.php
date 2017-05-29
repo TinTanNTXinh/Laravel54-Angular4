@@ -34,7 +34,9 @@ class UserRoleEloquentRepository extends EloquentBaseRepository implements UserR
 
     public function deleteByUserId($user_id)
     {
-        return $this->readByUserId($user_id)->delete();
+//        return $this->readByUserId($user_id)->delete();
+        $ids = $this->readByUserId($user_id)->pluck('id')->toArray();
+        return $this->model->destroy($ids);
     }
 
     public function deactivateByUserId($user_id)

@@ -28,6 +28,7 @@ export class UserComponent implements OnInit
         'Lợi nhuận',
         'HĐ khống'
     ];
+    public ngModelOptions = {standalone: true};
 
     /** ICommon **/
     title: string;
@@ -151,7 +152,7 @@ export class UserComponent implements OnInit
                 this.user.password = this.fake_pwd;
 
                 // set user_roles
-                this.clearValuePositions();
+                this.clearValueRoles();
                 success['user_roles'].forEach(function (role_id) {
                     let role = this.roles.find(o => o.id == role_id);
                     if (role)
@@ -159,14 +160,12 @@ export class UserComponent implements OnInit
                 }, this);
 
                 // set user_positions
-                this.clearValueRoles();
+                this.clearValuePositions();
                 success['user_positions'].forEach(function (position_id) {
                     let position = this.positions.find(o => o.id == position_id);
                     if (position)
                         position.value = true;
                 }, this);
-
-                console.table(this.positions);
             },
             (error: any) => {
                 this.toastrHelperService.showToastr('error');
