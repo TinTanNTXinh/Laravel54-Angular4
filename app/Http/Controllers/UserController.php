@@ -135,11 +135,14 @@ class UserController extends Controller implements ICrud, IValidate
         $roles       = $this->roleRepo->allActive();
         $group_roles = $this->groupRoleRepo->allActive();
 
+        $fake_pwd = substr(config('app.key'), 10);
+
         return [
             'users'       => $all,
             'positions'   => $positions,
             'roles'       => $roles,
-            'group_roles' => $group_roles
+            'group_roles' => $group_roles,
+            'fake_pwd'    => $fake_pwd
         ];
     }
 
@@ -147,32 +150,37 @@ class UserController extends Controller implements ICrud, IValidate
     {
         $one = $this->userRepo->oneSkeleton($id)->first();
 
+        $user_roles    = $this->userRoleRepo->readByUserId($one->id)->pluck('role_id')->toArray();
+        $user_position = $this->userPositionRepo->readByUserId($one->id)->pluck('position_id')->toArray();
+
         return [
-            $this->table_name => $one
+            $this->table_name => $one,
+            'user_roles'      => $user_roles,
+            'user_position'   => $user_position
         ];
     }
 
     public function createOne($data)
     {
-        $user           = $data['user'];
-        $user_roles     = $data['user_roles'];
-        $user_positions = $data['user_positions'];
-//        $field          = $data['field'];
+        $i_user           = $data['user'];
+        $i_user_roles     = $data['user_roles'];
+        $i_user_positions = $data['user_positions'];
+//        $i_field          = $data['field'];
 
         try {
             DB::beginTransaction();
 
-            $input = [
+            $i_one = [
                 'code'         => $this->userRepo->generateCode('USER'),
-                'fullname'     => $user['fullname'],
-                'username'     => $user['username'],
-                'password'     => $user['password'],
-                'address'      => $user['address'],
-                'phone'        => $user['phone'],
-                'birthday'     => DateTimeHelper::toStringDateTimeClientForDB($user['birthday'], 'd/m/Y'),
-                'sex'          => $user['sex'],
-                'email'        => $user['email'],
-                'note'         => $user['note'],
+                'fullname'     => $i_user['fullname'],
+                'username'     => $i_user['username'],
+                'password'     => $i_user['password'],
+                'address'      => $i_user['address'],
+                'phone'        => $i_user['phone'],
+                'birthday'     => DateTimeHelper::toStringDateTimeClientForDB($i_user['birthday'], 'd/m/Y'),
+                'sex'          => $i_user['sex'],
+                'email'        => $i_user['email'],
+                'note'         => $i_user['note'],
                 'created_by'   => $this->user->id,
                 'updated_by'   => 0,
                 'created_date' => date('Y-m-d H:i:s'),
@@ -180,7 +188,7 @@ class UserController extends Controller implements ICrud, IValidate
                 'active'       => true
             ];
 
-            $one = $this->userRepo->create($input);
+            $one = $this->userRepo->create($i_one);
 
             if (!$one) {
                 DB::rollback();
@@ -188,17 +196,17 @@ class UserController extends Controller implements ICrud, IValidate
             }
 
             // Insert UserRole
-            foreach ($user_roles as $user_role_input) {
-                $input_two = [
+            foreach ($i_user_roles as $i_user_role) {
+                $i_two = [
                     'user_id'      => $one->id,
-                    'role_id'      => $user_role_input,
+                    'role_id'      => $i_user_role,
                     'created_by'   => $one->created_by,
                     'updated_by'   => 0,
                     'created_date' => $one->created_date,
                     'updated_date' => null,
                     'active'       => true
                 ];
-                $two       = $this->userRoleRepo->create($input_two);
+                $two   = $this->userRoleRepo->create($i_two);
 
                 if (!$two) {
                     DB::rollback();
@@ -207,17 +215,17 @@ class UserController extends Controller implements ICrud, IValidate
             }
 
             // Insert UserPosition
-            foreach ($user_positions as $user_position_input) {
-                $input_three = [
+            foreach ($i_user_positions as $i_user_position) {
+                $i_three = [
                     'user_id'      => $one->id,
-                    'position_id'  => $user_position_input,
+                    'position_id'  => $i_user_position,
                     'created_by'   => $one->created_by,
                     'updated_by'   => 0,
                     'created_date' => $one->created_date,
                     'updated_date' => null,
                     'active'       => true
                 ];
-                $three       = $this->userPositionRepo->create($input_three);
+                $three   = $this->userPositionRepo->create($i_three);
 
                 if (!$three) {
                     DB::rollback();
@@ -235,34 +243,139 @@ class UserController extends Controller implements ICrud, IValidate
 
     public function updateOne($data)
     {
-        $one = $this->userRepo->find($data['id']);
+        $i_user           = $data['user'];
+        $i_user_roles     = $data['user_roles'];
+        $i_user_positions = $data['user_positions'];
+//        $i_field          = $data['field'];
 
-        $input = [
-            'fullname'     => $data['fullname'],
-            'username'     => $data['username'],
-            'password'     => $data['password'],
-            'address'      => $data['address'],
-            'phone'        => $data['phone'],
-            'birthday'     => DateTimeHelper::toStringDateTimeClientForDB($data['birthday']),
-            'sex'          => $data['sex'],
-            'email'        => $data['email'],
-            'note'         => $data['note'],
-            'updated_by'   => $this->user->id,
-            'updated_date' => date('Y-m-d H:i:s'),
-            'active'       => true
-        ];
+        try {
+            DB::beginTransaction();
 
-        return $this->userRepo->update($one, $input) ? true : false;
+            $one = $this->userRepo->find($i_user['id']);
+
+            $i_one = [
+                'fullname'     => $i_user['fullname'],
+                'username'     => $i_user['username'],
+                'password'     => $i_user['password'],
+                'address'      => $i_user['address'],
+                'phone'        => $i_user['phone'],
+                'birthday'     => DateTimeHelper::toStringDateTimeClientForDB($i_user['birthday'], 'd/m/Y'),
+                'sex'          => $i_user['sex'],
+                'email'        => $i_user['email'],
+                'note'         => $i_user['note'],
+                'updated_by'   => $this->user->id,
+                'updated_date' => date('Y-m-d H:i:s'),
+                'active'       => true
+            ];
+
+            $one = $this->userRepo->update($one, $i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            # Delete UserRole
+            $this->userRoleRepo->deleteByUserId($one->id);
+
+            // Insert UserRole
+            foreach ($i_user_roles as $i_user_role) {
+                $i_two = [
+                    'user_id'      => $one->id,
+                    'role_id'      => $i_user_role,
+                    'created_by'   => $one->created_by,
+                    'updated_by'   => 0,
+                    'created_date' => $one->created_date,
+                    'updated_date' => null,
+                    'active'       => true
+                ];
+                $two   = $this->userRoleRepo->create($i_two);
+
+                if (!$two) {
+                    DB::rollback();
+                    return false;
+                }
+            }
+
+            # Delete UserPosition
+            $this->userPositionRepo->deleteByUserId($one->id);
+
+            // Insert UserPosition
+            foreach ($i_user_positions as $i_user_position) {
+                $i_three = [
+                    'user_id'      => $one->id,
+                    'position_id'  => $i_user_position,
+                    'created_by'   => $one->created_by,
+                    'updated_by'   => 0,
+                    'created_date' => $one->created_date,
+                    'updated_date' => null,
+                    'active'       => true
+                ];
+                $three   = $this->userPositionRepo->create($i_three);
+
+                if (!$three) {
+                    DB::rollback();
+                    return false;
+                }
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deactivateOne($id)
     {
-        return $this->userRepo->deactivate($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->userRepo->deactivate($id) ? true : false;
+
+            if (!$one) {
+                DB::rollBack();
+                return false;
+            }
+
+            # Deactivate UserRole
+            $this->userRoleRepo->deactivateByUserId($id);
+
+            # Deactivate UserPosition
+            $this->userPositionRepo->deactivateByUserId($id);
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deleteOne($id)
     {
-        return $this->userRepo->destroy($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->userRepo->destroy($id) ? true : false;
+            if (!$one) {
+                DB::rollBack();
+                return false;
+            }
+
+            # Delete UserRole
+            $this->userRoleRepo->deleteByUserId($id);
+
+            # Delete UserPosition
+            $this->userPositionRepo->deleteByUserId($id);
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function searchOne($filter)

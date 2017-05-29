@@ -24,4 +24,21 @@ class UserRoleEloquentRepository extends EloquentBaseRepository implements UserR
     {
         return $this->allSkeleton()->where('user_roles.id', $id);
     }
+
+    public function readByUserId($user_id)
+    {
+        return $this->model->whereActive(true)
+            ->where('user_id', $user_id)
+            ->get();
+    }
+
+    public function deleteByUserId($user_id)
+    {
+        return $this->readByUserId($user_id)->delete();
+    }
+
+    public function deactivateByUserId($user_id)
+    {
+        return $this->readByUserId($user_id)->update(['active' => false]);
+    }
 }

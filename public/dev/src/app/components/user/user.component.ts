@@ -123,8 +123,6 @@ export class UserComponent implements OnInit
         this.positions = arr_data['positions'];
         this.group_roles = arr_data['group_roles'];
         this.roles = arr_data['roles'];
-
-        this.placeholder_code = arr_data['placeholder_code'];
     }
 
     refreshData(): void {
@@ -140,12 +138,27 @@ export class UserComponent implements OnInit
 
     /** ICrud **/
     loadOne(id: number): void {
-        this.user = this.users.find(function (o) {
-            return o.id == id;
-        });
+        this.httpClientService.get(`${this.prefix_url}/${id}`).subscribe(
+            (success: any) => {
+                // set fake_pwd
+                this.user.password = this.fake_pwd;
 
-        this.birthday = this.dateHelperService.createDate(this.user.birthday);
-        this.user.password = this.fake_pwd;
+                // set user
+                this.user = success['user'];
+
+                // set birthday
+                this.birthday = new Date(this.user.birthday);
+
+                // set user_roles
+                this.user_roles = success['user_roles'];
+
+                // set user_positions
+                this.user_positions = success['user_positions'];
+            },
+            (error: any) => {
+                this.toastrHelperService.showToastr('error');
+            }
+        );
     }
 
     clearOne(): void {
