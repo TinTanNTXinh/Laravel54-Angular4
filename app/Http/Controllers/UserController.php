@@ -156,7 +156,7 @@ class UserController extends Controller implements ICrud, IValidate
         return [
             $this->table_name => $one,
             'user_roles'      => $user_roles,
-            'user_position'   => $user_position
+            'user_positions'   => $user_position
         ];
     }
 
