@@ -178,6 +178,7 @@ class PostageController extends Controller implements ICrud, IValidate
             }
 
             // Sort rule
+            $i_formulas = $this->sortRule($i_formulas);
 
             // Insert Formulas
             foreach ($i_formulas as $key => $formula) {
@@ -246,6 +247,7 @@ class PostageController extends Controller implements ICrud, IValidate
             $this->formulaRepo->deleteByPostageId($one->id);
 
             // Sort rule
+            $i_formulas = $this->sortRule($i_formulas);
 
             // Insert Formulas
             foreach ($i_formulas as $formula) {
@@ -378,5 +380,11 @@ class PostageController extends Controller implements ICrud, IValidate
         return [
             'postages' => $postages
         ];
+    }
+
+    private function sortRule($i_formulas) {
+        return collect($i_formulas)->sortBy(function($formula, $key){
+            return $formula['rule'];
+        });
     }
 }
