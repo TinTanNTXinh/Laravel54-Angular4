@@ -95,13 +95,13 @@
               <div class="row">
                 <div class="col-sm-12">
                   <div class="panel panel-default">
-                    <div class="panel-heading font-bold">Nhân viên {{title}}</div>
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{title}}</div>
                     <div class="panel-body">
                       <form class="bs-example form-horizontal">
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group">
-                              <label class="col-lg-2 control-label">{{title}}</label>
+                              <label class="col-lg-2 control-label">Khách hàng</label>
                               <div class="col-lg-10">
                                 <xautocomplete [data]="customers"
                                                [name]="'fullname'"
@@ -121,7 +121,7 @@
                               <label class="col-lg-2 control-label">Chức vụ</label>
                               <div class="col-lg-10">
                                 <input type="text" class="form-control"
-                                       [(ngModel)]="staff_customer.position" name="fullname">
+                                       [(ngModel)]="staff_customer.position" name="position">
                               </div>
                             </div>
                           </div>

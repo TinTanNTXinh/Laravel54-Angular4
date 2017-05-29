@@ -69,4 +69,4 @@ KH or Nhà xe
 HĐ or PTT
 khống hay thường
 
-add form TruckType, DriverTruck, Voucher, UnitPricePark, Unit, StaffCustomer
+add form TruckType, DriverTruck, Voucher, UnitPricePark, Unit, StaffCustomer, Product, ProductCode

@@ -207,6 +207,16 @@ Route::group(['prefix' => 'v1'], function () {
             Route::delete('/{id}', 'InvoiceGarageController@deleteDeleteOne');
         });
 
+        Route::group(['middleware' => 'staff-customer', 'prefix' => 'staff-customers'], function () {
+            Route::get('/', 'StaffCustomerController@getReadAll');
+            Route::get('/search', 'StaffCustomerController@getSearchOne');
+            Route::get('/{id}', 'StaffCustomerController@getReadOne');
+            Route::post('/', 'StaffCustomerController@postCreateOne');
+            Route::put('/', 'StaffCustomerController@putUpdateOne');
+            Route::patch('/', 'StaffCustomerController@patchDeactivateOne');
+            Route::delete('/{id}', 'StaffCustomerController@deleteDeleteOne');
+        });
+
         //
         Route::group(['middleware' => []], function () {
             // Voucher
@@ -228,7 +238,8 @@ Route::group(['prefix' => 'v1'], function () {
 
             // Unit
 
-            // StaffCustomer
+            // Product, ProductCode
+
         });
 
     });

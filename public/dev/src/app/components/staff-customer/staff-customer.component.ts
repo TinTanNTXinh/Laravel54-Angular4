@@ -54,11 +54,29 @@ export class StaffCustomerComponent implements OnInit
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
-            name: {
-                title: 'Tên'
+            customer_fullname: {
+                title: 'Khách hàng',
+                data_type: 'TEXT'
             },
-            description: {
-                title: 'Mô tả'
+            fullname: {
+                title: 'Họ tên',
+                data_type: 'TEXT'
+            },
+            position: {
+                title: 'Chức vụ ',
+                data_type: 'TEXT'
+            },
+            address: {
+                title: 'Địa chỉ',
+                data_type: 'TEXT'
+            },
+            phone: {
+                title: 'Điện thoại',
+                data_type: 'TEXT'
+            },
+            email: {
+                title: 'Email',
+                data_type: 'TEXT'
             }
         };
 
@@ -108,8 +126,12 @@ export class StaffCustomerComponent implements OnInit
 
     clearOne(): void {
         this.staff_customer = {
-            name: '',
-            description: ''
+            customer_id: 0,
+            fullname: '',
+            position: '',
+            address: '',
+            phone: '',
+            email: '',
         };
     }
 
@@ -180,7 +202,11 @@ export class StaffCustomerComponent implements OnInit
 
     validateOne(): boolean {
         let flag: boolean = true;
-        if (this.staff_customer.name == '') {
+        if (this.staff_customer.customer_id == 0) {
+            flag = false;
+            this.toastrHelperService.showToastr('warning', `Khách hàng không được để trống!`);
+        }
+        if (this.staff_customer.fullname == '') {
             flag = false;
             this.toastrHelperService.showToastr('warning', `Tên ${this.title} không được để trống!`);
         }
@@ -200,17 +226,17 @@ export class StaffCustomerComponent implements OnInit
 
     actionCrud(obj: any): void {
         switch (obj.mode) {
-            case 'add':
+            case 'ADD':
                 this.clearOne();
                 this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'edit':
+            case 'EDIT':
                 this.loadOne(obj.data.id);
                 this.displayEditBtn(true);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'delete':
+            case 'DELETE':
                 this.fillDataModal(obj.data.id);
                 break;
             default:

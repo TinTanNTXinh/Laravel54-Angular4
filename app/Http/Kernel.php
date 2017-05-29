@@ -64,6 +64,7 @@ class Kernel extends HttpKernel
         'driver'           => \App\Http\Middleware\Driver::class,
         'truck'            => \App\Http\Middleware\Truck::class,
         'customer'         => \App\Http\Middleware\Customer::class,
+        'staff-customer'   => \App\Http\Middleware\StaffCustomer::class,
         'transport'        => \App\Http\Middleware\Transport::class,
         'garage'           => \App\Http\Middleware\Garage::class,
         'invoice-customer' => \App\Http\Middleware\InvoiceCustomer::class,

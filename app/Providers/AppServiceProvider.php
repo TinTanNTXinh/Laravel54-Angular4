@@ -213,5 +213,11 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\FieldRepositoryInterface',
             'App\Repositories\Eloquent\FieldEloquentRepository'
         );
+
+        // StaffCustomer
+        $this->app->bind(
+            'App\Repositories\StaffCustomerRepositoryInterface',
+            'App\Repositories\Eloquent\StaffCustomerEloquentRepository'
+        );
     }
 }
