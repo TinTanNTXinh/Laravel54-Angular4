@@ -15,25 +15,26 @@ class RolesTableSeeder extends Seeder
     public function run()
     {
         $array_name = [
-            'Dashboard',
-            'Position',
-            'User',
-            'Driver',
-            'Truck',
-            'Customer',
-            'Transport',
-            'Garage',
-            'InvoiceCustomer',
-            'InvoiceGarage',
-            'CostOil',
-            'CostLube',
-            'CostPark',
-            'CostOther',
-            'Postage',
-            'Oil',
-            'Lube',
-            'ReportRevenue',
-            'HistoryTransport'
+            'Dashboard', // 1
+            'Position', // 2
+            'User', // 3
+            'Driver', // 10
+            'Truck', // 9
+            'Customer', // 4
+            'Transport', // 7
+            'Garage', // 8
+            'InvoiceCustomer', // 17
+            'InvoiceGarage', // 18
+            'CostOil', // 13
+            'CostLube', // 14
+            'CostPark', // 15
+            'CostOther', // 16
+            'Postage', // 6
+            'Oil', // 11
+            'Lube', // 12
+            'ReportRevenue', // 19
+            'HistoryTransport', // 20
+            'StaffCustomer' // 5
         ];
 
         $array_group_id = [
@@ -55,11 +56,12 @@ class RolesTableSeeder extends Seeder
             7,
             7,
             8,
-            8
+            8,
+            3
         ];
 
         $array_index = [
-            1, 2, 3, 8, 5, 6, 15, 4, 9, 10, 11, 12, 13, 14, 7, 16, 17, 18, 19
+            1, 2, 3, 10, 9, 4, 7, 8, 17, 18, 13, 14, 15, 16, 6, 11, 12, 19, 20, 5
         ];
 
         $array_description = [
@@ -81,7 +83,8 @@ class RolesTableSeeder extends Seeder
             'Dầu',
             'Nhớt',
             'Doanh thu',
-            'Lịch sử giao hàng'
+            'Lịch sử giao hàng',
+            'Nhân viên khách hàng'
         ];
 
         $array_icon_name = [
@@ -103,6 +106,7 @@ class RolesTableSeeder extends Seeder
             'glyphicon-folder-open icon text-info-lter',
             'glyphicon-user icon text-info-lter',
             'glyphicon-user icon text-info-lter',
+            'glyphicon-folder-open icon text-info-lter',
             'glyphicon-folder-open icon text-info-lter'
         ];
 

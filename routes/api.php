@@ -220,7 +220,15 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::delete('/{id}', 'VoucherController@deleteDeleteOne');
             });
 
-            // Staff Customer
+            // TruckType
+
+            // DriverTruck
+
+            // UnitPricePark
+
+            // Unit
+
+            // StaffCustomer
         });
 
     });
