@@ -161,7 +161,8 @@
                             <div class="row">
                               <div class="col-md-12">
                                 <label>Ghi chú</label>
-                                <textarea [(ngModel)]="user.note" name="note" cols="30" rows="3" class="form-control"></textarea>
+                                <textarea [(ngModel)]="user.note" name="note" cols="30" rows="3"
+                                          class="form-control"></textarea>
                               </div>
                             </div>
 
@@ -175,18 +176,37 @@
                                   </div>
                                   <div class="panel-body">
                                     <div class="row">
-                                      <ng-container *ngFor="let chunked of chunk(positions, 3)">
-                                        <div class="col-md-4">
-                                          <div class="checkbox" *ngFor="let position of chunked">
-                                            <label class="i-checks">
-                                              <input #positioncb type="checkbox"
-                                                     (change)="checkPosition(positioncb.checked, position.id)">
-                                              <i></i>
-                                              {{ position.name }}
-                                            </label>
-                                          </div>
+                                      <div class="col-md-4">
+                                        <div class="checkbox" *ngFor="let position of positions.slice(0, 3)">
+                                          <label class="i-checks">
+                                            <input #positioncb type="checkbox"
+                                                   (change)="checkPosition(positioncb.checked, position.id)">
+                                            <i></i>
+                                            {{ position.name }}
+                                          </label>
                                         </div>
-                                      </ng-container>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="checkbox" *ngFor="let position of positions.slice(3, 6)">
+                                          <label class="i-checks">
+                                            <input #positioncb type="checkbox"
+                                                   (change)="checkPosition(positioncb.checked, position.id)">
+                                            <i></i>
+                                            {{ position.name }}
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="checkbox"
+                                             *ngFor="let position of positions.slice(6, positions.length)">
+                                          <label class="i-checks">
+                                            <input #positioncb type="checkbox"
+                                                   (change)="checkPosition(positioncb.checked, position.id)">
+                                            <i></i>
+                                            {{ position.name }}
+                                          </label>
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -200,28 +220,63 @@
                               </div>
                               <div class="panel-body">
                                 <div class="row">
-                                  <ng-container *ngFor="let chunked of chunk(group_roles, 3)">
-                                    <div class="col-md-4">
-                                      <div class="dd">
-                                        <ul class="dd-list">
-                                          <ng-container *ngFor="let group_role of chunked">
-                                            <li class="dd-item dd3-item">
-                                              <div class="dd-handle dd3-handle">{{group_role.name}}</div>
-                                              <div class="dd3-content">
-                                                <div class="checkbox" *ngFor="let role of slideRoles(group_role.id)">
-                                                  <label class="i-checks">
-                                                    <input #rolecb type="checkbox" (change)="checkRole(rolecb.checked, role.id)">
-                                                    <i></i>
-                                                    {{ role.description }}
-                                                  </label>
-                                                </div>
-                                              </div>
-                                            </li>
-                                          </ng-container>
-                                        </ul>
-                                      </div>
+                                  <div class="col-md-4">
+                                    <div class="dd">
+                                      <ul class="dd-list">
+                                        <li class="dd-item dd3-item" *ngFor="let group_role of group_roles.slice(0, 3)">
+                                          <div class="dd-handle dd3-handle">{{group_role.name}}</div>
+                                          <div class="dd3-content">
+                                            <div class="checkbox" *ngFor="let role of slideRoles(group_role.id)">
+                                              <label class="i-checks">
+                                                <input #rolecb type="checkbox"
+                                                       (change)="checkRole(rolecb.checked, role.id)">
+                                                <i></i>
+                                                {{ role.description }}
+                                              </label>
+                                            </div>
+                                          </div>
+                                        </li>
+                                      </ul>
                                     </div>
-                                  </ng-container>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="dd">
+                                      <ul class="dd-list">
+                                        <li class="dd-item dd3-item" *ngFor="let group_role of group_roles.slice(3, 6)">
+                                          <div class="dd-handle dd3-handle">{{group_role.name}}</div>
+                                          <div class="dd3-content">
+                                            <div class="checkbox" *ngFor="let role of slideRoles(group_role.id)">
+                                              <label class="i-checks">
+                                                <input #rolecb type="checkbox"
+                                                       (change)="checkRole(rolecb.checked, role.id)">
+                                                <i></i>
+                                                {{ role.description }}
+                                              </label>
+                                            </div>
+                                          </div>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="dd">
+                                      <ul class="dd-list">
+                                        <li class="dd-item dd3-item" *ngFor="let group_role of group_roles.slice(6, group_roles.length)">
+                                          <div class="dd-handle dd3-handle">{{group_role.name}}</div>
+                                          <div class="dd3-content">
+                                            <div class="checkbox" *ngFor="let role of slideRoles(group_role.id)">
+                                              <label class="i-checks">
+                                                <input #rolecb type="checkbox"
+                                                       (change)="checkRole(rolecb.checked, role.id)">
+                                                <i></i>
+                                                {{ role.description }}
+                                              </label>
+                                            </div>
+                                          </div>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -244,17 +299,20 @@
                                   </div>
                                   <div class="col-md-3">
                                     <label class="checkbox-inline i-checks">
-                                      <input #fieldcb type="checkbox" (change)="checkField(fieldcb.checked, field, 'Xem')"><i></i>
+                                      <input #fieldcb type="checkbox"
+                                             (change)="checkField(fieldcb.checked, field, 'Xem')"><i></i>
                                     </label>
                                   </div>
                                   <div class="col-md-3">
                                     <label class="checkbox-inline i-checks">
-                                      <input #fieldcb type="checkbox" (change)="checkField(fieldcb.checked, field, 'Them')"><i></i>
+                                      <input #fieldcb type="checkbox"
+                                             (change)="checkField(fieldcb.checked, field, 'Them')"><i></i>
                                     </label>
                                   </div>
                                   <div class="col-md-3">
                                     <label class="checkbox-inline i-checks">
-                                      <input #fieldcb type="checkbox" (change)="checkField(fieldcb.checked, field, 'Sua')"><i></i>
+                                      <input #fieldcb type="checkbox"
+                                             (change)="checkField(fieldcb.checked, field, 'Sua')"><i></i>
                                     </label>
                                   </div>
                                 </div>

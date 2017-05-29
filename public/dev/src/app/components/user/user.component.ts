@@ -21,6 +21,8 @@ export class UserComponent implements OnInit
     public users: any[] = [];
     public users_search: any[] = [];
     public user: any;
+    public user_positions: number[] = [];
+    public user_roles: number[] = [];
     public birthday: Date;
     public fake_pwd: string = '';
     public fields: string[] = [
@@ -166,7 +168,13 @@ export class UserComponent implements OnInit
 
         this.user.birthday = this.dateHelperService.getDate(this.birthday);
 
-        this.httpClientService.post(this.prefix_url, {"user": this.user}).subscribe(
+        let data = {
+            "user": this.user,
+            "user_roles": this.user_roles,
+            "user_positions": this.user_positions
+        };
+
+        this.httpClientService.post(this.prefix_url, {"user": data}).subscribe(
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();
@@ -185,7 +193,13 @@ export class UserComponent implements OnInit
 
         this.user.birthday = this.dateHelperService.getDate(this.birthday);
 
-        this.httpClientService.put(this.prefix_url, {"user": this.user}).subscribe(
+        let data = {
+            "user": this.user,
+            "user_roles": this.user_roles,
+            "user_positions": this.user_positions
+        };
+
+        this.httpClientService.put(this.prefix_url, {"user": data}).subscribe(
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();
@@ -255,17 +269,17 @@ export class UserComponent implements OnInit
 
     actionCrud(obj: any): void {
         switch (obj.mode) {
-            case 'add':
+            case 'ADD':
                 this.clearOne();
                 this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'edit':
+            case 'EDIT':
                 this.loadOne(obj.data.id);
                 this.displayEditBtn(true);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'delete':
+            case 'DELETE':
                 this.fillDataModal(obj.data.id);
                 break;
             default:
@@ -362,7 +376,21 @@ export class UserComponent implements OnInit
         return this.roles.filter(o => o.group_role_id == group_role_id);
     }
 
-    public chunk(data: any[], size){
+    public chunk(data: any[], size) {
         return this.arrayHelperService.chunkArray(data, size);
+    }
+
+    public checkPosition(value: boolean, position_id: number): void {
+        if (value)
+            this.user_positions.push(position_id);
+        else
+            this.user_positions.splice(this.user_positions.indexOf(position_id), 1);
+    }
+
+    public checkRole(value: boolean, role_id: number): void {
+        if (value)
+            this.user_roles.push(role_id);
+        else
+            this.user_roles.splice(this.user_roles.indexOf(role_id), 1);
     }
 }

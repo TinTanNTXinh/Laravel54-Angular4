@@ -62,12 +62,6 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\GarageEloquentRepository'
         );
 
-        // Truck Type
-        $this->app->bind(
-            'App\Repositories\TruckTypeRepositoryInterface',
-            'App\Repositories\Eloquent\TruckTypeEloquentRepository'
-        );
-
         // Truck
         $this->app->bind(
             'App\Repositories\TruckRepositoryInterface',
@@ -92,37 +86,37 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\LubeEloquentRepository'
         );
 
-        // Cost Oil
+        // CostOil
         $this->app->bind(
             'App\Repositories\CostOilRepositoryInterface',
             'App\Repositories\Eloquent\CostOilEloquentRepository'
         );
 
-        // Cost Lube
+        // CostLube
         $this->app->bind(
             'App\Repositories\CostLubeRepositoryInterface',
             'App\Repositories\Eloquent\CostLubeEloquentRepository'
         );
 
-        // Cost Park
+        // CostPark
         $this->app->bind(
             'App\Repositories\CostParkRepositoryInterface',
             'App\Repositories\Eloquent\CostParkEloquentRepository'
         );
 
-        // Cost Other
+        // CostOther
         $this->app->bind(
             'App\Repositories\CostOtherRepositoryInterface',
             'App\Repositories\Eloquent\CostOtherEloquentRepository'
         );
 
-        // Invoice Customer
+        // InvoiceCustomer
         $this->app->bind(
             'App\Repositories\InvoiceCustomerRepositoryInterface',
             'App\Repositories\Eloquent\InvoiceCustomerEloquentRepository'
         );
 
-        // Invoice Garage
+        // InvoiceGarage
         $this->app->bind(
             'App\Repositories\InvoiceGarageRepositoryInterface',
             'App\Repositories\Eloquent\InvoiceGarageEloquentRepository'
@@ -130,7 +124,7 @@ class AppServiceProvider extends ServiceProvider
 
         /**  **/
 
-        // Group Role
+        // GroupRole
         $this->app->bind(
             'App\Repositories\GroupRoleRepositoryInterface',
             'App\Repositories\Eloquent\GroupRoleEloquentRepository'
@@ -140,6 +134,18 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             'App\Repositories\RoleRepositoryInterface',
             'App\Repositories\Eloquent\RoleEloquentRepository'
+        );
+
+        // UserRole
+        $this->app->bind(
+            'App\Repositories\UserRoleRepositoryInterface',
+            'App\Repositories\Eloquent\UserRoleEloquentRepository'
+        );
+
+        // UserPosition
+        $this->app->bind(
+            'App\Repositories\UserPositionRepositoryInterface',
+            'App\Repositories\Eloquent\UserPositionEloquentRepository'
         );
 
         // Voucher
@@ -160,19 +166,19 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\ProductEloquentRepository'
         );
 
-        // Transport Voucher
+        // TransportVoucher
         $this->app->bind(
             'App\Repositories\TransportVoucherRepositoryInterface',
             'App\Repositories\Eloquent\TransportVoucherEloquentRepository'
         );
 
-        // Transport Formula
+        // TransportFormula
         $this->app->bind(
             'App\Repositories\TransportFormulaRepositoryInterface',
             'App\Repositories\Eloquent\TransportFormulaEloquentRepository'
         );
 
-        // Formula Sample
+        // FormulaSample
         $this->app->bind(
             'App\Repositories\FormulaSampleRepositoryInterface',
             'App\Repositories\Eloquent\FormulaSampleEloquentRepository'
@@ -184,16 +190,28 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\UnitEloquentRepository'
         );
 
-        // Customer Type
+        // CustomerType
         $this->app->bind(
             'App\Repositories\CustomerTypeRepositoryInterface',
             'App\Repositories\Eloquent\CustomerTypeEloquentRepository'
         );
 
-        // Garage Type
+        // GarageType
         $this->app->bind(
             'App\Repositories\GarageTypeRepositoryInterface',
             'App\Repositories\Eloquent\GarageTypeEloquentRepository'
+        );
+
+        // TruckType
+        $this->app->bind(
+            'App\Repositories\TruckTypeRepositoryInterface',
+            'App\Repositories\Eloquent\TruckTypeEloquentRepository'
+        );
+
+        // Field
+        $this->app->bind(
+            'App\Repositories\FieldRepositoryInterface',
+            'App\Repositories\Eloquent\FieldEloquentRepository'
         );
     }
 }

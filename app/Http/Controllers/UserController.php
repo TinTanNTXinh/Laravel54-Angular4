@@ -8,11 +8,16 @@ use App\Repositories\UserRepositoryInterface;
 use App\Repositories\PositionRepositoryInterface;
 use App\Repositories\RoleRepositoryInterface;
 use App\Repositories\GroupRoleRepositoryInterface;
+use App\Repositories\UserRoleRepositoryInterface;
+use App\Repositories\UserPositionRepositoryInterface;
+use App\Repositories\FieldRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Common\AuthHelper;
 use App\Common\DateTimeHelper;
 use Route;
+use DB;
+use League\Flysystem\Exception;
 
 class UserController extends Controller implements ICrud, IValidate
 {
@@ -21,17 +26,24 @@ class UserController extends Controller implements ICrud, IValidate
     private $table_name;
     private $skeleton;
 
-    protected $userRepo, $positionRepo, $roleRepo, $groupRoleRepo;
+    protected $userRepo, $positionRepo, $roleRepo, $groupRoleRepo
+    , $userRoleRepo, $userPositionRepo, $fieldRepo;
 
     public function __construct(UserRepositoryInterface $userRepo
         , PositionRepositoryInterface $positionRepo
         , RoleRepositoryInterface $roleRepo
-        , GroupRoleRepositoryInterface $groupRoleRepo)
+        , GroupRoleRepositoryInterface $groupRoleRepo
+        , UserRoleRepositoryInterface $userRoleRepo
+        , UserPositionRepositoryInterface $userPositionRepo
+        , FieldRepositoryInterface $fieldRepo)
     {
-        $this->userRepo      = $userRepo;
-        $this->positionRepo  = $positionRepo;
-        $this->roleRepo      = $roleRepo;
-        $this->groupRoleRepo = $groupRoleRepo;
+        $this->userRepo         = $userRepo;
+        $this->positionRepo     = $positionRepo;
+        $this->roleRepo         = $roleRepo;
+        $this->groupRoleRepo    = $groupRoleRepo;
+        $this->userRoleRepo     = $userRoleRepo;
+        $this->userPositionRepo = $userPositionRepo;
+        $this->fieldRepo        = $fieldRepo;
 
         $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
@@ -142,25 +154,83 @@ class UserController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
-        $input = [
-            'code'         => $this->userRepo->generateCode('USER'),
-            'fullname'     => $data['fullname'],
-            'username'     => $data['username'],
-            'password'     => $data['password'],
-            'address'      => $data['address'],
-            'phone'        => $data['phone'],
-            'birthday'     => DateTimeHelper::toStringDateTimeClientForDB($data['birthday']),
-            'sex'          => $data['sex'],
-            'email'        => $data['email'],
-            'note'         => $data['note'],
-            'created_by'   => $this->user->id,
-            'updated_by'   => 0,
-            'created_date' => date('Y-m-d H:i:s'),
-            'updated_date' => null,
-            'active'       => true
-        ];
+        $user           = $data['user'];
+        $user_roles     = $data['user_roles'];
+        $user_positions = $data['user_positions'];
+//        $field          = $data['field'];
 
-        return $this->userRepo->create($input) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $input = [
+                'code'         => $this->userRepo->generateCode('USER'),
+                'fullname'     => $user['fullname'],
+                'username'     => $user['username'],
+                'password'     => $user['password'],
+                'address'      => $user['address'],
+                'phone'        => $user['phone'],
+                'birthday'     => DateTimeHelper::toStringDateTimeClientForDB($user['birthday'], 'd/m/Y'),
+                'sex'          => $user['sex'],
+                'email'        => $user['email'],
+                'note'         => $user['note'],
+                'created_by'   => $this->user->id,
+                'updated_by'   => 0,
+                'created_date' => date('Y-m-d H:i:s'),
+                'updated_date' => null,
+                'active'       => true
+            ];
+
+            $one = $this->userRepo->create($input);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            // Insert UserRole
+            foreach ($user_roles as $user_role_input) {
+                $input_two = [
+                    'user_id'      => $one->id,
+                    'role_id'      => $user_role_input,
+                    'created_by'   => $one->created_by,
+                    'updated_by'   => 0,
+                    'created_date' => $one->created_date,
+                    'updated_date' => null,
+                    'active'       => true
+                ];
+                $two       = $this->userRoleRepo->create($input_two);
+
+                if (!$two) {
+                    DB::rollback();
+                    return false;
+                }
+            }
+
+            // Insert UserPosition
+            foreach ($user_positions as $user_position_input) {
+                $input_three = [
+                    'user_id'      => $one->id,
+                    'position_id'  => $user_position_input,
+                    'created_by'   => $one->created_by,
+                    'updated_by'   => 0,
+                    'created_date' => $one->created_date,
+                    'updated_date' => null,
+                    'active'       => true
+                ];
+                $three       = $this->userPositionRepo->create($input_three);
+
+                if (!$three) {
+                    DB::rollback();
+                    return false;
+                }
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function updateOne($data)

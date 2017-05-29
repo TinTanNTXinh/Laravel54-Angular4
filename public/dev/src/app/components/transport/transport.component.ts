@@ -592,15 +592,15 @@ export class TransportComponent implements OnInit
 
     public actionVoucher(obj: any): void {
         switch (obj.mode) {
-            case 'add':
+            case 'ADD':
                 this.vouchers[obj.index].quantum += 1;
                 break;
-            case 'edit':
+            case 'EDIT':
                 this.vouchers[obj.index].quantum -= 1;
                 if (this.vouchers[obj.index].quantum < 0)
                     this.vouchers[obj.index].quantum = 0;
                 break;
-            case 'delete':
+            case 'DELETE':
                 break;
             default:
                 break;
