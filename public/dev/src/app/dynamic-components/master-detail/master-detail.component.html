@@ -5,11 +5,17 @@
     <tr>
       <th></th>
       <th>#
-        <i [hidden]="!isAsc" (click)="sortIndex('desc')" class="fa fa-sort-desc"></i>
-        <i [hidden]="isAsc" (click)="sortIndex('asc')" class="fa fa-sort-asc"></i>
+        <i [hidden]="!isAsc" (click)="sortIndex('DESC')" class="fa fa-sort-desc"></i>
+        <i [hidden]="isAsc" (click)="sortIndex('ASC')" class="fa fa-sort-asc"></i>
       </th>
       <ng-container *ngFor="let key of header_master | ObjNgFor">
-        <th *ngIf="visible(header_master[key]['visible'])">{{header_master[key]['title']}}</th>
+        <th *ngIf="visible(key)">
+          {{header_master[key]['title']}}
+          <i class="fa fa-sort-desc" *ngIf="header_master[key].isDesc"
+             (click)="sortPropName(header_master[key]['data_type'], 'DESC', key)"></i>
+          <i class="fa fa-sort-asc" *ngIf="header_master[key].isAsc"
+             (click)="sortPropName(header_master[key]['data_type'], 'ASC', key)"></i>
+        </th>
       </ng-container>
     </tr>
     </thead>
@@ -25,7 +31,7 @@
       </td>
       <td>{{i + 1}}</td>
       <ng-container *ngFor="let key of header_master | ObjNgFor">
-        <td *ngIf="visible(header_master[key]['visible'])" [innerHTML]="master[key] | safeHtml"></td>
+        <td *ngIf="visible(key)" [innerHTML]="master[key] | safeHtml"></td>
       </ng-container>
     </tr>
     <tr *ngIf="activeRow==master.id">

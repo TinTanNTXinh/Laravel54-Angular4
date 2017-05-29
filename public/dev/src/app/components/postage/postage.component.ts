@@ -30,11 +30,13 @@ export class PostageComponent implements OnInit
     };
     public header_master = {
         fullname: {
-            title: 'Khách hàng'
+            title: 'Khách hàng',
+            data_type: 'TEXT'
         },
-        quantum_postage: {
-            title: 'Số cước phí'
-        },
+        // quantum_postage: {
+        //     title: 'Số cước phí',
+        //     data_type: 'TEXT'
+        // },
     };
     public header_detail = {
         unit_name: {
