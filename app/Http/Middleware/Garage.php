@@ -7,7 +7,7 @@ use App\Role;
 use App\UserRole;
 use App\Common\AuthHelper;
 
-class Report
+class Garage
 {
     /**
      * Handle an incoming request.
@@ -24,7 +24,7 @@ class Report
         $user = $jwt_data['user'];
 
         $user_roles = UserRole::whereActive(true)->where('user_id', $user->id)->pluck('role_id');
-        $role       = Role::whereActive(true)->where('name', 'Report')->first();
+        $role       = Role::whereActive(true)->where('name', 'Garage')->first();
         if ($user_roles->contains($role->id)) {
             return $next($request);
         } else {

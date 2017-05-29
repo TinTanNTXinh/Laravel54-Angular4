@@ -13,13 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['prefix' => 'v1'], function() {
-    Route::group(['middleware' => []],function(){
+Route::group(['prefix' => 'v1'], function () {
+    Route::group(['middleware' => []], function () {
         Route::post('/authentication', 'AuthController@postAuthentication');
     });
 
     // Co header la "Bearer + token" thi duoc vao
-    Route::group(['middleware' => 'jwt.auth'],function(){
+    Route::group(['middleware' => 'jwt.auth'], function () {
         Route::get('/authorization', 'AuthController@getAuthorization');
 
         /** MAIN **/
@@ -64,7 +64,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'UnitController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => [], 'prefix' => 'customers'], function () {
+        Route::group(['middleware' => 'customer', 'prefix' => 'customers'], function () {
             Route::get('/', 'CustomerController@getReadAll');
             Route::get('/search', 'CustomerController@getSearchOne');
             Route::get('/{id}', 'CustomerController@getReadOne');
@@ -97,7 +97,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'TransportController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => [], 'prefix' => 'garages'], function () {
+        Route::group(['middleware' => 'garage', 'prefix' => 'garages'], function () {
             Route::get('/', 'GarageController@getReadAll');
             Route::get('/search', 'GarageController@getSearchOne');
             Route::get('/{id}', 'GarageController@getReadOne');
@@ -107,7 +107,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'GarageController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => [], 'prefix' => 'trucks'], function () {
+        Route::group(['middleware' => 'truck', 'prefix' => 'trucks'], function () {
             Route::get('/', 'TruckController@getReadAll');
             Route::get('/search', 'TruckController@getSearchOne');
             Route::get('/{id}', 'TruckController@getReadOne');
@@ -117,7 +117,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'TruckController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => [], 'prefix' => 'drivers'], function () {
+        Route::group(['middleware' => 'driver', 'prefix' => 'drivers'], function () {
             Route::get('/', 'DriverController@getReadAll');
             Route::get('/search', 'DriverController@getSearchOne');
             Route::get('/{id}', 'DriverController@getReadOne');
@@ -127,7 +127,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'DriverController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => [], 'prefix' => 'oils'], function () {
+        Route::group(['middleware' => 'oil', 'prefix' => 'oils'], function () {
             Route::get('/', 'OilController@getReadAll');
             Route::get('/search', 'OilController@getSearchOne');
             Route::get('/{id}', 'OilController@getReadOne');
@@ -137,7 +137,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'OilController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => [], 'prefix' => 'lubes'], function () {
+        Route::group(['middleware' => 'lube', 'prefix' => 'lubes'], function () {
             Route::get('/', 'LubeController@getReadAll');
             Route::get('/search', 'LubeController@getSearchOne');
             Route::get('/{id}', 'LubeController@getReadOne');
@@ -147,7 +147,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'LubeController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => [], 'prefix' => 'cost-oils'], function () {
+        Route::group(['middleware' => 'cost-oil', 'prefix' => 'cost-oils'], function () {
             Route::get('/', 'CostOilController@getReadAll');
             Route::get('/search', 'CostOilController@getSearchOne');
             Route::get('/{id}', 'CostOilController@getReadOne');
@@ -157,7 +157,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'CostOilController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => [], 'prefix' => 'cost-lubes'], function () {
+        Route::group(['middleware' => 'cost-lube', 'prefix' => 'cost-lubes'], function () {
             Route::get('/', 'CostLubeController@getReadAll');
             Route::get('/search', 'CostLubeController@getSearchOne');
             Route::get('/{id}', 'CostLubeController@getReadOne');
@@ -167,7 +167,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'CostLubeController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => [], 'prefix' => 'cost-parks'], function () {
+        Route::group(['middleware' => 'cost-park', 'prefix' => 'cost-parks'], function () {
             Route::get('/', 'CostParkController@getReadAll');
             Route::get('/search', 'CostParkController@getSearchOne');
             Route::get('/{id}', 'CostParkController@getReadOne');
@@ -177,7 +177,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'CostParkController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => [], 'prefix' => 'cost-others'], function () {
+        Route::group(['middleware' => 'cost-other', 'prefix' => 'cost-others'], function () {
             Route::get('/', 'CostOtherController@getReadAll');
             Route::get('/search', 'CostOtherController@getSearchOne');
             Route::get('/{id}', 'CostOtherController@getReadOne');
@@ -187,7 +187,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'CostOtherController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => [], 'prefix' => 'invoice-customers'], function () {
+        Route::group(['middleware' => 'invoice-customer', 'prefix' => 'invoice-customers'], function () {
             Route::get('/', 'InvoiceCustomerController@getReadAll');
             Route::get('/search', 'InvoiceCustomerController@getSearchOne');
             Route::get('/{id}', 'InvoiceCustomerController@getReadOne');
@@ -197,7 +197,7 @@ Route::group(['prefix' => 'v1'], function() {
             Route::delete('/{id}', 'InvoiceCustomerController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => [], 'prefix' => 'invoice-garages'], function () {
+        Route::group(['middleware' => 'invoice-garage', 'prefix' => 'invoice-garages'], function () {
             Route::get('/', 'InvoiceGarageController@getReadAll');
             Route::get('/search', 'InvoiceGarageController@getSearchOne');
             Route::get('/{id}', 'InvoiceGarageController@getReadOne');
@@ -208,17 +208,20 @@ Route::group(['prefix' => 'v1'], function() {
         });
 
         //
+        Route::group(['middleware' => []], function () {
+            // Voucher
+            Route::group(['prefix' => 'vouchers'], function () {
+                Route::get('/', 'VoucherController@getReadAll');
+                Route::get('/search', 'VoucherController@getSearchOne');
+                Route::get('/{id}', 'VoucherController@getReadOne');
+                Route::post('/', 'VoucherController@postCreateOne');
+                Route::put('/', 'VoucherController@putUpdateOne');
+                Route::patch('/', 'VoucherController@patchDeactivateOne');
+                Route::delete('/{id}', 'VoucherController@deleteDeleteOne');
+            });
 
-        Route::group(['middleware' => [], 'prefix' => 'vouchers'], function () {
-            Route::get('/', 'VoucherController@getReadAll');
-            Route::get('/search', 'VoucherController@getSearchOne');
-            Route::get('/{id}', 'VoucherController@getReadOne');
-            Route::post('/', 'VoucherController@postCreateOne');
-            Route::put('/', 'VoucherController@putUpdateOne');
-            Route::patch('/', 'VoucherController@patchDeactivateOne');
-            Route::delete('/{id}', 'VoucherController@deleteDeleteOne');
+            // Staff Customer
         });
-
 
     });
 });
