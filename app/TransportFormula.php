@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class TransportFormula extends Model
 {
     //
+    protected $guarded = [];
 }
