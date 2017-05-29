@@ -12,19 +12,15 @@ import {DateHelperService} from '../../services/helpers/date.helper';
 })
 export class XDatatableComponent implements OnInit {
 
-    /** Variables */
+    /** ===== VARIABLES ===== **/
     public highlightRows: number[] = [];
     public selectedRow: number;
     public setClickedRow: Function;
     public isAsc: boolean = true;
     private body_data: any[];
 
-    /**
-     * VARIABLE PAGINATION
-     */
-        // pager object
+    /** ===== VARIABLES PAGINATION ===== **/
     public pager: any = {};
-    // paged items
     public pagedItems: any[];
     private pageSize: number = 10;
 
@@ -35,7 +31,7 @@ export class XDatatableComponent implements OnInit {
 
         this.clearSelectedAndHighlightRows();
         this.setClickedRow = function (index) {
-            switch (this.settingClass){
+            switch (this.settingClass) {
                 case 'active':
                     this.selectedRow = index;
                     break;
@@ -55,6 +51,92 @@ export class XDatatableComponent implements OnInit {
         };
     }
 
+    ngOnInit() {
+        this.setSortProp();
+    }
+
+    /** ===== INPUT ===== **/
+    @Input() header: any;
+    @Input() action: any = {
+        ADD: {
+            visible: true,
+            caption: 'Thêm',
+            icon: 'fa fa-plus',
+        },
+        EDIT: {
+            visible: true,
+            caption: 'Cập nhật',
+            icon: 'fa fa-pencil',
+        },
+        DELETE: {
+            visible: true,
+            caption: 'Xóa',
+            icon: 'fa fa-trash-o',
+        }
+    };
+    @Input() settingClass: string = 'active';
+
+    @Input() get body(): any[] {
+        return this.body_data;
+    }
+
+    set body(obj: any[]) {
+        this.pagedItems = [];
+        this.body_data = obj;
+        if (this.body_data.length > 0)
+            this.setPage(1);
+    }
+
+    /** ===== OUTPUT ===== **/
+    @Output() onClicked: EventEmitter<any> = new EventEmitter();
+
+    public clicked(mode: string): void {
+
+        switch (this.settingClass) {
+            case 'highlight':
+                this.onClicked.emit({highlight_rows: this.highlightRows, mode: mode});
+                break;
+            case 'active':
+                let index = this.selectedRow + (this.pager.currentPage * this.pageSize) - this.pageSize;
+                let data = this.body_data[index];
+                if (typeof data !== 'undefined') {
+                    this.onClicked.emit({index: index, mode: mode, data: data});
+                    switch (mode) {
+                        case 'ADD':
+                        case 'EDIT':
+                            break;
+                        case 'DELETE':
+                            this.domHelperService.getElementById('btn-show-modal').click();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else {
+                    switch (mode) {
+                        case 'ADD':
+                            this.onClicked.emit({index: 0, mode: mode, data: {}});
+                            break;
+                        case 'EDIT':
+                        case 'DELETE':
+                            this.toastrHelperService.showToastr('warning', 'Vui lòng chọn một dòng dữ liệu!');
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    /** ===== FUNCTION ACTION ===== **/
+    public visible(key): boolean {
+        return 'visible' in this.header[key] ? this.header[key]['visible'] : true;
+    }
+
+    /** ===== SELECTED & HIGHLIGHT ROW ===== **/
     public activeRow(index: number): boolean {
         if (this.settingClass == 'highlight') return false;
         return index == this.selectedRow;
@@ -75,91 +157,10 @@ export class XDatatableComponent implements OnInit {
 
     private clearSelectedAndHighlightRows(): void {
         this.selectedRow = 0;
-        this.highlightRows = [this.selectedRow];
+        this.highlightRows = [];
     }
 
-    ngOnInit() {
-        this.setSortProp();
-    }
-
-    /** Input */
-    @Input() header: any;
-    @Input() action: any = {
-        ADD: {
-            visible: true,
-            caption: 'Thêm',
-            icon: 'fa fa-plus',
-        },
-        EDIT: {
-            visible: true,
-            caption: 'Cập nhật',
-            icon: 'fa fa-pencil',
-        },
-        DELETE: {
-            visible: true,
-            caption: 'Xóa',
-            icon: 'fa fa-trash-o',
-        },
-        CHANGE: {
-            visible: true,
-            caption: 'Chọn',
-            icon: 'fa fa-refresh',
-        }
-    };
-    @Input() settingClass: string = 'active';
-
-    @Input() get body(): any[] {
-        return this.body_data;
-    }
-
-    set body(obj: any[]) {
-        this.pagedItems = [];
-        this.body_data = obj;
-        if (this.body_data.length > 0)
-            this.setPage(1);
-    }
-
-    /** Output */
-    @Output() onClicked: EventEmitter<any> = new EventEmitter();
-
-    public clicked(mode: string): void {
-
-        let index = this.selectedRow + (this.pager.currentPage * this.pageSize) - this.pageSize;
-        let data = this.body_data[index];
-        if (typeof data !== 'undefined') {
-            this.onClicked.emit({index: index, mode: mode, data: data});
-            switch (mode) {
-                case 'ADD':
-                case 'EDIT':
-                    break;
-                case 'DELETE':
-                    this.domHelperService.getElementById('btn-show-modal').click();
-                    break;
-                default:
-                    break;
-            }
-        }
-        else {
-            switch (mode) {
-                case 'ADD':
-                    this.onClicked.emit({index: 0, mode: mode, data: {}});
-                    break;
-                case 'EDIT':
-                case 'DELETE':
-                    this.toastrHelperService.showToastr('warning', 'Vui lòng chọn một dòng dữ liệu!');
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    /** Visible column */
-    public visible(key): boolean {
-        return 'visible' in this.header[key] ? this.header[key]['visible'] : true;
-    }
-
-    /** Sort */
+    /** ===== SORT ===== **/
     public sortIndex(mode: string): void {
         this.isAsc = !this.isAsc;
         this.pagedItems.reverse();
@@ -238,10 +239,7 @@ export class XDatatableComponent implements OnInit {
         }
     }
 
-    /**
-     *  PAGINATION
-     */
-    /** Function */
+    /** ===== PAGINATION ===== **/
     public setPage(page: number): void {
         if (page < 1 || page > this.pager.totalPages) {
             return;

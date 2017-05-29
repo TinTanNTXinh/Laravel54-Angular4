@@ -10,8 +10,8 @@
 <button class="btn m-b-xs btn-sm btn-danger btn-addon" (click)="clicked('DELETE')" *ngIf="action.DELETE.visible">
   <i [class]="action.DELETE.icon"></i>{{action.DELETE.caption}}
 </button>
-<button class="btn m-b-xs btn-sm btn-info btn-addon" (click)="changeSettingClass()" *ngIf="action.CHANGE.visible">
-  <i [class]="action.CHANGE.icon"></i>{{action.CHANGE.caption}}
+<button class="btn m-b-xs btn-sm btn-info btn-addon" (click)="changeSettingClass()" *ngIf="false">
+  <i class="fa fa-refresh"></i>Chọn
 </button>
 <button id="btn-show-modal" data-toggle="modal" data-target="#modal-confirm" hidden></button>
 <div class="table-responsive">

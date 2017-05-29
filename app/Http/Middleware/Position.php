@@ -5,12 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Role;
 use App\UserRole;
-use App\Traits\UserHelper;
+use App\Common\AuthHelper;
 
 class Position
 {
-    use UserHelper;
-
     /**
      * Handle an incoming request.
      *
@@ -20,7 +18,7 @@ class Position
      */
     public function handle($request, Closure $next)
     {
-        $jwt_data = $this->getCurrentUser();
+        $jwt_data = AuthHelper::getCurrentUser();
         if (!$jwt_data['status'])
             return redirect()->back();
         $user = $jwt_data['user'];

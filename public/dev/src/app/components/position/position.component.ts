@@ -199,6 +199,7 @@ export class PositionComponent implements OnInit
     }
 
     actionCrud(obj: any): void {
+        console.log(obj);
         switch (obj.mode) {
             case 'ADD':
                 this.clearOne();
