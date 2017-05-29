@@ -22,11 +22,9 @@
     <tbody *ngFor="let master of pagedItems; let i = index">
     <tr (click)="setClickedRow(i)" [class.active]="i == selectedRow">
       <td>
-        <button (click)=showDetail(master.id) class="btn btn-sm btn-info">
-          <i class="fa fa-plus text"></i>
-          <span class="text">More</span>
-          <i class="fa fa-minus text-active"></i>
-          <span class="text-active">Less</span>
+        <button (click)=showDetail(master.id) class="btn btn-rounded btn-sm btn-icon btn-default">
+          <i class="fa fa-chevron-down text" *ngIf="activeRow!=master.id"></i>
+          <i class="fa fa-chevron-up text" *ngIf="activeRow==master.id"></i>
         </button>
       </td>
       <td>{{i + 1}}</td>
@@ -44,11 +42,17 @@
               <th style="width: 20%">
                 <span class="label label-default">Chi tiết</span>
               </th>
-              <th *ngFor="let key of header_detail | ObjNgFor">{{header_detail[key]['title']}}</th>
+              <th *ngFor="let key of header_detail | ObjNgFor">
+                {{header_detail[key]['title']}}
+                <i class="fa fa-sort-desc" *ngIf="header_detail[key].isDesc"
+                   (click)="sortPropNameDetail(header_detail[key]['data_type'], 'DESC', key)"></i>
+                <i class="fa fa-sort-asc" *ngIf="header_detail[key].isAsc"
+                   (click)="sortPropNameDetail(header_detail[key]['data_type'], 'ASC', key)"></i>
+              </th>
             </tr>
             </thead>
-            <tbody *ngFor="let dt of detail">
-            <tr class="success">
+            <tbody *ngFor="let dt of detail; let ii = index">
+            <tr class="success" (click)="setClickedRowDetail(ii)" [class.highlight]="ii == selectedRowDetail">
               <td></td>
               <td *ngFor="let key1 of header_detail | ObjNgFor" [innerHTML]="dt[key1] | safeHtml"></td>
             </tr>

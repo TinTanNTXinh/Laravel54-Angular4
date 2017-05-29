@@ -2,3 +2,8 @@
     background-color:#123456 !important;
     color: white;
 }
+
+.table tbody tr.highlight td {
+    background-color: #550055;
+    color:#eeeeee;
+}
