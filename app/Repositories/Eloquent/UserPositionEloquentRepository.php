@@ -34,7 +34,6 @@ class UserPositionEloquentRepository extends EloquentBaseRepository implements U
 
     public function deleteByUserId($user_id)
     {
-//        return $this->readByUserId($user_id)->delete();
         $ids = $this->readByUserId($user_id)->pluck('id')->toArray();
         return $this->model->destroy($ids);
     }
