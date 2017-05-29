@@ -13,6 +13,8 @@ use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
 use App\Common\AuthHelper;
 use Route;
+use DB;
+use League\Flysystem\Exception;
 
 class PostageController extends Controller implements ICrud, IValidate
 {
@@ -142,55 +144,115 @@ class PostageController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
-        $input = [
-            'code'             => $this->postageRepo->generateCode('POSTAGE'),
-            'unit_price'       => $data['unit_price'],
-            'delivery_percent' => $data['delivery_percent'],
-            'apply_date'       => $data['apply_date'],
-            'change_by_fuel'   => false,
-            'note'             => $data['note'],
-            'created_by'       => $this->user->id,
-            'updated_by'       => 0,
-            'created_date'     => date('Y-m-d H:i:s'),
-            'updated_date'     => null,
-            'active'           => true,
-            'customer_id'      => $data['customer_id'],
-            'unit_id'          => $data['unit_id'],
-            'fuel_id'          => $data['fuel_id']
-        ];
+        try {
+            DB::beginTransaction();
 
-        return $this->postageRepo->create($input) ? true : false;
+            $i_one = [
+                'code'             => $this->postageRepo->generateCode('POSTAGE'),
+                'unit_price'       => $data['unit_price'],
+                'delivery_percent' => $data['delivery_percent'],
+                'apply_date'       => $data['apply_date'],
+                'change_by_fuel'   => false,
+                'note'             => $data['note'],
+                'created_by'       => $this->user->id,
+                'updated_by'       => 0,
+                'created_date'     => date('Y-m-d H:i:s'),
+                'updated_date'     => null,
+                'active'           => true,
+                'customer_id'      => $data['customer_id'],
+                'unit_id'          => $data['unit_id'],
+                'fuel_id'          => $data['fuel_id']
+            ];
+
+            $one = $this->postageRepo->create($i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function updateOne($data)
     {
-        $one = $this->postageRepo->find($data['id']);
+        try {
+            DB::beginTransaction();
 
-        $input = [
-            'unit_price'       => $data['unit_price'],
-            'delivery_percent' => $data['delivery_percent'],
-            'apply_date'       => $data['apply_date'],
-            'change_by_fuel'   => $data['change_by_fuel'],
-            'note'             => $data['note'],
-            'updated_by'       => $this->user->id,
-            'updated_date'     => date('Y-m-d H:i:s'),
-            'active'           => true,
-            'customer_id'      => $data['customer_id'],
-            'unit_id'          => $data['unit_id'],
-            'fuel_id'          => $data['fuel_id']
-        ];
+            $one = $this->postageRepo->find($data['id']);
 
-        return $this->postageRepo->update($one, $input) ? true : false;
+            $i_one = [
+                'unit_price'       => $data['unit_price'],
+                'delivery_percent' => $data['delivery_percent'],
+                'apply_date'       => $data['apply_date'],
+                'change_by_fuel'   => $data['change_by_fuel'],
+                'note'             => $data['note'],
+                'updated_by'       => $this->user->id,
+                'updated_date'     => date('Y-m-d H:i:s'),
+                'active'           => true,
+                'customer_id'      => $data['customer_id'],
+                'unit_id'          => $data['unit_id'],
+                'fuel_id'          => $data['fuel_id']
+            ];
+
+            $one = $this->postageRepo->update($one, $i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deactivateOne($id)
     {
-        return $this->postageRepo->deactivate($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->postageRepo->deactivate($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deleteOne($id)
     {
-        return $this->postageRepo->destroy($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->postageRepo->destroy($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function searchOne($filter)
@@ -238,4 +300,19 @@ class PostageController extends Controller implements ICrud, IValidate
     }
 
     /** ===== MY FUNCTION ===== */
+    public function getReadByCustomerId()
+    {
+        $customer_id = Route::current()->parameter('customer_id');
+        $one         = $this->readByCustomerId($customer_id);
+        return response()->json($one, 200);
+    }
+
+    private function readByCustomerId($customer_id)
+    {
+        $postages = $this->postageRepo->readByCustomerId($customer_id);
+
+        return [
+            'postages' => $postages
+        ];
+    }
 }

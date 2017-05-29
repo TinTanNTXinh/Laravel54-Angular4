@@ -75,6 +75,8 @@ Route::group(['prefix' => 'v1'], function () {
         });
 
         Route::group(['middleware' => 'postage', 'prefix' => 'postages'], function () {
+            Route::get('/search/customer/{customer_id}', 'PostageController@getReadByCustomerId');
+
             Route::get('/', 'PostageController@getReadAll');
             Route::get('/search', 'PostageController@getSearchOne');
             Route::get('/{id}', 'PostageController@getReadOne');

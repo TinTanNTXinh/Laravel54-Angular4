@@ -20,6 +20,32 @@ export class PostageComponent implements OnInit
     public customers: any[] = [];
     public units: any[] = [];
     public formula_samples: any[] = [];
+    public setup_master_detail = {
+        link: 'postages/search/customer',
+        json_name: 'postages'
+    };
+    public header_master = {
+        fullname: {
+            title: 'Khách hàng'
+        }
+    };
+    public header_detail = {
+        fc_unit_price: {
+            title: 'Đơn giá'
+        },
+        delivery_percent: {
+            title: 'Giao xe'
+        },
+        fd_apply_date: {
+            title: 'Ngày áp dụng'
+        },
+        unit_name: {
+            title: 'ĐVT'
+        },
+        note: {
+            title: 'Ghi chú'
+        }
+    };
 
     public apply_date: Date = new Date();
     public apply_time: Date = new Date();
@@ -63,14 +89,6 @@ export class PostageComponent implements OnInit
 
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
-        this.header = {
-            code: {
-                title: 'Mã'
-            },
-            name: {
-                title: 'Tên'
-            }
-        };
 
         this.modal = {
             id: 0,
@@ -122,7 +140,7 @@ export class PostageComponent implements OnInit
         this.postage = {
             customer_id: '',
             unit_id: '',
-            delvery_percent: '',
+            delivery_percent: '',
             unit_price: '',
             apply_date: '',
             apply_time: '',
@@ -224,17 +242,17 @@ export class PostageComponent implements OnInit
 
     actionCrud(obj: any): void {
         switch (obj.mode) {
-            case 'add':
+            case 'ADD':
                 this.clearOne();
                 this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'edit':
+            case 'EDIT':
                 this.loadOne(obj.data.id);
                 this.displayEditBtn(true);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'delete':
+            case 'DELETE':
                 this.fillDataModal(obj.data.id);
                 break;
             default:

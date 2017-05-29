@@ -84,10 +84,12 @@
                     </div>
                     <div class="panel-body">
                       <spinner-fb [isLoading]="isLoading"></spinner-fb>
-                      <xdatatable [body]="postages"
-                                  [header]="header"
-                                  (onClicked)="actionCrud($event)">
-                      </xdatatable>
+                      <master-detail [setup]="setup_master_detail"
+                                     [header_master]="header_master"
+                                     [header_detail]="header_detail"
+                                     [master]="customers"
+                                     [detail]="postages">
+                      </master-detail>
                     </div>
                   </div>
                 </div>
