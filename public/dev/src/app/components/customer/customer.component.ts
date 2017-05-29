@@ -13,13 +13,15 @@ import {DomHelperService} from '../../services/helpers/dom.helper';
 export class CustomerComponent implements OnInit
     , ICommon, ICrud, IDatePicker, ISearch {
 
-    /** My Variables **/
+    /** ===== MY VARIABLES ===== **/
     public customers: any[] = [];
     public customers_search: any[] = [];
     public customer: any;
     public customer_types: any[] = [];
+    public finish_date: Date = new Date();
+    public finish_time: Date = new Date();
 
-    /** ICommon **/
+    /** ===== ICOMMON ===== **/
     title: string;
     placeholder_code: string;
     prefix_url: string;
@@ -27,11 +29,11 @@ export class CustomerComponent implements OnInit
     header: any;
     action_data: any;
 
-    /** ICrud **/
+    /** ===== ICRUD ===== **/
     modal: any;
     isEdit: boolean;
 
-    /** IDatePicker **/
+    /** ===== IDATEPICKER ===== **/
     range_date: any[];
     datepickerSettings: any;
     timepickerSettings: any;
@@ -39,7 +41,7 @@ export class CustomerComponent implements OnInit
     datepicker_to: Date;
     datepickerToOpts: any = {};
 
-    /** ISearch **/
+    /** ===== ISEARCH ===== **/
     filtering: any;
 
     constructor(private httpClientService: HttpClientService
@@ -57,7 +59,36 @@ export class CustomerComponent implements OnInit
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
             fullname: {
-                title: 'Tên'
+                title: 'Tên',
+                date_type: 'TEXT'
+            },
+            customer_type_name: {
+                title: 'Loại',
+                date_type: 'TEXT'
+            },
+            tax_code: {
+                title: 'MST',
+                date_type: 'TEXT'
+            },
+            address: {
+                title: 'Địa chỉ',
+                date_type: 'TEXT'
+            },
+            phone: {
+                title: 'Điện thoại',
+                date_type: 'TEXT'
+            },
+            limit_oil: {
+                title: 'Phần trăm thay đổi cước phí',
+                date_type: 'NUMBER'
+            },
+            oil_per_postage: {
+                title: 'Phân trăm nhiên liệu/cước phí',
+                date_type: 'NUMBER'
+            },
+            fd_finish_date: {
+                title: 'Ngày kết thúc',
+                date_type: 'DATETIME'
             }
         };
 
@@ -69,7 +100,7 @@ export class CustomerComponent implements OnInit
         };
     }
 
-    /** ICommon **/
+    /** ===== ICOMMON ===== **/
     loadData(): void {
         this.httpClientService.get(this.prefix_url).subscribe(
             (success: any) => {
@@ -99,13 +130,13 @@ export class CustomerComponent implements OnInit
         this.isLoading = status;
     }
 
-    /** ICrud **/
+    /** ===== ICRUD ===== **/
     loadOne(id: number): void {
-        this.customer = this.customers.find(function (o) {
-            return o['id'] == id;
-        });
-        this.isEdit = true;
-        this.domHelperService.showTab('menu2');
+        this.customer = this.customers.find(o => o.id == id);
+
+        // set finish_date
+        this.finish_date = new Date(this.customer.finish_date);
+        this.finish_time = new Date(this.customer.finish_date);
     }
 
     clearOne(): void {
@@ -117,14 +148,16 @@ export class CustomerComponent implements OnInit
             email: '',
             limit_oil: 0,
             oil_per_postage: 0,
-            finish_date: Date,
+            finish_date: '',
             note: '',
-            customer_type_id: 0
+            customer_type_id: 1
         };
     }
 
     addOne(): void {
         if (!this.validateOne()) return;
+
+        this.setDateTimeToCustomer();
 
         this.httpClientService.post(this.prefix_url, {"customer": this.customer}).subscribe(
             (success: any) => {
@@ -142,6 +175,8 @@ export class CustomerComponent implements OnInit
 
     updateOne(): void {
         if (!this.validateOne()) return;
+
+        this.setDateTimeToCustomer();
 
         this.httpClientService.put(this.prefix_url, {"customer": this.customer}).subscribe(
             (success: any) => {
@@ -210,15 +245,17 @@ export class CustomerComponent implements OnInit
 
     actionCrud(obj: any): void {
         switch (obj.mode) {
-            case 'add':
-                this.displayEditBtn(false);
+            case 'ADD':
                 this.clearOne();
+                this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'edit':
+            case 'EDIT':
                 this.loadOne(obj.data.id);
+                this.displayEditBtn(true);
+                this.domHelperService.showTab('menu2');
                 break;
-            case 'delete':
+            case 'DELETE':
                 this.fillDataModal(obj.data.id);
                 break;
             default:
@@ -226,7 +263,7 @@ export class CustomerComponent implements OnInit
         }
     }
 
-    /** IDatePicker **/
+    /** ===== IDATEPICKER ===== **/
     handleDateFromChange(dateFrom: Date): void {
         this.datepicker_from = dateFrom;
         this.datepickerToOpts = {
@@ -255,7 +292,7 @@ export class CustomerComponent implements OnInit
         }
     }
 
-    /** ISearch **/
+    /** ===== ISEARCH ===== **/
     search(): void {
         if (this.datepicker_from != null && this.datepicker_to != null) {
             let from_date = this.dateHelperService.getDate(this.datepicker_from);
@@ -302,6 +339,10 @@ export class CustomerComponent implements OnInit
         }
     }
 
-    /** My Function **/
-    
+    /** ===== FUNCTION ACTION ===== **/
+
+    /** ===== FUNCTION ===== **/
+    private setDateTimeToCustomer(): void {
+        this.customer.finish_date = this.dateHelperService.joinDateTimeToString(this.finish_date, this.finish_time);
+    }
 }

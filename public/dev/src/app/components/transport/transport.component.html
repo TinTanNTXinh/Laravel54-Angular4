@@ -111,13 +111,15 @@
                                       <label>Ngày vận chuyển</label>
                                       <datetime [(ngModel)]="transport_date" name="transport_date"
                                                 [timepicker]="false"
-                                                [datepicker]="datepickerSettings"></datetime>
+                                                [datepicker]="datepickerSettings">
+                                      </datetime>
                                     </div>
                                     <div class="col-sm-6">
                                       <label>Giờ vận chuyển</label>
                                       <datetime [(ngModel)]="transport_time" name="transport_time"
                                                 [timepicker]="timepickerSettings"
-                                                [datepicker]="false"></datetime>
+                                                [datepicker]="false">
+                                      </datetime>
                                     </div>
                                 </div>
 

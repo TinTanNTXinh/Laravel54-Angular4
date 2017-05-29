@@ -162,7 +162,8 @@ class PositionController extends Controller implements ICrud, IValidate
 
             $i_one = [
                 'name'        => $data['name'],
-                'description' => $data['description']
+                'description' => $data['description'],
+                'active'      => true
             ];
 
             $one = $this->positionRepo->update($one, $i_one);

@@ -108,18 +108,6 @@
                               </div>
                             </div>
                             <div class="form-group">
-                              <label class="col-lg-2 control-label">Loại</label>
-                              <div class="col-lg-10">
-                                <select [(ngModel)]="customer.customer_type_id"
-                                        name="sup_id" class="form-control m-b">
-                                  <option *ngFor="let customer_type of customer_types"
-                                          value="{{ customer_type.id }}">
-                                    {{ customer_type.name }}
-                                  </option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="form-group">
                               <label class="col-lg-2 control-label">Phần trăm thay đổi cước phí</label>
                               <div class="col-lg-10">
                                 <input type="text" class="form-control"
@@ -133,8 +121,34 @@
                                        [(ngModel)]="customer.oil_per_postage" name="oil_per_postage">
                               </div>
                             </div>
+                            <div class="col-sm-6">
+                              <label>Ngày kết thúc</label>
+                              <datetime [(ngModel)]="finish_date" name="finish_date"
+                                        [timepicker]="false"
+                                        [datepicker]="datepickerSettings">
+                              </datetime>
+                            </div>
+                            <div class="col-sm-6">
+                              <label>Giờ kết thúc</label>
+                              <datetime [(ngModel)]="finish_time" name="finish_time"
+                                        [timepicker]="timepickerSettings"
+                                        [datepicker]="false">
+                              </datetime>
+                            </div>
                           </div>
                           <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="col-lg-2 control-label">Loại</label>
+                              <div class="col-lg-10">
+                                <select [(ngModel)]="customer.customer_type_id"
+                                        name="sup_id" class="form-control m-b">
+                                  <option *ngFor="let customer_type of customer_types"
+                                          value="{{ customer_type.id }}">
+                                    {{ customer_type.name }}
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
                             <div class="form-group">
                               <label class="col-lg-2 control-label">Mã số thuế</label>
                               <div class="col-lg-10">

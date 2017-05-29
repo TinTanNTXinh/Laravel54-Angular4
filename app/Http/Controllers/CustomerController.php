@@ -11,6 +11,8 @@ use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
 use App\Common\AuthHelper;
 use Route;
+use DB;
+use League\Flysystem\Exception;
 
 class CustomerController extends Controller implements ICrud, IValidate
 {
@@ -132,36 +134,119 @@ class CustomerController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
-        $one = [
-            'code'        => $this->customerRepo->generateCode('CUSTOMER'),
-            'name'        => $data['name'],
-            'description' => $data['description'],
-            'active'      => true
-        ];
+        try {
+            DB::beginTransaction();
 
-        return $this->customerRepo->create($one) ? true : false;
+            $i_one = [
+                'code'             => $this->customerRepo->generateCode('CUSTOMER'),
+                'tax_code'         => $data['tax_code'],
+                'fullname'         => $data['fullname'],
+                'address'          => $data['address'],
+                'phone'            => $data['phone'],
+                'email'            => $data['email'],
+                'limit_oil'        => $data['limit_oil'],
+                'oil_per_postage'  => $data['oil_per_postage'],
+                'finish_date'      => DateTimeHelper::toStringDateTimeClientForDB($data['finish_date']),
+                'note'             => $data['note'],
+                'created_by'       => $this->user->id,
+                'updated_by'       => 0,
+                'created_date'     => date('Y-m-d H:i:s'),
+                'updated_date'     => null,
+                'active'           => true,
+                'customer_type_id' => $data['customer_type_id']
+            ];
+
+            $one = $this->customerRepo->create($i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function updateOne($data)
     {
-        $one = $this->customerRepo->find($data['id']);
+        try {
+            DB::beginTransaction();
 
-        $input = [
-            'name'        => $data['name'],
-            'description' => $data['description']
-        ];
+            $one = $this->customerRepo->find($data['id']);
 
-        return $this->customerRepo->update($one, $input) ? true : false;
+            $i_one = [
+                'tax_code'         => $data['tax_code'],
+                'fullname'         => $data['fullname'],
+                'address'          => $data['address'],
+                'phone'            => $data['phone'],
+                'email'            => $data['email'],
+                'limit_oil'        => $data['limit_oil'],
+                'oil_per_postage'  => $data['oil_per_postage'],
+                'finish_date'      => DateTimeHelper::toStringDateTimeClientForDB($data['finish_date']),
+                'note'             => $data['note'],
+                'updated_by'       => $this->user->id,
+                'updated_date'     => date('Y-m-d H:i:s'),
+                'active'           => true,
+                'customer_type_id' => $data['customer_type_id']
+            ];
+
+            $one = $this->customerRepo->update($one, $i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deactivateOne($id)
     {
-        return $this->customerRepo->deactivate($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->customerRepo->deactivate($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deleteOne($id)
     {
-        return $this->customerRepo->destroy($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->customerRepo->destroy($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function searchOne($filter)
