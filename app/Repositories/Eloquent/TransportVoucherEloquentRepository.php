@@ -34,8 +34,11 @@ class TransportVoucherEloquentRepository extends EloquentBaseRepository implemen
 
     public function deleteByTransportId($transport_id)
     {
-        $ids = $this->readByTransportId($transport_id)->pluck('id')->toArray();
-        return $this->model->destroy($ids);
+        return $this->model->whereActive(true)
+            ->where('transport_id', $transport_id)
+            ->delete();
+//        $ids = $this->readByTransportId($transport_id)->pluck('id')->toArray();
+//        return $this->model->destroy($ids);
     }
 
     public function deactivateByTransportId($transport_id)
