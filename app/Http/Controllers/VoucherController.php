@@ -8,36 +8,27 @@ use Route;
 use DB;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
-use App\Traits\UserHelper;
-use App\Traits\Common\DBHelper;
-use App\Traits\Domain\VoucherHelper;
+use App\Common\AuthHelper;
+use App\Common\DateTimeHelper;
 use App\Voucher;
 
 class VoucherController extends Controller implements ICrud, IValidate
 {
-    use UserHelper, DBHelper
-        , VoucherHelper;
-
     private $first_day, $last_day, $today;
     private $user;
-    private $format_date, $format_time;
     private $table_name;
     private $skeleton;
 
     public function __construct()
     {
-        $format_date_time  = $this->getFormatDateTime();
-        $this->format_date = $format_date_time['date'];
-        $this->format_time = $format_date_time['time'];
-
-        $current_month   = $this->getCurrentMonth();
+        $current_month   = DateTimeHelper::getFirstDayLastDay();
         $this->first_day = $current_month['first_day'];
         $this->last_day  = $current_month['last_day'];
         $this->today     = $current_month['today'];
 
-        $jwt_data = $this->getCurrentUser();
+        $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
-            $user_data = $this->getInfoCurrentUser($jwt_data['user']);
+            $user_data = AuthHelper::getInfoCurrentUser($jwt_data['user']);
             if ($user_data['status'])
                 $this->user = $user_data['user'];
         }
