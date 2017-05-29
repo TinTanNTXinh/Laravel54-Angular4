@@ -30,13 +30,22 @@ class FormulaSamplesTableSeeder extends Seeder
             'Loại xe'
         ];
 
+        $indexs = [
+            2,
+            1,
+            3,
+            4,
+            5,
+            6
+        ];
+
         foreach($names as $key => $name)
         {
             \App\FormulaSample::create([
                 'code'         => $this->generateCode(\App\FormulaSample::class, 'FORMULASAMPLE'),
                 'rule'         => $rules[$key],
                 'name'         => $name,
-                'index'        => ++$key,
+                'index'        => $indexs[$key],
                 'active'       => true
             ]);
         }

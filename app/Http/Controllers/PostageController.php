@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Repositories\PostageRepositoryInterface;
 use App\Repositories\FormulaSampleRepositoryInterface;
+use App\Repositories\FormulaRepositoryInterface;
 use App\Repositories\CustomerRepositoryInterface;
 use App\Repositories\UnitRepositoryInterface;
 use App\Interfaces\ICrud;
@@ -23,17 +24,19 @@ class PostageController extends Controller implements ICrud, IValidate
     private $table_name;
     private $skeleton;
 
-    protected $postageRepo, $formulaSampleRepo, $customerRepo, $unitRepo;
+    protected $postageRepo, $formulaSampleRepo, $customerRepo, $unitRepo, $formulaRepo;
 
     public function __construct(PostageRepositoryInterface $postageRepo
         , FormulaSampleRepositoryInterface $formulaSampleRepo
         , CustomerRepositoryInterface $customerRepo
-        , UnitRepositoryInterface $unitRepo)
+        , UnitRepositoryInterface $unitRepo
+        , FormulaRepositoryInterface $formulaRepo)
     {
         $this->postageRepo       = $postageRepo;
         $this->formulaSampleRepo = $formulaSampleRepo;
         $this->customerRepo      = $customerRepo;
         $this->unitRepo          = $unitRepo;
+        $this->formulaRepo       = $formulaRepo;
 
         $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
@@ -144,24 +147,27 @@ class PostageController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
+        $i_postage  = $data['postage'];
+        $i_formulas = $data['formulas'];
+
         try {
             DB::beginTransaction();
 
             $i_one = [
                 'code'             => $this->postageRepo->generateCode('POSTAGE'),
-                'unit_price'       => $data['unit_price'],
-                'delivery_percent' => $data['delivery_percent'],
-                'apply_date'       => $data['apply_date'],
+                'unit_price'       => $i_postage['unit_price'],
+                'delivery_percent' => $i_postage['delivery_percent'],
+                'apply_date'       => DateTimeHelper::toStringDateTimeClientForDB($i_postage['apply_date']),
                 'change_by_fuel'   => false,
-                'note'             => $data['note'],
+                'note'             => $i_postage['note'],
                 'created_by'       => $this->user->id,
                 'updated_by'       => 0,
                 'created_date'     => date('Y-m-d H:i:s'),
                 'updated_date'     => null,
                 'active'           => true,
-                'customer_id'      => $data['customer_id'],
-                'unit_id'          => $data['unit_id'],
-                'fuel_id'          => $data['fuel_id']
+                'customer_id'      => $i_postage['customer_id'],
+                'unit_id'          => $i_postage['unit_id'],
+                'fuel_id'          => $i_postage['fuel_id']
             ];
 
             $one = $this->postageRepo->create($i_one);
@@ -169,6 +175,32 @@ class PostageController extends Controller implements ICrud, IValidate
             if (!$one) {
                 DB::rollback();
                 return false;
+            }
+
+            // Sort rule
+
+            // Insert Formulas
+            foreach ($i_formulas as $key => $formula) {
+                $i_two = [
+                    'code'         => $this->formulaRepo->generateCode('FORMULA'),
+                    'rule'         => $formula['rule'],
+                    'name'         => $formula['name'],
+                    'value1'       => $formula['value1'],
+                    'value2'       => $formula['value2'],
+                    'index'        => ++$key,
+                    'created_by'   => $this->user->id,
+                    'updated_by'   => 0,
+                    'created_date' => date('Y-m-d H:i:s'),
+                    'updated_date' => null,
+                    'active'       => true,
+                    'postage_id'   => $one->id,
+                ];
+
+                $two = $this->formulaRepo->create($i_two);
+                if (!$two) {
+                    DB::rollback();
+                    return false;
+                }
             }
 
             DB::commit();
@@ -181,23 +213,26 @@ class PostageController extends Controller implements ICrud, IValidate
 
     public function updateOne($data)
     {
+        $i_postage  = $data['postage'];
+        $i_formulas = $data['formulas'];
+
         try {
             DB::beginTransaction();
 
-            $one = $this->postageRepo->find($data['id']);
+            $one = $this->postageRepo->find($i_postage['id']);
 
             $i_one = [
-                'unit_price'       => $data['unit_price'],
-                'delivery_percent' => $data['delivery_percent'],
-                'apply_date'       => $data['apply_date'],
-                'change_by_fuel'   => $data['change_by_fuel'],
-                'note'             => $data['note'],
+                'unit_price'       => $i_postage['unit_price'],
+                'delivery_percent' => $i_postage['delivery_percent'],
+                'apply_date'       => $i_postage['apply_date'],
+                'change_by_fuel'   => $i_postage['change_by_fuel'],
+                'note'             => $i_postage['note'],
                 'updated_by'       => $this->user->id,
                 'updated_date'     => date('Y-m-d H:i:s'),
                 'active'           => true,
-                'customer_id'      => $data['customer_id'],
-                'unit_id'          => $data['unit_id'],
-                'fuel_id'          => $data['fuel_id']
+                'customer_id'      => $i_postage['customer_id'],
+                'unit_id'          => $i_postage['unit_id'],
+                'fuel_id'          => $i_postage['fuel_id']
             ];
 
             $one = $this->postageRepo->update($one, $i_one);
@@ -205,6 +240,35 @@ class PostageController extends Controller implements ICrud, IValidate
             if (!$one) {
                 DB::rollback();
                 return false;
+            }
+
+            // Delete Formulas
+            $this->formulaRepo->deleteByPostageId($one->id);
+
+            // Sort rule
+
+            // Insert Formulas
+            foreach ($i_formulas as $formula) {
+                $i_two = [
+                    'code'         => $this->formulaRepo->generateCode('FORMULA'),
+                    'rule'         => $formula['rule'],
+                    'name'         => $formula['name'],
+                    'value1'       => $formula['value1'],
+                    'value2'       => $formula['value2'],
+                    'index'        => $formula['index'],
+                    'created_by'   => $this->user->id,
+                    'updated_by'   => 0,
+                    'created_date' => date('Y-m-d H:i:s'),
+                    'updated_date' => null,
+                    'active'       => true,
+                    'postage_id'   => $one->id,
+                ];
+
+                $two = $this->formulaRepo->create($i_two);
+                if (!$two) {
+                    DB::rollback();
+                    return false;
+                }
             }
 
             DB::commit();

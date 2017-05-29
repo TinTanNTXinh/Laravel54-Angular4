@@ -43,4 +43,11 @@ class FormulaEloquentRepository extends EloquentBaseRepository implements Formul
 
         return $formulas;
     }
+
+    public function deleteByPostageId($postage_id)
+    {
+        return $this->model->whereActive(true)
+            ->where('postage_id', $postage_id)
+            ->delete();
+    }
 }

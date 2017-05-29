@@ -20,6 +20,10 @@ export class PostageComponent implements OnInit
     public customers: any[] = [];
     public units: any[] = [];
     public formula_samples: any[] = [];
+
+    public apply_date: Date = new Date();
+    public apply_time: Date = new Date();
+
     public setup_master_detail = {
         link: 'postages/search/customer',
         json_name: 'postages'
@@ -27,28 +31,28 @@ export class PostageComponent implements OnInit
     public header_master = {
         fullname: {
             title: 'Khách hàng'
-        }
+        },
+        quantum_postage: {
+            title: 'Số cước phí'
+        },
     };
     public header_detail = {
+        unit_name: {
+            title: 'ĐVT'
+        },
         fc_unit_price: {
             title: 'Đơn giá'
-        },
-        delivery_percent: {
-            title: 'Giao xe'
         },
         fd_apply_date: {
             title: 'Ngày áp dụng'
         },
-        unit_name: {
-            title: 'ĐVT'
+        delivery_percent: {
+            title: 'Giao xe'
         },
         note: {
             title: 'Ghi chú'
         }
     };
-
-    public apply_date: Date = new Date();
-    public apply_time: Date = new Date();
 
     /** ===== ICOMMON ===== **/
     title: string;
@@ -134,27 +138,35 @@ export class PostageComponent implements OnInit
     /** ===== ICRUD ===== **/
     loadOne(id: number): void {
         this.postage = this.postages.find(o => o.id == id);
+
+        // set transport_date
+        this.apply_date = new Date(this.postage.apply_date);
+        this.apply_time = new Date(this.postage.apply_date);
     }
 
     clearOne(): void {
         this.postage = {
-            customer_id: '',
-            unit_id: '',
-            delivery_percent: '',
-            unit_price: '',
+            customer_id: 0,
+            unit_id: 0,
+            fuel_id: 0,
+            delivery_percent: 0,
+            unit_price: 0,
             apply_date: '',
-            apply_time: '',
             note: ''
         };
     }
 
     addOne(): void {
-        console.log('Saved: ' + JSON.stringify(this.formulaFormArray.value));
-        console.log('Saved: ' + JSON.stringify(this.postage));
-
         if (!this.validateOne()) return;
 
-        this.httpClientService.post(this.prefix_url, {"postage": this.postage}).subscribe(
+        this.setDateTimeToPostage();
+
+        let data = {
+            postage: this.postage,
+            formulas: this.formulaFormArray.value
+        };
+
+        this.httpClientService.post(this.prefix_url, {"postage": data}).subscribe(
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();
@@ -171,7 +183,14 @@ export class PostageComponent implements OnInit
     updateOne(): void {
         if (!this.validateOne()) return;
 
-        this.httpClientService.put(this.prefix_url, {"postage": this.postage}).subscribe(
+        this.setDateTimeToPostage();
+
+        let data = {
+            postage: this.postage,
+            formulas: this.formulaFormArray.value
+        };
+
+        this.httpClientService.put(this.prefix_url, {"postage": data}).subscribe(
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();
@@ -404,5 +423,9 @@ export class PostageComponent implements OnInit
     public selectFormulaSample(formula_sample_id: number): void {
         let formula_sample = this.formula_samples.find(o => o.id == formula_sample_id);
         this.addFormula(formula_sample.rule, formula_sample.name);
+    }
+
+    private setDateTimeToPostage(): void {
+        this.postage.apply_date = this.dateHelperService.joinDateTimeToString(this.apply_date, this.apply_time);
     }
 }
