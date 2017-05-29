@@ -3,6 +3,7 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {HttpClientService} from '../../services/httpClient.service';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {PaginationHelperService} from '../../services/helpers/pagination.helper';
+import {DomHelperService} from '../../services/helpers/dom.helper';
 import {DateHelperService} from '../../services/helpers/date.helper';
 
 @Component({
@@ -29,6 +30,7 @@ export class MasterDetailComponent implements OnInit {
     constructor(private httpClientService: HttpClientService
         , private toastrHelperService: ToastrHelperService
         , private paginationHelperService: PaginationHelperService
+        , private domHelperService: DomHelperService
         , private dateHelperService: DateHelperService) {
 
         this.setClickedRow = function (index) {
@@ -48,6 +50,23 @@ export class MasterDetailComponent implements OnInit {
     @Input() header_master: any = {};
     @Input() header_detail: any = {};
     @Input() detail: any[] = [];
+    @Input() action_detail: any = {
+        ADD: {
+            visible: true,
+            caption: 'Thêm',
+            icon: 'fa fa-plus',
+        },
+        EDIT: {
+            visible: true,
+            caption: 'Cập nhật',
+            icon: 'fa fa-pencil',
+        },
+        DELETE: {
+            visible: true,
+            caption: 'Xóa',
+            icon: 'fa fa-trash-o',
+        }
+    };
 
     @Input() get master(): any[] {
         return this.master_data;
@@ -60,6 +79,40 @@ export class MasterDetailComponent implements OnInit {
     }
 
     /** ===== OUTPUT ===== **/
+    @Output() onClickedDetail: EventEmitter<any> = new EventEmitter();
+
+    public clickedDetail(mode: string): void {
+        let index = this.selectedRowDetail;
+        let data = this.detail[index];
+        if (typeof data !== 'undefined') {
+            this.onClickedDetail.emit({index: index, mode: mode, data: data});
+            switch (mode) {
+                case 'ADD':
+                case 'EDIT':
+                    break;
+                case 'DELETE':
+                    this.domHelperService.getElementById('btn-show-modal').click();
+                    break;
+                default:
+                    break;
+            }
+        }
+        else {
+            switch (mode) {
+                case 'ADD':
+                    this.onClickedDetail.emit({index: 0, mode: mode, data: {}});
+                    break;
+                case 'EDIT':
+                case 'DELETE':
+                    this.toastrHelperService.showToastr('warning', 'Vui lòng chọn một dòng dữ liệu!');
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    /** ===== FUNCTION ACTION ===== **/
     public showDetail(id: number): void {
         if (this.activeRow == id) {
             this.activeRow = 0;
@@ -69,12 +122,18 @@ export class MasterDetailComponent implements OnInit {
             (success: any) => {
                 this.detail = success[this.setup.json_name];
                 this.activeRow = id;
+
+                this.selectedRowDetail = 0;
                 this.setSortPropDetail();
             },
             (error: any) => {
                 this.toastrHelperService.showToastr('error');
             }
         );
+    }
+
+    public visible(key): boolean {
+        return 'visible' in this.header_master[key] ? this.header_master[key]['visible'] : true;
     }
 
     /** ===== SORT ===== **/
@@ -211,11 +270,6 @@ export class MasterDetailComponent implements OnInit {
                 this.header_detail[key].isDesc = true;
             }
         }
-    }
-
-    /** ===== SELECTED & HIGHLIGHT ROW ===== **/
-    public visible(key): boolean {
-        return 'visible' in this.header_master[key] ? this.header_master[key]['visible'] : true;
     }
 
     /** ===== PAGINATION ===== **/

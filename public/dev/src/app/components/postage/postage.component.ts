@@ -437,4 +437,8 @@ export class PostageComponent implements OnInit
     private setDateTimeToPostage(): void {
         this.postage.apply_date = this.dateHelperService.joinDateTimeToString(this.apply_date, this.apply_time);
     }
+
+    log(event: any){
+        console.log(event);
+    }
 }

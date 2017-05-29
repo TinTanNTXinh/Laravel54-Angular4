@@ -3,7 +3,8 @@
     color: white;
 }
 
-.table tbody tr.highlight td {
-    background-color: #550055;
+.table tbody tr.highlight-dark td {
+    background-color: #3a3f51;
+    border-color: #3a3f51;
     color:#eeeeee;
 }

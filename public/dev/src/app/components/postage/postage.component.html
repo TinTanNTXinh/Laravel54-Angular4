@@ -88,7 +88,8 @@
                                      [header_master]="header_master"
                                      [header_detail]="header_detail"
                                      [master]="customers"
-                                     [detail]="postages">
+                                     [detail]="postages"
+                                     (onClickedDetail)="log($event)">
                       </master-detail>
                     </div>
                   </div>

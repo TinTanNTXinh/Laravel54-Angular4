@@ -1,3 +1,13 @@
+<button class="btn m-b-xs btn-sm btn-primary btn-addon" (click)="clickedDetail('ADD')" *ngIf="action_detail.ADD.visible">
+  <i [class]="action_detail.ADD.icon"></i>{{action_detail.ADD.caption}}
+</button>
+<button class="btn m-b-xs btn-sm btn-warning btn-addon" (click)="clickedDetail('EDIT')" *ngIf="action_detail.EDIT.visible">
+  <i [class]="action_detail.EDIT.icon"></i>{{action_detail.EDIT.caption}}
+</button>
+<button class="btn m-b-xs btn-sm btn-danger btn-addon" (click)="clickedDetail('DELETE')" *ngIf="action_detail.DELETE.visible">
+  <i [class]="action_detail.DELETE.icon"></i>{{action_detail.DELETE.caption}}
+</button>
+<button id="btn-show-modal" data-toggle="modal" data-target="#modal-confirm" hidden></button>
 <div class="table-responsive">
   <table *ngIf="master_data" class="table table-striped b-t b-b"
          cellpadding="2" cellspacing="2">
@@ -52,7 +62,7 @@
             </tr>
             </thead>
             <tbody *ngFor="let dt of detail; let ii = index">
-            <tr class="success" (click)="setClickedRowDetail(ii)" [class.highlight]="ii == selectedRowDetail">
+            <tr class="success" (click)="setClickedRowDetail(ii)" [class.highlight-dark]="ii == selectedRowDetail">
               <td></td>
               <td *ngFor="let key1 of header_detail | ObjNgFor" [innerHTML]="dt[key1] | safeHtml"></td>
             </tr>
