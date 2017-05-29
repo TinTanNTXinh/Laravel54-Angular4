@@ -19,6 +19,9 @@ export class CostLubeComponent implements OnInit
     public cost_lube: any;
     public trucks: any[] = [];
 
+    public refuel_date: Date = new Date();
+    public refuel_time: Date = new Date();
+
     /** ===== ICOMMON ===== **/
     title: string;
     placeholder_code: string;

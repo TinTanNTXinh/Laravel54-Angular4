@@ -19,6 +19,9 @@ export class CostOtherComponent implements OnInit
     public cost_other: any;
     public trucks: any[] = [];
 
+    public created_date: Date = new Date();
+    public created_time: Date = new Date();
+
     /** ===== ICOMMON ===== **/
     title: string;
     placeholder_code: string;

@@ -367,7 +367,7 @@ export class PostageComponent implements OnInit
         return formula;
     }
 
-    private addFormula(rule: string, name: string = ''): void {
+    public addFormula(rule: string, name: string = ''): void {
         this.formulaFormArray.push(this.buildFormula(rule, name));
     }
 
