@@ -67,6 +67,23 @@ export class MasterDetailComponent implements OnInit {
             icon: 'fa fa-trash-o',
         }
     };
+    @Input() action_master: any = {
+        ADD: {
+            visible: true,
+            caption: 'Thêm',
+            icon: 'fa fa-plus',
+        },
+        EDIT: {
+            visible: true,
+            caption: 'Cập nhật',
+            icon: 'fa fa-pencil',
+        },
+        DELETE: {
+            visible: true,
+            caption: 'Xóa',
+            icon: 'fa fa-trash-o',
+        }
+    };
 
     @Input() get master(): any[] {
         return this.master_data;
@@ -79,8 +96,39 @@ export class MasterDetailComponent implements OnInit {
     }
 
     /** ===== OUTPUT ===== **/
-    @Output() onClickedDetail: EventEmitter<any> = new EventEmitter();
+    @Output() onClickedMaster: EventEmitter<any> = new EventEmitter();
+    public clickedMaster(mode: string): void {
+        let index = this.selectedRow + (this.pager.currentPage * this.pageSize) - this.pageSize;
+        let data = this.master[index];
+        if (typeof data !== 'undefined') {
+            this.onClickedMaster.emit({index: index, mode: mode, data: data});
+            switch (mode) {
+                case 'ADD':
+                case 'EDIT':
+                    break;
+                case 'DELETE':
+                    this.domHelperService.getElementById('btn-show-modal').click();
+                    break;
+                default:
+                    break;
+            }
+        }
+        else {
+            switch (mode) {
+                case 'ADD':
+                    this.onClickedMaster.emit({index: 0, mode: mode, data: {}});
+                    break;
+                case 'EDIT':
+                case 'DELETE':
+                    this.toastrHelperService.showToastr('warning', 'Vui lòng chọn một dòng dữ liệu!');
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
+    @Output() onClickedDetail: EventEmitter<any> = new EventEmitter();
     public clickedDetail(mode: string): void {
         let index = this.selectedRowDetail;
         let data = this.detail[index];

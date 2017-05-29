@@ -441,4 +441,8 @@ export class PostageComponent implements OnInit
     log(event: any){
         console.log(event);
     }
+
+    log2(event: any){
+        console.log(event);
+    }
 }
