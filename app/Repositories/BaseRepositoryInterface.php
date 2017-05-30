@@ -52,6 +52,11 @@ interface BaseRepositoryInterface
     public function allActive();
 
     /**
+     * @return mixed
+     */
+    public function allActiveQuery();
+
+    /**
      * @param $prefix
      * @return mixed
      */

@@ -7,14 +7,13 @@ use App\UserPosition;
 
 class UserPositionEloquentRepository extends EloquentBaseRepository implements UserPositionRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return UserPosition::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);
@@ -27,21 +26,21 @@ class UserPositionEloquentRepository extends EloquentBaseRepository implements U
 
     public function readByUserId($user_id)
     {
-        return $this->model->whereActive(true)
+        return $this->allActiveQuery()
             ->where('user_id', $user_id)
             ->get();
     }
 
     public function deleteByUserId($user_id)
     {
-        return $this->model->whereActive(true)
+        return $this->allActiveQuery()
             ->where('user_id', $user_id)
             ->delete();
     }
 
     public function deactivateByUserId($user_id)
     {
-        return $this->model->whereActive(true)
+        return $this->allActiveQuery()
             ->where('user_id', $user_id)
             ->update(['active' => false]);
     }

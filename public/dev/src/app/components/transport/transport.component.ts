@@ -574,6 +574,7 @@ export class TransportComponent implements OnInit
 
         this.httpClientService.get(`${this.prefix_url}/find-postage?query=${JSON.stringify(formulas)}`).subscribe(
             (success: any) => {
+                this.transport.postage_id = success.postage.id;
                 this.transport.postage_unit_price = success.postage.unit_price;
                 this.transport.unit_name = success.postage.unit_name;
 

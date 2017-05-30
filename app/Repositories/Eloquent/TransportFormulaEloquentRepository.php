@@ -7,14 +7,13 @@ use App\TransportFormula;
 
 class TransportFormulaEloquentRepository extends EloquentBaseRepository implements TransportFormulaRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return TransportFormula::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);
@@ -27,22 +26,22 @@ class TransportFormulaEloquentRepository extends EloquentBaseRepository implemen
 
     public function readByTransportId($transport_id)
     {
-        return $this->model->whereActive(true)
+        return $this->allActiveQuery()
             ->where('transport_id', $transport_id)
             ->get();
     }
 
     public function deleteByTransportId($transport_id)
     {
-        return $this->model->whereActive(true)
+        return $this->allActiveQuery()
             ->where('transport_id', $transport_id)
             ->delete();
-//        $ids = $this->readByTransportId($transport_id)->pluck('id')->toArray();
-//        return $this->model->destroy($ids);
     }
 
     public function deactivateByTransportId($transport_id)
     {
-        return $this->readByTransportId($transport_id)->update(['active' => false]);
+        return $this->allActiveQuery()
+            ->where('transport_id', $transport_id)
+            ->update(['active' => false]);
     }
 }

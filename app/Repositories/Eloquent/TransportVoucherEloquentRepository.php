@@ -7,14 +7,14 @@ use App\TransportVoucher;
 
 class TransportVoucherEloquentRepository extends EloquentBaseRepository implements TransportVoucherRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return TransportVoucher::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);
@@ -27,14 +27,14 @@ class TransportVoucherEloquentRepository extends EloquentBaseRepository implemen
 
     public function readByTransportId($transport_id)
     {
-        return $this->model->whereActive(true)
+        return $this->allActiveQuery()
             ->where('transport_id', $transport_id)
             ->get();
     }
 
     public function deleteByTransportId($transport_id)
     {
-        return $this->model->whereActive(true)
+        return $this->allActiveQuery()
             ->where('transport_id', $transport_id)
             ->delete();
 //        $ids = $this->readByTransportId($transport_id)->pluck('id')->toArray();
@@ -43,6 +43,8 @@ class TransportVoucherEloquentRepository extends EloquentBaseRepository implemen
 
     public function deactivateByTransportId($transport_id)
     {
-        return $this->readByTransportId($transport_id)->update(['active' => false]);
+        return $this->allActiveQuery()
+            ->where('transport_id', $transport_id)
+            ->update(['active' => false]);
     }
 }

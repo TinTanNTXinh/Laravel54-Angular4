@@ -7,14 +7,13 @@ use App\User;
 
 class UserEloquentRepository extends EloquentBaseRepository implements UserRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return User::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

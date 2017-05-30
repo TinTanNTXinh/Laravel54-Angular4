@@ -37,6 +37,8 @@ class FormulaEloquentRepository extends EloquentBaseRepository implements Formul
             ->orderBy('apply_date', 'desc')
             ->first();
 
+        if(!$postage) return [];
+
         $formulas = $this->model->whereActive(true)
             ->where('postage_id', $postage->id)
             ->get();
