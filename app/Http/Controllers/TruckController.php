@@ -12,6 +12,8 @@ use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
 use App\Common\AuthHelper;
 use Route;
+use DB;
+use League\Flysystem\Exception;
 
 class TruckController extends Controller implements ICrud, IValidate
 {
@@ -26,9 +28,9 @@ class TruckController extends Controller implements ICrud, IValidate
         , TruckTypeRepositoryInterface $truckTypeRepo
         , GarageRepositoryInterface $garageRepo)
     {
-        $this->truckRepo = $truckRepo;
+        $this->truckRepo     = $truckRepo;
         $this->truckTypeRepo = $truckTypeRepo;
-        $this->garageRepo = $garageRepo;
+        $this->garageRepo    = $garageRepo;
 
         $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
@@ -116,12 +118,12 @@ class TruckController extends Controller implements ICrud, IValidate
     {
         $all = $this->skeleton->get();
 
-        $garages = $this->garageRepo->allActive();
+        $garages     = $this->garageRepo->allActive();
         $truck_types = $this->truckTypeRepo->allActive();
 
         return [
-            'trucks' => $all,
-            'garages' => $garages,
+            'trucks'      => $all,
+            'garages'     => $garages,
             'truck_types' => $truck_types
         ];
     }
@@ -137,36 +139,123 @@ class TruckController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
-        $one = [
-            'code'        => $this->truckRepo->generateCode('TRUCK'),
-            'name'        => $data['name'],
-            'description' => $data['description'],
-            'active'      => true
-        ];
+        try {
+            DB::beginTransaction();
 
-        return $this->truckRepo->create($one) ? true : false;
+            $i_one = [
+                'code'                => $this->truckRepo->generateCode('TRUCK'),
+                'area_code'           => $data['area_code'],
+                'number_plate'        => $data['number_plate'],
+                'trademark'           => $data['trademark'],
+                'year_of_manufacture' => $data['year_of_manufacture'],
+                'owner'               => $data['owner'],
+                'length'              => $data['length'],
+                'width'               => $data['width'],
+                'height'              => $data['height'],
+                'status'              => $data['status'],
+                'note'                => $data['note'],
+                'created_by'          => $this->user->id,
+                'updated_by'          => 0,
+                'created_date'        => date('Y-m-d'),
+                'updated_date'        => null,
+                'active'              => true,
+                'truck_type_id'       => $data['truck_type_id'],
+                'garage_type_id'      => $data['garage_type_id']
+            ];
+
+            $one = $this->truckRepo->create($i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function updateOne($data)
     {
-        $one = $this->truckRepo->find($data['id']);
+        try {
+            DB::beginTransaction();
 
-        $input = [
-            'name'        => $data['name'],
-            'description' => $data['description']
-        ];
+            $one = $this->truckRepo->find($data['id']);
 
-        return $this->truckRepo->update($one, $input) ? true : false;
+            $i_one = [
+                'area_code'           => $data['area_code'],
+                'number_plate'        => $data['number_plate'],
+                'trademark'           => $data['trademark'],
+                'year_of_manufacture' => $data['year_of_manufacture'],
+                'owner'               => $data['owner'],
+                'length'              => $data['length'],
+                'width'               => $data['width'],
+                'height'              => $data['height'],
+                'status'              => $data['status'],
+                'note'                => $data['note'],
+                'updated_by'          => $this->user->id,
+                'updated_date'        => date('Y-m-d'),
+                'active'              => true,
+                'truck_type_id'       => $data['truck_type_id'],
+                'garage_type_id'      => $data['garage_type_id']
+            ];
+
+            $one = $this->truckRepo->update($one, $i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deactivateOne($id)
     {
-        return $this->truckRepo->deactivate($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->truckRepo->deactivate($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deleteOne($id)
     {
-        return $this->truckRepo->destroy($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->truckRepo->destroy($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function searchOne($filter)

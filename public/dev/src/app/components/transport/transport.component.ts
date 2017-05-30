@@ -5,6 +5,7 @@ import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
+import {ArrayHelperService} from '../../services/helpers/array.helper';
 
 @Component({
     selector: 'app-transport',
@@ -69,7 +70,8 @@ export class TransportComponent implements OnInit
         , private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
-        , private domHelperService: DomHelperService) {
+        , private domHelperService: DomHelperService
+        , private arrayHelperService: ArrayHelperService) {
     }
 
     ngOnInit(): void {
@@ -175,7 +177,7 @@ export class TransportComponent implements OnInit
         this.products = arr_data['products'];
         this.vouchers = arr_data['vouchers'];
 
-        this.setAreaCodeNumberPlate('TRUCK');
+        this.trucks = this.arrayHelperService.setAreaCodeNumberPlate(this.trucks);
         this.clearQuantumVoucher();
     }
 
@@ -457,8 +459,6 @@ export class TransportComponent implements OnInit
 
     reloadDataSearch(arr_data: any[]): void {
         this.transports = arr_data['transports'];
-
-        this.setAreaCodeNumberPlate('TRANSPORT');
     }
 
     clearSearch(): void {
@@ -645,23 +645,5 @@ export class TransportComponent implements OnInit
             voucher.quantum = 0;
             return voucher;
         });
-    }
-
-    private setAreaCodeNumberPlate(type: string): void {
-        switch (type) {
-            case 'TRUCK':
-                this.trucks.map(function (item) {
-                    item.area_code_number_plate = `${item.area_code}-${item.number_plate}`;
-                    return item;
-                });
-                break;
-            case 'TRANSPORT':
-                this.transports.map(function (item) {
-                    item.truck_area_code_number_plate = `${item.truck_area_code}-${item.truck_number_plate}`;
-                    return item;
-                });
-                break;
-            default: break;
-        }
     }
 }

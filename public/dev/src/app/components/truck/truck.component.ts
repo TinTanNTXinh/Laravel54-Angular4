@@ -62,11 +62,45 @@ export class TruckComponent implements OnInit
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
-            name: {
-                title: 'Tên'
+            garage_name: {
+                title: 'Nhà xe',
+                data_type: 'TEXT'
             },
-            description: {
-                title: 'Mô tả'
+            truck_type_name: {
+                title: 'Loại',
+                data_type: 'TEXT'
+            },
+            area_code_number_plate: {
+                title: 'Xe',
+                data_type: 'TEXT'
+            },
+            status: {
+                title: 'Trạng thái',
+                data_type: 'TEXT'
+            },
+            trademark: {
+                title: 'Hãng',
+                data_type: 'TEXT'
+            },
+            year_of_manufacture: {
+                title: 'Năm sản xuất',
+                data_type: 'NUMBER'
+            },
+            owner: {
+                title: 'Chủ xe',
+                data_type: 'TEXT'
+            },
+            length: {
+                title: 'Dài',
+                data_type: 'TEXT'
+            },
+            width: {
+                title: 'Rộng',
+                data_type: 'TEXT'
+            },
+            height: {
+                title: 'Cao',
+                data_type: 'TEXT'
             }
         };
 
@@ -117,7 +151,18 @@ export class TruckComponent implements OnInit
 
     clearOne(): void {
         this.truck = {
+            area_code: '',
+            number_plate: '',
+            trademark: '',
+            year_of_manufacture: 2000,
+            owner: '',
+            length: 0,
+            width: 0,
+            height: 0,
             status: '',
+            note: '',
+            garage_id: 0,
+            truck_type_id: 0
         };
     }
 
@@ -208,17 +253,17 @@ export class TruckComponent implements OnInit
 
     actionCrud(obj: any): void {
         switch (obj.mode) {
-            case 'add':
+            case 'ADD':
                 this.clearOne();
                 this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'edit':
+            case 'EDIT':
                 this.loadOne(obj.data.id);
                 this.displayEditBtn(true);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'delete':
+            case 'DELETE':
                 this.fillDataModal(obj.data.id);
                 break;
             default:

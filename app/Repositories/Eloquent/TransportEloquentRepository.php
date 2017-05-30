@@ -48,6 +48,7 @@ class TransportEloquentRepository extends EloquentBaseRepository implements Tran
                 , DB::raw(DBHelper::getWithCurrencyFormat('transports.phi_tang_bo', 'fc_phi_tang_bo'))
                 , DB::raw(DBHelper::getWithCurrencyFormat('transports.add_score', 'fc_add_score'))
                 , DB::raw(DBHelper::getWithDateTimeFormat('transports.transport_date', 'fd_transport_date'))
+                , DB::raw(DBHelper::getWithAreaCodeNumberPlate('trucks.area_code', 'trucks.number_plate', 'truck_area_code_number_plate'))
             );
     }
 
