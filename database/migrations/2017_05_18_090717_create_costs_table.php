@@ -16,19 +16,20 @@ class CreateCostsTable extends Migration
         Schema::create('costs', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->unique()->comment('Mã');
-            $table->decimal('money', 18, 0)->default(0)->comment('Chi phí');
-            $table->decimal('vat')->default(0)->comment();
-            $table->decimal('after_vat', 18, 0)->default(0)->comment('Chi phí sau khi có vat');
             $table->enum('type', ['OIL', 'LUBE', 'PARK', 'OTHER']);
+            $table->decimal('vat')->default(0)->comment();
+            $table->decimal('after_vat', 18, 0)->default(0)->comment('Tổng chi phí (Chi phí sau khi có vat)');
 
-            $table->integer('fuel_id')->unsigned();
-            $table->decimal('quantum_liter')->default(0)->comment('Số lít dầu/nhớt');
-            $table->dateTime('refuel_date')->comment('Ngày đổ dầu/nhớt');
+            // Oil, Lube
+            $table->integer('fuel_id')->nullable()->unsigned();
+            $table->decimal('quantum_liter')->default(0)->nullable()->comment('Số lít dầu/nhớt');
+            $table->dateTime('refuel_date')->nullable()->comment('Ngày đổ dầu/nhớt');
 
-            $table->integer('unit_price_park_id')->unsigned();
-            $table->dateTime('checkin_date')->comment('Ngày đậu bãi');
-            $table->dateTime('checkout_date')->comment('Ngày ra bãi');
-            $table->integer('total_day')->comment('Tổng ngày đậu bãi');
+            // Park
+            $table->integer('unit_price_park_id')->nullable()->unsigned();
+            $table->dateTime('checkin_date')->nullable()->comment('Ngày đậu bãi');
+            $table->dateTime('checkout_date')->nullable()->comment('Ngày ra bãi');
+            $table->integer('total_day')->nullable()->comment('Tổng ngày đậu bãi');
 
             $table->text('note')->nullable()->comment('Ghi chú');
             $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');

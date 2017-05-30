@@ -4,7 +4,6 @@ import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
-import {ArrayHelperService} from '../../services/helpers/array.helper';
 
 @Component({
     selector: 'app-cost-oil',
@@ -48,8 +47,7 @@ export class CostOilComponent implements OnInit
     constructor(private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
-        , private domHelperService: DomHelperService
-        , private arrayHelperService: ArrayHelperService) {
+        , private domHelperService: DomHelperService) {
     }
 
     ngOnInit(): void {
@@ -59,11 +57,37 @@ export class CostOilComponent implements OnInit
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
-            name: {
-                title: 'Tên'
+            truck_area_code_number_plate: {
+                title: 'Xe',
+                data_type: 'TEXT',
             },
-            description: {
-                title: 'Mô tả'
+            fd_refuel_date: {
+                title: 'Ngày đổ',
+                data_type: 'DATETIME',
+                prop_name: 'refuel_date'
+            },
+            fc_fuel_price: {
+                title: 'Giá dầu',
+                data_type: 'NUMBER',
+                prop_name: 'fuel_price'
+            },
+            quantum_liter: {
+                title: 'Số lít',
+                data_type: 'NUMBER'
+            },
+            fc_vat: {
+                title: 'VAT',
+                data_type: 'NUMBER',
+                prop_name: 'vat'
+            },
+            fc_after_vat: {
+                title: 'Tổng chi phí',
+                data_type: 'NUMBER',
+                prop_name: 'after_vat'
+            },
+            note: {
+                title: 'Ghi chú',
+                data_type: 'TEXT'
             }
         };
 
@@ -93,8 +117,6 @@ export class CostOilComponent implements OnInit
     reloadData(arr_data: any[]): void {
         this.cost_oils = [];
         this.trucks = arr_data['trucks'];
-
-        this.trucks = this.arrayHelperService.setAreaCodeNumberPlate(this.trucks);
     }
 
     refreshData(): void {
@@ -115,8 +137,14 @@ export class CostOilComponent implements OnInit
 
     clearOne(): void {
         this.cost_oil = {
-            name: '',
-            description: ''
+            vat: 0,
+            after_vat: 0,
+            fuel_id: 0,
+            fuel_price: 0,
+            quantum_liter: 0,
+            refuel_date: '',
+            note: '',
+            truck_id: 0
         };
     }
 
@@ -187,10 +215,6 @@ export class CostOilComponent implements OnInit
 
     validateOne(): boolean {
         let flag: boolean = true;
-        if (this.cost_oil.name == '') {
-            flag = false;
-            this.toastrHelperService.showToastr('warning', `Tên ${this.title} không được để trống!`);
-        }
         return flag;
     }
 
@@ -301,6 +325,10 @@ export class CostOilComponent implements OnInit
     }
 
     /** ===== FUNCTION ACTION ===== **/
+    public computeAfterVat(): void {
+        this.cost_oil.after_vat = (this.cost_oil.quantum_liter * this.cost_oil.fuel_price)
+         + ((this.cost_oil.quantum_liter * this.cost_oil.fuel_price) * this.cost_oil.vat / 100);
+    }
 
     /** ===== FUNCTION ===== **/
 }

@@ -128,20 +128,17 @@
                                                [(value)]="cost_oil.truck_id">
                                 </xautocomplete>
                               </div>
-                              <div class="col-md-6">
-                                <label>Số lít</label>
-                                <input type="text" class="form-control"
-                                       [(ngModel)]="cost_oil.quantum_liter" name="quantum_liter">
-                              </div>
+                              <div class="col-md-6"></div>
                             </div>
                             <div class="row">
                               <div class="col-md-6">
                                 <label>Đơn giá</label>
-                                <currency [ngModel]="cost_oil.unit_price" name="unit_price"></currency>
+                                <currency [ngModel]="cost_oil.fuel_price" name="fuel_price"></currency>
                               </div>
                               <div class="col-md-6">
-                                <label>Thành tiền</label>
-                                <currency [(ngModel)]="cost_oil.money" name="money"></currency>
+                                <label>Số lít</label>
+                                <input type="text" class="form-control"
+                                       [(ngModel)]="cost_oil.quantum_liter" name="quantum_liter">
                               </div>
                             </div>
                             <div class="row">

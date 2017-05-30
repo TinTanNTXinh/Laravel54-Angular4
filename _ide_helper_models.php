@@ -337,10 +337,9 @@ namespace App{
  *
  * @property int $id
  * @property string $code Mã
- * @property float $money Chi phí
- * @property float $vat 1
- * @property float $after_vat Chi phí sau khi có vat
  * @property string $type
+ * @property float $vat 1
+ * @property float $after_vat Tổng chi phí (Chi phí sau khi có vat)
  * @property int $fuel_id
  * @property float $quantum_liter Số lít dầu/nhớt
  * @property string $refuel_date Ngày đổ dầu/nhớt
@@ -369,7 +368,6 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereFuelId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereInvoiceId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Cost whereMoney($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereNote($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereQuantumLiter($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Cost whereRefuelDate($value)
@@ -828,7 +826,6 @@ namespace App{
  * @property string $address
  * @property string $contactor
  * @property string $phone
- * @property string $note
  * @property bool $active Kích hoạt
  * @property int $garage_type_id
  * @property \Carbon\Carbon $created_at
@@ -842,7 +839,6 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Garage whereGarageTypeId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Garage whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Garage whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Garage whereNote($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Garage wherePhone($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Garage whereUpdatedAt($value)
  */
