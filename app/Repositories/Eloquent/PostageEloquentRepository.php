@@ -25,7 +25,8 @@ class PostageEloquentRepository extends EloquentBaseRepository implements Postag
                 , 'units.name as unit_name'
                 , DB::raw(DBHelper::getWithCurrencyFormat('postages.unit_price', 'fc_unit_price'))
                 , DB::raw(DBHelper::getWithDateTimeFormat('postages.apply_date', 'fd_apply_date'))
-            );
+            )
+            ->orderBy('postages.apply_date', 'desc');
     }
 
     public function oneSkeleton($id)

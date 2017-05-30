@@ -10,6 +10,8 @@ use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
 use App\Common\AuthHelper;
 use Route;
+use DB;
+use League\Flysystem\Exception;
 
 class LubeController extends Controller implements ICrud, IValidate
 {
@@ -126,36 +128,107 @@ class LubeController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
-        $one = [
-            'code'        => $this->lubeRepo->generateCode('LUBE'),
-            'name'        => $data['name'],
-            'description' => $data['description'],
-            'active'      => true
-        ];
+        try {
+            DB::beginTransaction();
 
-        return $this->lubeRepo->create($one) ? true : false;
+            $i_one = [
+                'code'         => $this->lubeRepo->generateCode('LUBE'),
+                'price'        => $data['price'],
+                'type'         => 'LUBE',
+                'apply_date'   => DateTimeHelper::toStringDateTimeClientForDB($data['apply_date']),
+                'note'         => $data['note'],
+                'created_by'   => $this->user->id,
+                'updated_by'   => 0,
+                'created_date' => date('Y-m-d'),
+                'updated_date' => null,
+                'active'       => true
+            ];
+
+            $one = $this->lubeRepo->create($i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function updateOne($data)
     {
-        $one = $this->lubeRepo->find($data['id']);
+        try {
+            DB::beginTransaction();
 
-        $input = [
-            'name'        => $data['name'],
-            'description' => $data['description']
-        ];
+            $one = $this->lubeRepo->find($data['id']);
 
-        return $this->lubeRepo->update($one, $input) ? true : false;
+            $i_one = [
+                'price'        => $data['price'],
+                'type'         => 'LUBE',
+                'apply_date'   => DateTimeHelper::toStringDateTimeClientForDB($data['apply_date']),
+                'note'         => $data['note'],
+                'updated_by'   => $this->user->id,
+                'updated_date' => date('Y-m-d'),
+                'active'       => true
+            ];
+
+            $one = $this->lubeRepo->update($one, $i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deactivateOne($id)
     {
-        return $this->lubeRepo->deactivate($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->lubeRepo->deactivate($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deleteOne($id)
     {
-        return $this->lubeRepo->destroy($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->lubeRepo->destroy($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function searchOne($filter)

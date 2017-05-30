@@ -23,7 +23,8 @@ class OilEloquentRepository extends EloquentBaseRepository implements OilReposit
             ->select('fuels.*'
                 , DB::raw(DBHelper::getWithCurrencyFormat('fuels.price', 'fc_price'))
                 , DB::raw(DBHelper::getWithDateTimeFormat('fuels.apply_date', 'fd_apply_date'))
-            );
+            )
+            ->orderBy('apply_date', 'desc');
     }
 
     public function oneSkeleton($id)
