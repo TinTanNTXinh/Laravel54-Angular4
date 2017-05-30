@@ -7,14 +7,13 @@ use App\ProductCode;
 
 class ProductCodeEloquentRepository extends EloquentBaseRepository implements ProductCodeRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return ProductCode::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

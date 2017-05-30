@@ -54,7 +54,7 @@ interface BaseRepositoryInterface
     /**
      * @return mixed
      */
-    public function allActiveQuery();
+    public function allActiveQuery($active = 'active');
 
     /**
      * @param $prefix

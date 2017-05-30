@@ -7,14 +7,13 @@ use App\Role;
 
 class RoleEloquentRepository extends EloquentBaseRepository implements RoleRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Role::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true)

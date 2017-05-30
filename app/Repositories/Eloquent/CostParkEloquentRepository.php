@@ -7,14 +7,13 @@ use App\Cost;
 
 class CostParkEloquentRepository extends EloquentBaseRepository implements CostParkRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Cost::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true)

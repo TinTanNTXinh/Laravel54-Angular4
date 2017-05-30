@@ -9,18 +9,13 @@ use DB;
 
 class TransportEloquentRepository extends EloquentBaseRepository implements TransportRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Transport::class;
     }
 
-    /**
-     * Lấy danh sách các post đã active
-     * @return object
-     */
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->where('transports.active', true)

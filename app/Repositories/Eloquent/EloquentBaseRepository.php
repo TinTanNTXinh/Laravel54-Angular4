@@ -98,9 +98,9 @@ abstract class EloquentBaseRepository implements BaseRepositoryInterface
         return $this->model->whereActive(true)->get();
     }
 
-    public function allActiveQuery()
+    public function allActiveQuery($active = 'active')
     {
-        return $this->model->whereActive(true);
+        return $this->model->where($active, true);
     }
 
     public function generateCode($prefix)

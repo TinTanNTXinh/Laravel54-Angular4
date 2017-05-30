@@ -7,14 +7,13 @@ use App\Driver;
 
 class DriverEloquentRepository extends EloquentBaseRepository implements DriverRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Driver::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

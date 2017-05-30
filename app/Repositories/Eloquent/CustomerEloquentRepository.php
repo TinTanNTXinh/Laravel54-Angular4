@@ -9,14 +9,13 @@ use App\Common\DBHelper;
 
 class CustomerEloquentRepository extends EloquentBaseRepository implements CustomerRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Customer::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->where('customers.active', true)

@@ -7,14 +7,13 @@ use App\Fuel;
 
 class OilEloquentRepository extends EloquentBaseRepository implements OilRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Fuel::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true)

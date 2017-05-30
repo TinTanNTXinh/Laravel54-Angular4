@@ -7,14 +7,13 @@ use App\FormulaSample;
 
 class FormulaSampleEloquentRepository extends EloquentBaseRepository implements FormulaSampleRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return FormulaSample::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

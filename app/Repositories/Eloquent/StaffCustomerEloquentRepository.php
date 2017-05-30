@@ -7,14 +7,13 @@ use App\StaffCustomer;
 
 class StaffCustomerEloquentRepository extends EloquentBaseRepository implements StaffCustomerRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return StaffCustomer::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->where('staff_customers.active', true)

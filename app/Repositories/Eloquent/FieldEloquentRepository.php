@@ -7,14 +7,13 @@ use App\Field;
 
 class FieldEloquentRepository extends EloquentBaseRepository implements FieldRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Field::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

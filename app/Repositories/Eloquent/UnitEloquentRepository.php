@@ -7,14 +7,13 @@ use App\Unit;
 
 class UnitEloquentRepository extends EloquentBaseRepository implements UnitRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Unit::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

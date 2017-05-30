@@ -7,14 +7,13 @@ use App\Cost;
 
 class CostOtherEloquentRepository extends EloquentBaseRepository implements CostOtherRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Cost::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true)

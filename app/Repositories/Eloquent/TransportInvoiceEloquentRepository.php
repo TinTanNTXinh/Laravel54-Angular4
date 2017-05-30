@@ -7,14 +7,13 @@ use App\TransportInvoice;
 
 class TransportInvoiceEloquentRepository extends EloquentBaseRepository implements TransportInvoiceRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return TransportInvoice::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

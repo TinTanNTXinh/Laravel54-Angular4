@@ -7,14 +7,13 @@ use App\InvoiceDetail;
 
 class InvoiceDetailEloquentRepository extends EloquentBaseRepository implements InvoiceDetailRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return InvoiceDetail::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

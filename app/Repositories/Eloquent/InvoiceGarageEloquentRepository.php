@@ -7,14 +7,13 @@ use App\Invoice;
 
 class InvoiceGarageEloquentRepository extends EloquentBaseRepository implements InvoiceGarageRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Invoice::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true)

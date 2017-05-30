@@ -7,14 +7,13 @@ use App\UnitPricePark;
 
 class UnitPriceParkEloquentRepository extends EloquentBaseRepository implements UnitPriceParkRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return UnitPricePark::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

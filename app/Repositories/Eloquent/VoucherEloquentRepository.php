@@ -7,14 +7,13 @@ use App\Voucher;
 
 class VoucherEloquentRepository extends EloquentBaseRepository implements VoucherRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Voucher::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

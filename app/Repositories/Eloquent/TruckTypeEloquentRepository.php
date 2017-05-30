@@ -7,14 +7,13 @@ use App\TruckType;
 
 class TruckTypeEloquentRepository extends EloquentBaseRepository implements TruckTypeRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return TruckType::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

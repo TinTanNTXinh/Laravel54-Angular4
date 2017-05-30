@@ -10,14 +10,13 @@ use App\Common\DBHelper;
 
 class PostageEloquentRepository extends EloquentBaseRepository implements PostageRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Postage::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->where('postages.active', true)
@@ -39,7 +38,7 @@ class PostageEloquentRepository extends EloquentBaseRepository implements Postag
         if(!isset($i_transport_date))
             $i_transport_date = date('Y-m-d') . ' 00:00:00';
 
-        $postage_ids = Postage::whereActive(true)
+        $postage_ids = $this->allActiveQuery()
             ->where('customer_id', $i_customer_id)
             ->where('apply_date', '<', $i_transport_date)
             ->pluck('id')
@@ -92,7 +91,8 @@ class PostageEloquentRepository extends EloquentBaseRepository implements Postag
         $result_postage_ids = collect($founds)->collapse();
         if (count($result_postage_ids) == count($i_formulas) && count($result_postage_ids->unique()) == 1) {
             $postage_id = $result_postage_ids->unique()->first();
-            $postage = Postage::where('postages.id', '=', $postage_id)
+            $postage = $this->allActiveQuery('postages.active')
+                ->where('postages.id', '=', $postage_id)
                 ->leftJoin('units', 'units.id', '=', 'postages.unit_id')
                 ->select('postages.*', 'units.name as unit_name')
                 ->first();

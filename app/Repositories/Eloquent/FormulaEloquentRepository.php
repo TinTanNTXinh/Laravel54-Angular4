@@ -8,14 +8,13 @@ use App\Postage;
 
 class FormulaEloquentRepository extends EloquentBaseRepository implements FormulaRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Formula::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);
@@ -39,7 +38,7 @@ class FormulaEloquentRepository extends EloquentBaseRepository implements Formul
 
         if(!$postage) return [];
 
-        $formulas = $this->model->whereActive(true)
+        $formulas = $this->allActiveQuery()
             ->where('postage_id', $postage->id)
             ->get();
 
@@ -48,7 +47,7 @@ class FormulaEloquentRepository extends EloquentBaseRepository implements Formul
 
     public function deleteByPostageId($postage_id)
     {
-        return $this->model->whereActive(true)
+        return $this->allActiveQuery()
             ->where('postage_id', $postage_id)
             ->delete();
     }

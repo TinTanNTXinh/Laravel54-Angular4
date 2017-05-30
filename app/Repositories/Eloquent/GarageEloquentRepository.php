@@ -7,14 +7,13 @@ use App\Garage;
 
 class GarageEloquentRepository extends EloquentBaseRepository implements GarageRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return Garage::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

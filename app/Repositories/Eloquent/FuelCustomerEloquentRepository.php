@@ -7,14 +7,13 @@ use App\FuelCustomer;
 
 class FuelCustomerEloquentRepository extends EloquentBaseRepository implements FuelCustomerRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return FuelCustomer::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);

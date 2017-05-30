@@ -7,14 +7,13 @@ use App\DriverTruck;
 
 class DriverTruckEloquentRepository extends EloquentBaseRepository implements DriverTruckRepositoryInterface
 {
-    /**
-     * Khai báo Model
-     */
+    /** ===== INIT MODEL ===== */
     public function setModel()
     {
         return DriverTruck::class;
     }
 
+    /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
         return $this->model->whereActive(true);
