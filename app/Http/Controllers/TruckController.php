@@ -160,7 +160,7 @@ class TruckController extends Controller implements ICrud, IValidate
                 'updated_date'        => null,
                 'active'              => true,
                 'truck_type_id'       => $data['truck_type_id'],
-                'garage_type_id'      => $data['garage_type_id']
+                'garage_id'           => $data['garage_id']
             ];
 
             $one = $this->truckRepo->create($i_one);
@@ -200,7 +200,7 @@ class TruckController extends Controller implements ICrud, IValidate
                 'updated_date'        => date('Y-m-d'),
                 'active'              => true,
                 'truck_type_id'       => $data['truck_type_id'],
-                'garage_type_id'      => $data['garage_type_id']
+                'garage_id'           => $data['garage_id']
             ];
 
             $one = $this->truckRepo->update($one, $i_one);

@@ -183,7 +183,6 @@
                               <div class="col-lg-10">
                                 <select [(ngModel)]="truck.status"
                                         name="sup_id" class="form-control m-b">
-                                  <option disabled selected value> -- Chọn trạng thái -- </option>
                                   <option *ngFor="let status of statuses"
                                           value="{{ status }}">
                                     {{ status }}

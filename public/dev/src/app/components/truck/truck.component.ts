@@ -159,7 +159,7 @@ export class TruckComponent implements OnInit
             length: 0,
             width: 0,
             height: 0,
-            status: '',
+            status: 'Chưa phân tài',
             note: '',
             garage_id: 0,
             truck_type_id: 0
