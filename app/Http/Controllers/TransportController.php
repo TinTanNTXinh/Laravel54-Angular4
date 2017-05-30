@@ -494,7 +494,11 @@ class TransportController extends Controller implements ICrud, IValidate
         $customer_id    = $data['customer_id'];
         $transport_date = DateTimeHelper::toStringDateTimeClientForDB($data['transport_date']);
 
-        $formulas = $this->formulaRepo->readByCustomerId($customer_id, $transport_date);
+        $postage = $this->postageRepo->findByCustomerIdAndTransportDate($customer_id, $transport_date);
+
+        if(!$postage) return ['formulas' => []];
+
+        $formulas = $this->formulaRepo->readByPostageId($postage->id);
 
         return ['formulas' => $formulas];
     }
@@ -512,7 +516,8 @@ class TransportController extends Controller implements ICrud, IValidate
         $i_transport_date = DateTimeHelper::toStringDateTimeClientForDB($data['transport_date']);
         $i_formulas       = $data['formulas'];
 
-        $postage = $this->postageRepo->readByCustomerIdFormulas($i_formulas, $i_customer_id, $i_transport_date);
+        $postage_id = $this->formulaRepo->findPostageIdByFormulas($i_formulas, $i_customer_id, $i_transport_date);
+        $postage = $this->postageRepo->oneSkeleton($postage_id)->first();
 
         return ['postage' => $postage];
     }

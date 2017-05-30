@@ -8,7 +8,9 @@ interface FormulaRepositoryInterface
 
     public function oneSkeleton($id);
 
-    public function readByCustomerId($customer_id, $transport_date);
-
     public function deleteByPostageId($postage_id);
+
+    public function readByPostageId($postage_id);
+
+    public function findPostageIdByFormulas($i_formulas, $i_customer_id, $i_transport_date = null);
 }
