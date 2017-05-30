@@ -90,8 +90,8 @@ class RolesTableSeeder extends Seeder
         $array_icon_name = [
             'fa fa-dashboard icon text-primary-lter',
             'fa fa-sitemap icon text-danger-lter',
-            'fa fa-user icon text-danger-lter',
             'fa fa-male icon text-danger-lter',
+            'fa fa-id-card icon text-danger-lter',
             'fa fa-truck icon text-info-lter',
             'fa fa-users icon text-info-lter',
             'fa fa-shopping-cart icon text-success-lter',
@@ -107,7 +107,7 @@ class RolesTableSeeder extends Seeder
             'fa fa-tint icon text-warning-lter',
             'fa fa-calculator icon text-primary-lter',
             'fa fa-calculator icon text-primary-lter',
-            'fa fa-male icon text-info-lter'
+            'fa fa-user icon text-info-lter'
         ];
 
         foreach ($array_name as $key => $name) {
