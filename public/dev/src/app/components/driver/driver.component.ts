@@ -18,6 +18,13 @@ export class DriverComponent implements OnInit
     public drivers_search: any[] = [];
     public driver: any;
 
+    public birthday: Date = new Date();
+    public ngay_cap_chung_minh: Date = new Date();
+    public start_date: Date = new Date();
+    public finish_date: Date = new Date();
+    public ngay_cap_bang_lai: Date = new Date();
+    public ngay_het_han_bang_lai: Date = new Date();
+
     /** ICommon **/
     title: string;
     placeholder_code: string;
@@ -55,11 +62,59 @@ export class DriverComponent implements OnInit
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
-            code: {
-                title: 'Mã'
-            },
             fullname: {
-                title: 'Tên'
+                title: 'Tên',
+                data_type: 'TEXT'
+            },
+            phone: {
+                title: 'Điện thoại',
+                data_type: 'TEXT'
+            },
+            fd_birthday: {
+                title: 'Ngày sinh',
+                data_type: 'TEXT',
+                prop_name: 'birthday'
+            },
+            dia_chi_thuong_tru: {
+                title: 'Địa chỉ thường trú',
+                data_type: 'TEXT'
+            },
+            dia_chi_tam_tru: {
+                title: 'Địa chỉ tạm trú',
+                data_type: 'TEXT'
+            },
+            so_chung_minh: {
+                title: 'Số chứng minh',
+                data_type: 'TEXT'
+            },
+            fd_ngay_cap_chung_minh: {
+                title: 'Ngày cấp chứng minh',
+                data_type: 'DATETIME',
+                prop_name: 'ngay_cap_chung_minh'
+            },
+            loai_bang_lai: {
+                title: 'Loại bằng lái',
+                data_type: 'TEXT'
+            },
+            fd_ngay_cap_bang_lai: {
+                title: 'Ngày cấp bằng lái',
+                data_type: 'DATETIME',
+                prop_name: 'ngay_cap_bang_lai'
+            },
+            fd_ngay_het_han_bang_lai: {
+                title: 'Ngày hết hạn bằng lái',
+                data_type: 'DATETIME',
+                prop_name: 'ngay_het_han_bang_lai'
+            },
+            fd_start_date: {
+                title: 'Ngày vào làm',
+                data_type: 'DATETIME',
+                prop_name: 'start_date'
+            },
+            fd_finish_date: {
+                title: 'Ngày thôi việc',
+                data_type: 'DATETIME',
+                prop_name: 'finish_date'
             }
         };
 
@@ -101,34 +156,36 @@ export class DriverComponent implements OnInit
 
     /** ICrud **/
     loadOne(id: number): void {
-        this.driver = this.drivers.find(function (o) {
-            return o['id'] == id;
-        });
+        this.driver = this.drivers.find(o => o.id == id);
+
+        this.setDateTimeDriverToGlobal();
     }
 
     clearOne(): void {
         this.driver = {
             fullname: '',
             phone: '',
-            birthday: Date,
-            sex: '',
+            birthday: '',
+            sex: 'Nam',
             email: '',
             dia_chi_thuong_tru: '',
             dia_chi_tam_tru: '',
             so_chung_minh: '',
-            ngay_cap_chung_minh: Date,
+            ngay_cap_chung_minh: '',
             loai_bang_lai: '',
             so_bang_lai: '',
-            ngay_cap_bang_lai: Date,
-            ngay_het_han_bang_lai: Date,
-            start_date: Date,
-            finish_date: Date,
+            ngay_cap_bang_lai: '',
+            ngay_het_han_bang_lai: '',
+            start_date: '',
+            finish_date: '',
             note: ''
         };
     }
 
     addOne(): void {
         if (!this.validateOne()) return;
+
+        this.setDateTimeGlobalToDriver();
 
         this.httpClientService.post(this.prefix_url, {"driver": this.driver}).subscribe(
             (success: any) => {
@@ -146,6 +203,8 @@ export class DriverComponent implements OnInit
 
     updateOne(): void {
         if (!this.validateOne()) return;
+
+        this.setDateTimeGlobalToDriver();
 
         this.httpClientService.put(this.prefix_url, {"driver": this.driver}).subscribe(
             (success: any) => {
@@ -214,17 +273,17 @@ export class DriverComponent implements OnInit
 
     actionCrud(obj: any): void {
         switch (obj.mode) {
-            case 'add':
+            case 'ADD':
                 this.clearOne();
                 this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'edit':
+            case 'EDIT':
                 this.loadOne(obj.data.id);
                 this.displayEditBtn(true);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'delete':
+            case 'DELETE':
                 this.fillDataModal(obj.data.id);
                 break;
             default:
@@ -309,5 +368,22 @@ export class DriverComponent implements OnInit
     }
 
     /** My Function **/
-    
+    private setDateTimeGlobalToDriver(): void {
+        this.driver.birthday = this.dateHelperService.getDate(this.birthday);
+        this.driver.ngay_cap_chung_minh = this.dateHelperService.getDate(this.ngay_cap_chung_minh);
+        this.driver.start_date = this.dateHelperService.getDate(this.start_date);
+        this.driver.finish_date = this.dateHelperService.getDate(this.finish_date);
+        this.driver.ngay_cap_bang_lai = this.dateHelperService.getDate(this.ngay_cap_bang_lai);
+        this.driver.ngay_het_han_bang_lai = this.dateHelperService.getDate(this.ngay_het_han_bang_lai);
+    }
+
+    private setDateTimeDriverToGlobal(): void {
+        this.birthday = new Date(this.driver.birthday);
+        this.ngay_cap_chung_minh = new Date(this.driver.ngay_cap_chung_minh);
+        this.start_date = new Date(this.driver.start_date);
+        this.finish_date = new Date(this.driver.finish_date);
+        this.ngay_cap_bang_lai = new Date(this.driver.ngay_cap_bang_lai);
+        this.ngay_het_han_bang_lai = new Date(this.driver.ngay_het_han_bang_lai);
+    }
+
 }
