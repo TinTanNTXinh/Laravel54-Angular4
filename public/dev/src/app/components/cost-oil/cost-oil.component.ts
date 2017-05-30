@@ -17,6 +17,9 @@ export class CostOilComponent implements OnInit
     public cost_oils: any[] = [];
     public cost_oil: any;
     public trucks: any[] = [];
+    public oil: any = {
+        price: 0
+    };
 
     public refuel_date: Date = new Date();
     public refuel_time: Date = new Date();
@@ -75,10 +78,9 @@ export class CostOilComponent implements OnInit
                 title: 'Số lít',
                 data_type: 'NUMBER'
             },
-            fc_vat: {
+            vat: {
                 title: 'VAT',
-                data_type: 'NUMBER',
-                prop_name: 'vat'
+                data_type: 'NUMBER'
             },
             fc_after_vat: {
                 title: 'Tổng chi phí',
@@ -117,6 +119,7 @@ export class CostOilComponent implements OnInit
     reloadData(arr_data: any[]): void {
         this.cost_oils = [];
         this.trucks = arr_data['trucks'];
+        this.oil = arr_data['oil'];
     }
 
     refreshData(): void {
@@ -133,6 +136,8 @@ export class CostOilComponent implements OnInit
     /** ===== ICRUD ===== **/
     loadOne(id: number): void {
         this.cost_oil = this.cost_oils.find(o => o.id == id);
+
+        this.setDataOneToGlobal();
     }
 
     clearOne(): void {
@@ -140,7 +145,6 @@ export class CostOilComponent implements OnInit
             vat: 0,
             after_vat: 0,
             fuel_id: 0,
-            fuel_price: 0,
             quantum_liter: 0,
             refuel_date: '',
             note: '',
@@ -150,6 +154,8 @@ export class CostOilComponent implements OnInit
 
     addOne(): void {
         if (!this.validateOne()) return;
+
+        this.setDataGlobalToOne();
 
         this.httpClientService.post(this.prefix_url, {"cost_oil": this.cost_oil}).subscribe(
             (success: any) => {
@@ -167,6 +173,8 @@ export class CostOilComponent implements OnInit
 
     updateOne(): void {
         if (!this.validateOne()) return;
+
+        this.setDataGlobalToOne();
 
         this.httpClientService.put(this.prefix_url, {"cost_oil": this.cost_oil}).subscribe(
             (success: any) => {
@@ -231,17 +239,17 @@ export class CostOilComponent implements OnInit
 
     actionCrud(obj: any): void {
         switch (obj.mode) {
-            case 'add':
+            case 'ADD':
                 this.clearOne();
                 this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'edit':
+            case 'EDIT':
                 this.loadOne(obj.data.id);
                 this.displayEditBtn(true);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'delete':
+            case 'DELETE':
                 this.fillDataModal(obj.data.id);
                 break;
             default:
@@ -326,9 +334,21 @@ export class CostOilComponent implements OnInit
 
     /** ===== FUNCTION ACTION ===== **/
     public computeAfterVat(): void {
-        this.cost_oil.after_vat = (this.cost_oil.quantum_liter * this.cost_oil.fuel_price)
-         + ((this.cost_oil.quantum_liter * this.cost_oil.fuel_price) * this.cost_oil.vat / 100);
+        this.cost_oil.after_vat = (this.cost_oil.quantum_liter * this.oil.price)
+         + ((this.cost_oil.quantum_liter * this.oil.price) * this.cost_oil.vat / 100);
     }
 
     /** ===== FUNCTION ===== **/
+    private setDataGlobalToOne(): void {
+        this.cost_oil.refuel_date = this.dateHelperService.joinDateTimeToString(this.refuel_date, this.refuel_time);
+
+        this.cost_oil.fuel_id = this.oil.id;
+    }
+
+    private setDataOneToGlobal(): void {
+        this.oil.id = this.cost_oil.fuel_id;
+
+        this.refuel_date = new Date(this.cost_oil.refuel_date);
+        this.refuel_time = new Date(this.cost_oil.refuel_date);
+    }
 }

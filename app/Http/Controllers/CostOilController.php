@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Repositories\CostOilRepositoryInterface;
+use App\Repositories\OilRepositoryInterface;
 use App\Repositories\TruckRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
@@ -21,13 +22,15 @@ class CostOilController extends Controller implements ICrud, IValidate
     private $table_name;
     private $skeleton;
 
-    protected $costOilRepo, $truckRepo;
+    protected $costOilRepo, $truckRepo, $oilRepo;
 
     public function __construct(CostOilRepositoryInterface $costOilRepo
-        , TruckRepositoryInterface $truckRepo)
+        , TruckRepositoryInterface $truckRepo
+        , OilRepositoryInterface $oilRepo)
     {
         $this->costOilRepo = $costOilRepo;
         $this->truckRepo   = $truckRepo;
+        $this->oilRepo     = $oilRepo;
 
         $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
@@ -117,9 +120,12 @@ class CostOilController extends Controller implements ICrud, IValidate
 
         $trucks = $this->truckRepo->allSkeleton()->get();
 
+        $oil = $this->oilRepo->findByApplyDate();
+
         return [
             'cost_oils' => $all,
-            'trucks'    => $trucks
+            'trucks'    => $trucks,
+            'oil'       => $oil
         ];
     }
 
@@ -144,7 +150,7 @@ class CostOilController extends Controller implements ICrud, IValidate
                 'after_vat' => $data['after_vat'],
 
                 'fuel_id'        => $data['fuel_id'],
-                'quantum_litter' => $data['quantum_litter'],
+                'quantum_liter' => $data['quantum_liter'],
                 'refuel_date'    => DateTimeHelper::toStringDateTimeClientForDB($data['refuel_date']),
 
                 'unit_price_park_id' => null,
@@ -190,7 +196,7 @@ class CostOilController extends Controller implements ICrud, IValidate
                 'after_vat' => $data['after_vat'],
 
                 'fuel_id'        => $data['fuel_id'],
-                'quantum_litter' => $data['quantum_litter'],
+                'quantum_liter' => $data['quantum_liter'],
                 'refuel_date'    => DateTimeHelper::toStringDateTimeClientForDB($data['refuel_date']),
 
                 'note'         => $data['note'],

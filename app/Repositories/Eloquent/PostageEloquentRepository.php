@@ -4,9 +4,9 @@ namespace App\Repositories\Eloquent;
 
 use App\Repositories\PostageRepositoryInterface;
 use App\Postage;
-use App\Formula;
 use DB;
 use App\Common\DBHelper;
+use App\Common\DateTimeHelper;
 
 class PostageEloquentRepository extends EloquentBaseRepository implements PostageRepositoryInterface
 {
@@ -44,11 +44,11 @@ class PostageEloquentRepository extends EloquentBaseRepository implements Postag
     public function findByCustomerIdAndTransportDate($customer_id, $transport_date = null)
     {
         if (!isset($transport_date))
-            $transport_date = date('Y-m-d') . ' 00:00:00';
+            $transport_date = DateTimeHelper::addTimeForDate(date('Y-m-d'), 'max');
 
         $postage = $this->allActiveQuery()
             ->where('customer_id', $customer_id)
-            ->where('apply_date', '<', $transport_date)
+            ->where('apply_date', '<=', $transport_date)
             ->orderBy('apply_date', 'desc')
             ->first();
 

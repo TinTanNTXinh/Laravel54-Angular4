@@ -133,24 +133,30 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <label>Đơn giá</label>
-                                <currency [ngModel]="cost_oil.fuel_price" name="fuel_price"></currency>
+                                <currency [numberData]="oil.price"
+                                          [readonly]="true"
+                                          [ngModel]="oil.price" name="price">
+                                </currency>
                               </div>
                               <div class="col-md-6">
                                 <label>Số lít</label>
                                 <input type="text" class="form-control"
-                                       [(ngModel)]="cost_oil.quantum_liter" name="quantum_liter">
+                                       [(ngModel)]="cost_oil.quantum_liter" name="quantum_liter"
+                                       (input)="computeAfterVat()">
                               </div>
                             </div>
                             <div class="row">
                               <div class="col-md-6">
                                 <label>VAT</label>
                                 <input type="text" class="form-control"
-                                       [(ngModel)]="cost_oil.vat" name="vat">
+                                       [(ngModel)]="cost_oil.vat" name="vat"
+                                       (input)="computeAfterVat()">
                               </div>
                               <div class="col-md-6">
                                 <label>Tổng chi phí</label>
-                                <currency [(ngModel)]="cost_oil.after_vat" name="after_vat"
-                                          [readonly]="true">
+                                <currency [numberData]="cost_oil.after_vat"
+                                          [readonly]="true"
+                                          [ngModel]="cost_oil.after_vat" name="after_vat">
                                 </currency>
                               </div>
                             </div>

@@ -18,7 +18,7 @@ class LubeEloquentRepository extends EloquentBaseRepository implements LubeRepos
     /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
-        return $this->model->whereActive(true)
+        return $this->allActiveQuery()
             ->where('type', 'LUBE')
             ->select('fuels.*'
                 , DB::raw(DBHelper::getWithCurrencyFormat('fuels.price', 'fc_price'))

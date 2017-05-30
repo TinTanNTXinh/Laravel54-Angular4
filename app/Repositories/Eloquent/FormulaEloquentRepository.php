@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Repositories\FormulaRepositoryInterface;
 use App\Formula;
 use DB;
+use App\Common\DateTimeHelper;
 
 class FormulaEloquentRepository extends EloquentBaseRepository implements FormulaRepositoryInterface
 {
@@ -44,12 +45,12 @@ class FormulaEloquentRepository extends EloquentBaseRepository implements Formul
     public function findPostageIdByFormulas($i_formulas, $i_customer_id, $i_transport_date = null)
     {
         if (!isset($i_transport_date))
-            $i_transport_date = date('Y-m-d') . ' 00:00:00';
+            $i_transport_date = DateTimeHelper::addTimeForDate(date('Y-m-d'), 'max');
 
         $formulas = $this->allActiveQuery('formulas.active')
             ->leftJoin('postages', 'postages.id', '=', 'formulas.postage_id')
             ->where('postages.customer_id', $i_customer_id)
-            ->where('postages.apply_date', '<', $i_transport_date);
+            ->where('postages.apply_date', '<=', $i_transport_date);
 
         $founds = [];
         foreach ($i_formulas as $key => $i_formula) {
