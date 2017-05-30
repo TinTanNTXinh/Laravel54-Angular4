@@ -200,8 +200,7 @@ export class TransportComponent implements OnInit
                 this.transport = success['transport'];
 
                 // set transport_date
-                this.transport_date = new Date(this.transport.transport_date);
-                this.transport_time = new Date(this.transport.transport_date);
+                this.setDateTimeTransportToGlobal();
 
                 // set transport_vouchers
                 this.clearQuantumVoucher();
@@ -258,7 +257,7 @@ export class TransportComponent implements OnInit
     addOne(): void {
         if (!this.validateOne()) return;
 
-        this.setDateTimeToTransport();
+        this.setDateTimeGlobalToTransport();
 
         let transport_vouchers = this.vouchers.filter(function (obj) {
             return obj.quantum > 0;
@@ -292,7 +291,7 @@ export class TransportComponent implements OnInit
     updateOne(): void {
         if (!this.validateOne()) return;
 
-        this.setDateTimeToTransport();
+        this.setDateTimeGlobalToTransport();
 
         let transport_vouchers = this.vouchers.filter(function (obj) {
             return obj.quantum > 0;
@@ -636,8 +635,13 @@ export class TransportComponent implements OnInit
         );
     }
 
-    private setDateTimeToTransport(): void {
+    private setDateTimeGlobalToTransport(): void {
         this.transport.transport_date = this.dateHelperService.joinDateTimeToString(this.transport_date, this.transport_time);
+    }
+
+    private setDateTimeTransportToGlobal(): void {
+        this.transport_date = new Date(this.transport.transport_date);
+        this.transport_time = new Date(this.transport.transport_date);
     }
 
     private clearQuantumVoucher(): void {

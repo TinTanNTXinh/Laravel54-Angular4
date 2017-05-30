@@ -15,16 +15,15 @@ class FuelsTableSeeder extends Seeder
     public function run()
     {
         $default_price = 10000;
-        $faker         = \Faker\Factory::create();
 
-        $types = ['oil', 'lube'];
+        $types = ['OIL', 'LUBE'];
         foreach ($types as $type) {
             \App\Fuel::create([
-                'code'         => $this->generateCode(\App\Fuel::class, 'FUEL'),
+                'code'         => $this->generateCode(\App\Fuel::class, $type),
                 'price'        => $default_price,
                 'type'         => $type,
                 'apply_date'   => '2016-01-01 00:00:00',
-                'note'         => $faker->sentence,
+                'note'         => 'Giá mặc định ban đầu',
                 'created_by'   => 1,
                 'updated_by'   => 0,
                 'created_date' => date('Y-m-d'),

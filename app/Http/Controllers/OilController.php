@@ -10,6 +10,8 @@ use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
 use App\Common\AuthHelper;
 use Route;
+use DB;
+use League\Flysystem\Exception;
 
 class OilController extends Controller implements ICrud, IValidate
 {
@@ -126,36 +128,107 @@ class OilController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
-        $one = [
-            'code'        => $this->oilRepo->generateCode('OIL'),
-            'name'        => $data['name'],
-            'description' => $data['description'],
-            'active'      => true
-        ];
+        try {
+            DB::beginTransaction();
 
-        return $this->oilRepo->create($one) ? true : false;
+            $i_one = [
+                'code'         => $this->oilRepo->generateCode('OIL'),
+                'price'        => $data['price'],
+                'type'         => 'OIL',
+                'apply_date'   => DateTimeHelper::toStringDateTimeClientForDB($data['apply_date']),
+                'note'         => $data['note'],
+                'created_by'   => $this->user->id,
+                'updated_by'   => 0,
+                'created_date' => date('Y-m-d'),
+                'updated_date' => null,
+                'active'       => true
+            ];
+
+            $one = $this->oilRepo->create($i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function updateOne($data)
     {
-        $one = $this->oilRepo->find($data['id']);
+        try {
+            DB::beginTransaction();
 
-        $input = [
-            'name'        => $data['name'],
-            'description' => $data['description']
-        ];
+            $one = $this->oilRepo->find($data['id']);
 
-        return $this->oilRepo->update($one, $input) ? true : false;
+            $i_one = [
+                'price'        => $data['price'],
+                'type'         => 'OIL',
+                'apply_date'   => DateTimeHelper::toStringDateTimeClientForDB($data['apply_date']),
+                'note'         => $data['note'],
+                'updated_by'   => $this->user->id,
+                'updated_date' => date('Y-m-d'),
+                'active'       => true
+            ];
+
+            $one = $this->oilRepo->update($one, $i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deactivateOne($id)
     {
-        return $this->oilRepo->deactivate($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->oilRepo->deactivate($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deleteOne($id)
     {
-        return $this->oilRepo->destroy($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->oilRepo->destroy($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function searchOne($filter)

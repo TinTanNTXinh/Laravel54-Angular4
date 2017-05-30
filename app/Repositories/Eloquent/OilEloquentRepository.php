@@ -4,6 +4,8 @@ namespace App\Repositories\Eloquent;
 
 use App\Repositories\OilRepositoryInterface;
 use App\Fuel;
+use DB;
+use App\Common\DBHelper;
 
 class OilEloquentRepository extends EloquentBaseRepository implements OilRepositoryInterface
 {
@@ -17,7 +19,11 @@ class OilEloquentRepository extends EloquentBaseRepository implements OilReposit
     public function allSkeleton()
     {
         return $this->model->whereActive(true)
-            ->where('type', 'OIL');
+            ->where('type', 'OIL')
+            ->select('fuels.*'
+                , DB::raw(DBHelper::getWithCurrencyFormat('fuels.price', 'fc_price'))
+                , DB::raw(DBHelper::getWithDateTimeFormat('fuels.apply_date', 'fd_apply_date'))
+            );
     }
 
     public function oneSkeleton($id)

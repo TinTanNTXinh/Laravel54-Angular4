@@ -13,14 +13,14 @@ import {DomHelperService} from '../../services/helpers/dom.helper';
 export class OilComponent implements OnInit
     , ICommon, ICrud, IDatePicker, ISearch {
 
-    /** My Variables **/
+    /** ===== MY VARIABLES ===== **/
     public oils: any[] = [];
     public oil: any;
 
     public apply_date: Date = new Date();
     public apply_time: Date = new Date();
 
-    /** ICommon **/
+    /** ===== ICOMMON ===== **/
     title: string;
     placeholder_code: string;
     prefix_url: string;
@@ -28,11 +28,11 @@ export class OilComponent implements OnInit
     header: any;
     action_data: any;
 
-    /** ICrud **/
+    /** ===== ICRUD ===== **/
     modal: any;
     isEdit: boolean;
 
-    /** IDatePicker **/
+    /** ===== IDATEPICKER ===== **/
     range_date: any[];
     datepickerSettings: any;
     timepickerSettings: any;
@@ -40,7 +40,7 @@ export class OilComponent implements OnInit
     datepicker_to: Date;
     datepickerToOpts: any = {};
 
-    /** ISearch **/
+    /** ===== ISEARCH ===== **/
     filtering: any;
 
     constructor(private httpClientService: HttpClientService
@@ -57,8 +57,19 @@ export class OilComponent implements OnInit
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
-            fullname: {
-                title: 'Tên'
+            fd_apply_date: {
+                title: 'Tên',
+                data_type: 'Ngày áp dụng',
+                prop_name: 'apply_date'
+            },
+            fc_price: {
+                title: 'Giá',
+                data_type: 'NUMBER',
+                prop_name: 'price'
+            },
+            note: {
+                title: 'Ghi chú',
+                data_type: 'TEXT',
             }
         };
 
@@ -70,7 +81,7 @@ export class OilComponent implements OnInit
         };
     }
 
-    /** ICommon **/
+    /** ===== ICOMMON ===== **/
     loadData(): void {
         this.httpClientService.get(this.prefix_url).subscribe(
             (success: any) => {
@@ -98,19 +109,16 @@ export class OilComponent implements OnInit
         this.isLoading = status;
     }
 
-    /** ICrud **/
+    /** ===== ICRUD ===== **/
     loadOne(id: number): void {
-        this.oil = this.oils.find(function (o) {
-            return o['id'] == id;
-        });
-        this.isEdit = true;
-        this.domHelperService.showTab('menu2');
+        this.oil = this.oils.find(o => o.id == id);
+
+        this.setDateTimeOilToGlobal()
     }
 
     clearOne(): void {
         this.oil = {
-            apply_date: Date,
-            apply_time: Date,
+            apply_date: '',
             price: 0,
             note: ''
         };
@@ -118,6 +126,8 @@ export class OilComponent implements OnInit
 
     addOne(): void {
         if (!this.validateOne()) return;
+
+        this.setDateTimeGlobalToOil();
 
         this.httpClientService.post(this.prefix_url, {"oil": this.oil}).subscribe(
             (success: any) => {
@@ -135,6 +145,8 @@ export class OilComponent implements OnInit
 
     updateOne(): void {
         if (!this.validateOne()) return;
+
+        this.setDateTimeGlobalToOil();
 
         this.httpClientService.put(this.prefix_url, {"oil": this.oil}).subscribe(
             (success: any) => {
@@ -203,15 +215,17 @@ export class OilComponent implements OnInit
 
     actionCrud(obj: any): void {
         switch (obj.mode) {
-            case 'add':
-                this.displayEditBtn(false);
+            case 'ADD':
                 this.clearOne();
+                this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'edit':
+            case 'EDIT':
                 this.loadOne(obj.data.id);
+                this.displayEditBtn(true);
+                this.domHelperService.showTab('menu2');
                 break;
-            case 'delete':
+            case 'DELETE':
                 this.fillDataModal(obj.data.id);
                 break;
             default:
@@ -219,7 +233,7 @@ export class OilComponent implements OnInit
         }
     }
 
-    /** IDatePicker **/
+    /** ===== IDATEPICKER ===== **/
     handleDateFromChange(dateFrom: Date): void {
         this.datepicker_from = dateFrom;
         this.datepickerToOpts = {
@@ -248,7 +262,7 @@ export class OilComponent implements OnInit
         }
     }
 
-    /** ISearch **/
+    /** ===== ISEARCH ===== **/
     search(): void {
         if (this.datepicker_from != null && this.datepicker_to != null) {
             let from_date = this.dateHelperService.getDate(this.datepicker_from);
@@ -271,7 +285,7 @@ export class OilComponent implements OnInit
     }
 
     reloadDataSearch(arr_data: any[]): void {
-        this.oils = arr_data['lubes'];
+        this.oils = arr_data['oils'];
     }
 
     clearSearch(): void {
@@ -294,6 +308,16 @@ export class OilComponent implements OnInit
         }
     }
 
-    /** My Function **/
+    /** ===== FUNCTION ACTION ===== **/
+
+    /** ===== FUNCTION ===== **/
+    private setDateTimeGlobalToOil(): void {
+        this.oil.apply_date = this.dateHelperService.joinDateTimeToString(this.apply_date, this.apply_time);
+    }
+
+    private setDateTimeOilToGlobal(): void {
+        this.apply_date = new Date(this.oil.apply_date);
+        this.apply_time = new Date(this.oil.apply_date);
+    }
     
 }
