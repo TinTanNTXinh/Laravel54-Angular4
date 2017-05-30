@@ -149,9 +149,9 @@ class CostOilController extends Controller implements ICrud, IValidate
                 'vat'       => $data['vat'],
                 'after_vat' => $data['after_vat'],
 
-                'fuel_id'        => $data['fuel_id'],
+                'fuel_id'       => $data['fuel_id'],
                 'quantum_liter' => $data['quantum_liter'],
-                'refuel_date'    => DateTimeHelper::toStringDateTimeClientForDB($data['refuel_date']),
+                'refuel_date'   => DateTimeHelper::toStringDateTimeClientForDB($data['refuel_date']),
 
                 'unit_price_park_id' => null,
                 'checkin_date'       => null,
@@ -195,9 +195,9 @@ class CostOilController extends Controller implements ICrud, IValidate
                 'vat'       => $data['vat'],
                 'after_vat' => $data['after_vat'],
 
-                'fuel_id'        => $data['fuel_id'],
+                'fuel_id'       => $data['fuel_id'],
                 'quantum_liter' => $data['quantum_liter'],
-                'refuel_date'    => DateTimeHelper::toStringDateTimeClientForDB($data['refuel_date']),
+                'refuel_date'   => DateTimeHelper::toStringDateTimeClientForDB($data['refuel_date']),
 
                 'note'         => $data['note'],
                 'updated_by'   => $this->user->id,

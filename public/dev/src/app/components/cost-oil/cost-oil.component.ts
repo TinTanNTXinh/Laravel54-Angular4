@@ -362,8 +362,13 @@ export class CostOilComponent implements OnInit
 
         this.httpClientService.get(`oils/find?query=${JSON.stringify({apply_date: refuel_date})}`).subscribe(
             (success: any) => {
-                this.oil = success.oil;
-                this.setOilForOne();
+                if (success.oil) {
+                    this.oil = success.oil;
+                    this.setOilForOne();
+                } else {
+                    this.cost_oil.fuel_id = 0;
+                    this.cost_oil.fuel_price = 0;
+                }
             },
             (error: any) => {
                 this.toastrHelperService.showToastr('error');

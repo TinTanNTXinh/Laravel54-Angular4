@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Repositories\CostLubeRepositoryInterface;
+use App\Repositories\LubeRepositoryInterface;
 use App\Repositories\TruckRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
 use App\Common\AuthHelper;
 use Route;
+use DB;
+use League\Flysystem\Exception;
 
 class CostLubeController extends Controller implements ICrud, IValidate
 {
@@ -19,13 +22,15 @@ class CostLubeController extends Controller implements ICrud, IValidate
     private $table_name;
     private $skeleton;
 
-    protected $costLubeRepo, $truckRepo;
+    protected $costLubeRepo, $truckRepo, $lubeRepo;
 
     public function __construct(CostLubeRepositoryInterface $costLubeRepo
-        , TruckRepositoryInterface $truckRepo)
+        , TruckRepositoryInterface $truckRepo
+        , LubeRepositoryInterface $lubeRepo)
     {
         $this->costLubeRepo = $costLubeRepo;
         $this->truckRepo    = $truckRepo;
+        $this->lubeRepo     = $lubeRepo;
 
         $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
@@ -113,11 +118,14 @@ class CostLubeController extends Controller implements ICrud, IValidate
     {
         $all = $this->skeleton->get();
 
-        $trucks = $this->truckRepo->allActive();
+        $trucks = $this->truckRepo->allSkeleton()->get();
+
+        $lube = $this->lubeRepo->findByApplyDate();
 
         return [
             'cost_lubes' => $all,
-            'trucks'     => $trucks
+            'trucks'     => $trucks,
+            'lube'       => $lube
         ];
     }
 
@@ -132,36 +140,125 @@ class CostLubeController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
-        $one = [
-            'code'        => $this->costLubeRepo->generateCode('COSTOIL'),
-            'name'        => $data['name'],
-            'description' => $data['description'],
-            'active'      => true
-        ];
+        try {
+            DB::beginTransaction();
 
-        return $this->costLubeRepo->create($one) ? true : false;
+            $i_one = [
+                'code'      => $this->costLubeRepo->generateCode('COSTLUBE'),
+                'type'      => 'LUBE',
+                'vat'       => $data['vat'],
+                'after_vat' => $data['after_vat'],
+
+                'fuel_id'       => $data['fuel_id'],
+                'quantum_liter' => $data['quantum_liter'],
+                'refuel_date'   => DateTimeHelper::toStringDateTimeClientForDB($data['refuel_date']),
+
+                'unit_price_park_id' => null,
+                'checkin_date'       => null,
+                'checkout_date'      => null,
+                'total_day'          => null,
+
+                'note'         => $data['note'],
+                'created_by'   => $this->user->id,
+                'updated_by'   => 0,
+                'created_date' => date('Y-m-d'),
+                'updated_date' => null,
+                'active'       => true,
+                'truck_id'     => $data['truck_id'],
+                'invoice_id'   => 0
+            ];
+
+            $one = $this->costLubeRepo->create($i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function updateOne($data)
     {
-        $one = $this->costLubeRepo->find($data['id']);
+        try {
+            DB::beginTransaction();
 
-        $input = [
-            'name'        => $data['name'],
-            'description' => $data['description']
-        ];
+            $one = $this->costLubeRepo->find($data['id']);
 
-        return $this->costLubeRepo->update($one, $input) ? true : false;
+            $i_one = [
+                'type'      => 'LUBE',
+                'vat'       => $data['vat'],
+                'after_vat' => $data['after_vat'],
+
+                'fuel_id'       => $data['fuel_id'],
+                'quantum_liter' => $data['quantum_liter'],
+                'refuel_date'   => DateTimeHelper::toStringDateTimeClientForDB($data['refuel_date']),
+
+                'note'         => $data['note'],
+                'updated_by'   => $this->user->id,
+                'updated_date' => date('Y-m-d'),
+                'active'       => true,
+                'truck_id'     => $data['truck_id']
+            ];
+
+            $one = $this->costLubeRepo->update($one, $i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deactivateOne($id)
     {
-        return $this->costLubeRepo->deactivate($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->costLubeRepo->deactivate($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deleteOne($id)
     {
-        return $this->costLubeRepo->destroy($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->costLubeRepo->destroy($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function searchOne($filter)

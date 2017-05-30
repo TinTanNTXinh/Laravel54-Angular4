@@ -6,6 +6,7 @@ use App\Repositories\LubeRepositoryInterface;
 use App\Fuel;
 use DB;
 use App\Common\DBHelper;
+use App\Common\DateTimeHelper;
 
 class LubeEloquentRepository extends EloquentBaseRepository implements LubeRepositoryInterface
 {
@@ -30,5 +31,19 @@ class LubeEloquentRepository extends EloquentBaseRepository implements LubeRepos
     public function oneSkeleton($id)
     {
         return $this->allSkeleton()->where('fuels.id', $id);
+    }
+
+    public function findByApplyDate($i_apply_date = null)
+    {
+        if (!isset($i_apply_date))
+            $i_apply_date = DateTimeHelper::addTimeForDate(date('Y-m-d'), 'max');
+
+        $lube = $this->allActiveQuery()
+            ->where('type', 'LUBE')
+            ->where('apply_date', '<=', $i_apply_date)
+            ->latest('apply_date')
+            ->first();
+
+        return $lube;
     }
 }
