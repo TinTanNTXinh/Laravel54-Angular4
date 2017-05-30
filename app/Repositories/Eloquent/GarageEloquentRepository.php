@@ -16,7 +16,11 @@ class GarageEloquentRepository extends EloquentBaseRepository implements GarageR
     /** ===== PUBLIC FUNCTION ===== */
     public function allSkeleton()
     {
-        return $this->model->whereActive(true);
+        return $this->allActiveQuery('garages.active')
+            ->leftJoin('garage_types', 'garage_types.id', '=', 'garages.garage_type_id')
+            ->select('garages.*'
+                , 'garage_types.name as garage_type_name'
+            );
     }
 
     public function oneSkeleton($id)

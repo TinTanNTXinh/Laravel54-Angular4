@@ -11,6 +11,8 @@ use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
 use App\Common\AuthHelper;
 use Route;
+use DB;
+use League\Flysystem\Exception;
 
 class GarageController extends Controller implements ICrud, IValidate
 {
@@ -132,36 +134,105 @@ class GarageController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
-        $one = [
-            'code'        => $this->garageRepo->generateCode('GARAGE'),
-            'name'        => $data['name'],
-            'description' => $data['description'],
-            'active'      => true
-        ];
+        try {
+            DB::beginTransaction();
 
-        return $this->garageRepo->create($one) ? true : false;
+            $i_one = [
+                'code'           => $this->garageRepo->generateCode('GARAGE'),
+                'name'           => $data['name'],
+                'description'    => $data['description'],
+                'address'        => $data['address'],
+                'contactor'      => $data['contactor'],
+                'phone'          => $data['phone'],
+                'active'         => true,
+                'garage_type_id' => $data['garage_type_id']
+            ];
+
+            $one = $this->garageRepo->create($i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function updateOne($data)
     {
-        $one = $this->garageRepo->find($data['id']);
+        try {
+            DB::beginTransaction();
 
-        $input = [
-            'name'        => $data['name'],
-            'description' => $data['description']
-        ];
+            $one = $this->garageRepo->find($data['id']);
 
-        return $this->garageRepo->update($one, $input) ? true : false;
+            $i_one = [
+                'name'           => $data['name'],
+                'description'    => $data['description'],
+                'address'        => $data['address'],
+                'contactor'      => $data['contactor'],
+                'phone'          => $data['phone'],
+                'active'         => true,
+                'garage_type_id' => $data['garage_type_id']
+            ];
+
+            $one = $this->garageRepo->update($one, $i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deactivateOne($id)
     {
-        return $this->garageRepo->deactivate($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->garageRepo->deactivate($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deleteOne($id)
     {
-        return $this->garageRepo->destroy($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->garageRepo->destroy($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function searchOne($filter)

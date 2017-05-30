@@ -55,7 +55,24 @@ export class GarageComponent implements OnInit
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
             name: {
-                title: 'Tên'
+                title: 'Tên',
+                data_type: 'TEXT'
+            },
+            garage_type_name: {
+                title: 'Loại',
+                data_type: 'TEXT'
+            },
+            address: {
+                title: 'Địa chỉ',
+                data_type: 'TEXT'
+            },
+            contactor: {
+                title: 'Người liên hệ',
+                data_type: 'TEXT'
+            },
+            phone: {
+                title: 'Điện thoại',
+                data_type: 'TEXT'
             },
             description: {
                 title: 'Mô tả'
@@ -114,8 +131,7 @@ export class GarageComponent implements OnInit
             address: '',
             contactor: '',
             phone: '',
-            note: '',
-            garage_type_id: 0
+            garage_type_id: 1
         };
     }
 
@@ -210,17 +226,17 @@ export class GarageComponent implements OnInit
 
     actionCrud(obj: any): void {
         switch (obj.mode) {
-            case 'add':
+            case 'ADD':
                 this.clearOne();
                 this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'edit':
+            case 'EDIT':
                 this.loadOne(obj.data.id);
                 this.displayEditBtn(true);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'delete':
+            case 'DELETE':
                 this.fillDataModal(obj.data.id);
                 break;
             default:

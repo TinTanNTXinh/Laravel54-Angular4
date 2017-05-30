@@ -36,7 +36,6 @@ class GaragesTableSeeder extends Seeder
                 'address'       => '70 Bis Nguyễn Văn Lượng, P.10, Gò Vấp - TP HCM',
                 'contactor'     => 'Binh',
                 'phone'         => '0987650650',
-                'note'          => '',
                 'active'        => true,
                 'garage_type_id' => ($key % 2) + 1
             ]);

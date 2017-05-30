@@ -21,7 +21,6 @@ class CreateGaragesTable extends Migration
             $table->text('address')->nullable();
             $table->text('contactor')->nullable();
             $table->text('phone')->nullable();
-            $table->text('note')->nullable();
             $table->boolean('active')->default(false)->comment('Kích hoạt');
             $table->integer('garage_type_id')->unsigned();
             $table->timestamps();
