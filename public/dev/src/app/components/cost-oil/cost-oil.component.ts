@@ -17,9 +17,7 @@ export class CostOilComponent implements OnInit
     public cost_oils: any[] = [];
     public cost_oil: any;
     public trucks: any[] = [];
-    public oil: any = {
-        price: 0
-    };
+    public oil: any;
 
     public refuel_date: Date = new Date();
     public refuel_time: Date = new Date();
@@ -120,6 +118,8 @@ export class CostOilComponent implements OnInit
         this.cost_oils = [];
         this.trucks = arr_data['trucks'];
         this.oil = arr_data['oil'];
+
+        this.setOilForOne();
     }
 
     refreshData(): void {
@@ -145,11 +145,15 @@ export class CostOilComponent implements OnInit
             vat: 0,
             after_vat: 0,
             fuel_id: 0,
+            fuel_price: 0,
             quantum_liter: 0,
             refuel_date: '',
             note: '',
             truck_id: 0
         };
+        if (this.oil) {
+            this.setOilForOne();
+        }
     }
 
     addOne(): void {
@@ -334,21 +338,22 @@ export class CostOilComponent implements OnInit
 
     /** ===== FUNCTION ACTION ===== **/
     public computeAfterVat(): void {
-        this.cost_oil.after_vat = (this.cost_oil.quantum_liter * this.oil.price)
-         + ((this.cost_oil.quantum_liter * this.oil.price) * this.cost_oil.vat / 100);
+        this.cost_oil.after_vat = (this.cost_oil.quantum_liter * this.cost_oil.fuel_price)
+            + ((this.cost_oil.quantum_liter * this.cost_oil.fuel_price) * this.cost_oil.vat / 100);
     }
 
     /** ===== FUNCTION ===== **/
     private setDataGlobalToOne(): void {
         this.cost_oil.refuel_date = this.dateHelperService.joinDateTimeToString(this.refuel_date, this.refuel_time);
-
-        this.cost_oil.fuel_id = this.oil.id;
     }
 
     private setDataOneToGlobal(): void {
-        this.oil.id = this.cost_oil.fuel_id;
-
         this.refuel_date = new Date(this.cost_oil.refuel_date);
         this.refuel_time = new Date(this.cost_oil.refuel_date);
+    }
+
+    private setOilForOne(): void {
+        this.cost_oil.fuel_id = this.oil.id;
+        this.cost_oil.fuel_price = this.oil.price;
     }
 }
