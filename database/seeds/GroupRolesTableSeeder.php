@@ -31,13 +31,13 @@ class GroupRolesTableSeeder extends Seeder
 
         $array_icon_name = [
             '',
-            'glyphicon-cog icon',
-            'glyphicon-wrench icon',
-            'glyphicon-phone icon',
-            'glyphicon-th-large icon',
-            'glyphicon-book icon',
-            'glyphicon-plane icon',
-            'glyphicon-shopping-cart icon'
+            'fa fa-universal-access icon',
+            'fa fa-wrench icon',
+            'fa fa-truck icon',
+            'fa fa-money icon',
+            'fa fa-calendar-o icon',
+            'fa fa-tint icon',
+            'fa fa-bar-chart icon'
         ];
 
         foreach($array_name as $key => $name){

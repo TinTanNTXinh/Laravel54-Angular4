@@ -43,7 +43,7 @@
               <ng-container *ngSwitchCase="1">
                 <li *ngFor="let role of sliceRoles(group_role.id)" routerLinkActive="active">
                   <a [routerLink]="role.router_link">
-                    <i class="glyphicon {{ role.icon_name }}"></i>
+                    <i [class]="role.icon_name"></i>
                     <span>{{ role.description }}</span>
                   </a>
                 </li>
@@ -55,7 +55,7 @@
                   <i class="fa fa-fw fa-angle-right text"></i>
                   <i class="fa fa-fw fa-angle-down text-active"></i>
               </span>
-                    <i class="glyphicon {{ group_role.icon_name }}"></i>
+                    <i [class]="group_role.icon_name"></i>
                     <span>{{group_role.name}}</span>
                   </a>
                   <ul class="nav nav-sub dk">
@@ -66,7 +66,7 @@
                     </li>
                     <li *ngFor="let role of sliceRoles(group_role.id)">
                       <a [routerLink]="role.router_link">
-                        <i class="glyphicon {{ role.icon_name }}"></i>
+                        <i [class]="role.icon_name"></i>
                         <span>{{ role.description }}</span>
                       </a>
                     </li>

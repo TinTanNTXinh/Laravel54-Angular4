@@ -20,7 +20,7 @@
       "prefix": "app",
       "styles": [
         "assets/animate.css/animate.css",
-        "assets/font-awesome/css/font-awesome.min.css",
+        "../node_modules/font-awesome/css/font-awesome.min.css",
         "assets/simple-line-icons/css/simple-line-icons.css",
         "assets/jquery/bootstrap/dist/css/bootstrap.css",
         "assets/css/font.css",

@@ -88,26 +88,26 @@ class RolesTableSeeder extends Seeder
         ];
 
         $array_icon_name = [
-            'glyphicon-stats icon text-primary-lter',
-            'glyphicon-cog icon text-danger-lter',
-            'glyphicon-wrench icon text-danger-lter',
-            'glyphicon-phone icon text-danger-lter',
-            'glyphicon-th-large icon text-info-lter',
-            'glyphicon-book icon text-info-lter',
-            'glyphicon-plane icon text-success-lter',
-            'glyphicon-shopping-cart icon text-success-lter',
-            'glyphicon-user icon text-success-lter',
-            'glyphicon-home icon text-success-lter',
-            'glyphicon-tint icon text-info-lter',
-            'glyphicon-inbox icon text-warning-lter',
-            'glyphicon-credit-card icon text-warning-lter',
-            'glyphicon-eye-close icon text-info-lter',
-            'glyphicon-folder-open icon text-info-lter',
-            'glyphicon-folder-open icon text-info-lter',
-            'glyphicon-user icon text-info-lter',
-            'glyphicon-user icon text-info-lter',
-            'glyphicon-folder-open icon text-info-lter',
-            'glyphicon-folder-open icon text-info-lter'
+            'fa fa-dashboard icon text-primary-lter',
+            'fa fa-sitemap icon text-danger-lter',
+            'fa fa-user icon text-danger-lter',
+            'fa fa-male icon text-danger-lter',
+            'fa fa-truck icon text-info-lter',
+            'fa fa-users icon text-info-lter',
+            'fa fa-shopping-cart icon text-success-lter',
+            'fa fa-home icon text-success-lter',
+            'fa fa-credit-card icon text-success-lter',
+            'fa fa-credit-card icon text-info-lter',
+            'fa fa-tint icon text-warning-lter',
+            'fa fa-tint icon text-warning-lter',
+            'fa fa-road icon text-info-lter',
+            'fa fa-ellipsis-h icon text-info-lter',
+            'fa fa-calendar-o icon text-success-lter',
+            'fa fa-tint icon text-warning-lter',
+            'fa fa-tint icon text-warning-lter',
+            'fa fa-calculator icon text-primary-lter',
+            'fa fa-calculator icon text-primary-lter',
+            'fa fa-male icon text-info-lter'
         ];
 
         foreach ($array_name as $key => $name) {
