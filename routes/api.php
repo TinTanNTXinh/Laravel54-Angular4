@@ -130,6 +130,8 @@ Route::group(['prefix' => 'v1'], function () {
         });
 
         Route::group(['middleware' => 'oil', 'prefix' => 'oils'], function () {
+            Route::get('/find', 'OilController@getReadByApplyDate');
+
             Route::get('/', 'OilController@getReadAll');
             Route::get('/search', 'OilController@getSearchOne');
             Route::get('/{id}', 'OilController@getReadOne');

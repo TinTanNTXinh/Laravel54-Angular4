@@ -356,4 +356,18 @@ export class CostOilComponent implements OnInit
         this.cost_oil.fuel_id = this.oil.id;
         this.cost_oil.fuel_price = this.oil.price;
     }
+
+    public findOilByRefuelDate(event: Date): void {
+        let refuel_date = this.dateHelperService.joinDateTimeToString(this.refuel_date, this.refuel_time);
+
+        this.httpClientService.get(`oils/find?query=${JSON.stringify({apply_date: refuel_date})}`).subscribe(
+            (success: any) => {
+                this.oil = success.oil;
+                this.setOilForOne();
+            },
+            (error: any) => {
+                this.toastrHelperService.showToastr('error');
+            }
+        );
+    }
 }

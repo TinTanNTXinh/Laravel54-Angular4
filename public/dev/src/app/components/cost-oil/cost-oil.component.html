@@ -104,18 +104,18 @@
                               <div class="col-md-1"></div>
                               <div class="col-md-5">
                                 <label>Ngày đổ</label>
-                                <datetime [timepicker]="false"
+                                <datetime [(ngModel)]="refuel_date" name="refuel_date"
+                                          [timepicker]="false"
                                           [datepicker]="datepickerSettings"
-                                          [(ngModel)]="refuel_date"
-                                          name="refuel_date">
+                                          (ngModelChange)="findOilByRefuelDate($event)">
                                 </datetime>
                               </div>
                               <div class="col-md-6">
                                 <label>Giờ đổ</label>
-                                <datetime [timepicker]="timepickerSettings"
+                                <datetime [(ngModel)]="refuel_time" name="refuel_time"
+                                          [timepicker]="timepickerSettings"
                                           [datepicker]="false"
-                                          [(ngModel)]="refuel_time"
-                                          name="refuel_time">
+                                          (ngModelChange)="findOilByRefuelDate($event)">
                                 </datetime>
                               </div>
                             </div>

@@ -276,4 +276,19 @@ class OilController extends Controller implements ICrud, IValidate
     }
 
     /** ===== MY FUNCTION ===== */
+    public function getReadByApplyDate()
+    {
+        $data = (array)json_decode($_GET['query']);
+        $one        = $this->readByApplyDate($data['apply_date']);
+        return response()->json($one, 200);
+    }
+
+    private function readByApplyDate($apply_date)
+    {
+        $apply_date = DateTimeHelper::toStringDateTimeClientForDB($apply_date);
+        $oil = $this->oilRepo->findByApplyDate($apply_date);
+        return [
+            'oil' => $oil
+        ];
+    }
 }
