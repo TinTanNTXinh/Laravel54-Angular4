@@ -58,7 +58,7 @@ class UserController extends Controller implements ICrud, IValidate
         $this->first_day = $current_month['first_day'];
         $this->last_day  = $current_month['last_day'];
         $this->today     = $current_month['today'];
-        $this->fake_pwd = substr(config('app.key'), 10);
+        $this->fake_pwd  = substr(config('app.key'), 10);
 
         $this->table_name = 'user';
         $this->skeleton   = $this->userRepo->allSkeleton();
@@ -151,7 +151,7 @@ class UserController extends Controller implements ICrud, IValidate
     {
         $one = $this->userRepo->oneSkeleton($id)->first();
 
-        $user_roles    = $this->userRoleRepo->readByUserId($one->id)->pluck('role_id')->toArray();
+        $user_roles     = $this->userRoleRepo->readByUserId($one->id)->pluck('role_id')->toArray();
         $user_positions = $this->userPositionRepo->readByUserId($one->id)->pluck('position_id')->toArray();
 
         return [
@@ -426,4 +426,39 @@ class UserController extends Controller implements ICrud, IValidate
     }
 
     /** ===== MY FUNCTION ===== */
+    public function postChangePassword(Request $request)
+    {
+        $data      = $request->input('data');
+        $arr_datas = $this->changePassword($data);
+        return response()->json($arr_datas, $arr_datas['status_code']);
+    }
+
+    public function changePassword($data)
+    {
+        if ($data['password'] == $data['new_password'])
+            return ['error' => 'Mật khẩu cũ và mới không được trùng nhau.', 'status_code' => 404];
+
+        $user = $this->userRepo->find($this->user->id);
+        if (!$user)
+            return ['error' => 'Người dùng không tồn tại.', 'error_en' => 'user is not exist', 'status_code' => 401];
+
+        // Xác thực mật khẩu cũ
+        $password_check = Hash::check($data['password'], $user->password);
+        if (!$password_check) {
+            return ['error' => 'Mật khẩu không hợp lệ.', 'error_en' => 'password is not correct', 'status_code' => 401];
+        }
+
+        // Update password
+        $i_one = [
+            'password' => Hash::make($data['password']),
+            'active'   => true
+        ];
+
+        $one = $this->userRepo->update($user, $i_one);
+
+        if (!$one)
+            return ['error' => 'Kết nối đến máy chủ thất bại, vui lòng làm mới trình duyệt và thử lại.', 'status_code' => 404];
+
+        return ['status_code' => 200];
+    }
 }
