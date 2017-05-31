@@ -4,27 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Repositories\CostParkRepositoryInterface;
+use App\Repositories\CostParkingRepositoryInterface;
 use App\Repositories\TruckRepositoryInterface;
 use App\Interfaces\ICrud;
 use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
 use App\Common\AuthHelper;
 use Route;
+use DB;
+use League\Flysystem\Exception;
 
-class CostParkController extends Controller implements ICrud, IValidate
+class CostParkingController extends Controller implements ICrud, IValidate
 {
     private $first_day, $last_day, $today;
     private $user;
     private $table_name;
     private $skeleton;
 
-    protected $costParkRepo, $truckRepo;
+    protected $costParkingRepo, $truckRepo;
 
-    public function __construct(CostParkRepositoryInterface $costParkRepo
+    public function __construct(CostParkingRepositoryInterface $costParkingRepo
         , TruckRepositoryInterface $truckRepo)
     {
-        $this->costParkRepo = $costParkRepo;
+        $this->costParkingRepo = $costParkingRepo;
         $this->truckRepo    = $truckRepo;
 
         $jwt_data = AuthHelper::getCurrentUser();
@@ -39,8 +41,8 @@ class CostParkController extends Controller implements ICrud, IValidate
         $this->last_day  = $current_month['last_day'];
         $this->today     = $current_month['today'];
 
-        $this->table_name = 'cost_park';
-        $this->skeleton   = $this->costParkRepo->allSkeleton();
+        $this->table_name = 'cost_parking';
+        $this->skeleton   = $this->costParkingRepo->allSkeleton();
     }
 
     /** ===== API METHOD ===== */
@@ -116,14 +118,14 @@ class CostParkController extends Controller implements ICrud, IValidate
         $trucks = $this->truckRepo->allActive();
 
         return [
-            'cost_parks' => $all,
+            'cost_parkings' => $all,
             'trucks'     => $trucks
         ];
     }
 
     public function readOne($id)
     {
-        $one = $this->costParkRepo->oneSkeleton($id)->first();
+        $one = $this->costParkingRepo->oneSkeleton($id)->first();
 
         return [
             $this->table_name => $one
@@ -132,36 +134,125 @@ class CostParkController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
-        $one = [
-            'code'        => $this->costParkRepo->generateCode('COSTOIL'),
-            'name'        => $data['name'],
-            'description' => $data['description'],
-            'active'      => true
-        ];
+        try {
+            DB::beginTransaction();
 
-        return $this->costParkRepo->create($one) ? true : false;
+            $i_one = [
+                'code'      => $this->costParkingRepo->generateCode('COSTPARK'),
+                'type'      => 'PARK',
+                'vat'       => 0,
+                'after_vat' => $data['after_vat'],
+
+                'fuel_id'       => null,
+                'quantum_liter' => null,
+                'refuel_date'   => null,
+
+                'unit_price_park_id' => $data['unit_price_park_id'],
+                'checkin_date'       => DateTimeHelper::toStringDateTimeClientForDB($data['checkin_date']),
+                'checkout_date'      => DateTimeHelper::toStringDateTimeClientForDB($data['checkout_date']),
+                'total_day'          => $data['total_day'],
+
+                'note'         => $data['note'],
+                'created_by'   => $this->user->id,
+                'updated_by'   => 0,
+                'created_date' => date('Y-m-d'),
+                'updated_date' => null,
+                'active'       => true,
+                'truck_id'     => $data['truck_id'],
+                'invoice_id'   => 0
+            ];
+
+            $one = $this->costParkingRepo->create($i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function updateOne($data)
     {
-        $one = $this->costParkRepo->find($data['id']);
+        try {
+            DB::beginTransaction();
 
-        $input = [
-            'name'        => $data['name'],
-            'description' => $data['description']
-        ];
+            $one = $this->costParkingRepo->find($data['id']);
 
-        return $this->costParkRepo->update($one, $input) ? true : false;
+            $i_one = [
+                'type'      => 'PARK',
+                'after_vat' => $data['after_vat'],
+
+                'unit_price_park_id' => $data['unit_price_park_id'],
+                'checkin_date'       => DateTimeHelper::toStringDateTimeClientForDB($data['checkin_date']),
+                'checkout_date'      => DateTimeHelper::toStringDateTimeClientForDB($data['checkout_date']),
+                'total_day'          => $data['total_day'],
+
+                'note'         => $data['note'],
+                'updated_by'   => $this->user->id,
+                'updated_date' => date('Y-m-d'),
+                'active'       => true,
+                'truck_id'     => $data['truck_id']
+            ];
+
+            $one = $this->costParkingRepo->update($one, $i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deactivateOne($id)
     {
-        return $this->costParkRepo->deactivate($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->costParkingRepo->deactivate($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deleteOne($id)
     {
-        return $this->costParkRepo->destroy($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->costParkingRepo->destroy($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function searchOne($filter)
@@ -172,12 +263,12 @@ class CostParkController extends Controller implements ICrud, IValidate
 
         $filtered = $this->skeleton;
 
-        $filtered = $this->costParkRepo->filterFromDateToDate($filtered, 'costs.created_date', $from_date, $to_date);
+        $filtered = $this->costParkingRepo->filterFromDateToDate($filtered, 'costs.created_date', $from_date, $to_date);
 
-        $filtered = $this->costParkRepo->filterRangeDate($filtered, 'costs.created_date', $range);
+        $filtered = $this->costParkingRepo->filterRangeDate($filtered, 'costs.created_date', $range);
 
         return [
-            'cost_parks' => $filtered->get()
+            'cost_parkings' => $filtered->get()
         ];
     }
 

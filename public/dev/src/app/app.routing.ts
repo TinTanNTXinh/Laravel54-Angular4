@@ -19,7 +19,7 @@ import {LubeComponent} from './components/lube/lube.component';
 import {OilComponent} from './components/oil/oil.component';
 import {CostOilComponent} from './components/cost-oil/cost-oil.component';
 import {CostLubeComponent} from './components/cost-lube/cost-lube.component';
-import {CostParkComponent} from './components/cost-park/cost-park.component';
+import {CostParkingComponent} from './components/cost-parking/cost-parking.component';
 import {CostOtherComponent} from './components/cost-other/cost-other.component';
 import {InvoiceCustomerComponent} from './components/invoice-customer/invoice-customer.component';
 import {InvoiceGarageComponent} from './components/invoice-garage/invoice-garage.component';
@@ -50,7 +50,7 @@ const APP_ROUTES: Routes = [
 
     {path: 'cost-oils', component: CostOilComponent},
     {path: 'cost-lubes', component: CostLubeComponent},
-    {path: 'cost-parks', component: CostParkComponent},
+    {path: 'cost-parkings', component: CostParkingComponent},
     {path: 'cost-others', component: CostOtherComponent},
     //
     {path: 'invoice-customers', component: InvoiceCustomerComponent},

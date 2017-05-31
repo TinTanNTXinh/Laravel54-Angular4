@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-interface UnitPriceParkRepositoryInterface
+interface CostParkingRepositoryInterface
 {
     public function allSkeleton();
 

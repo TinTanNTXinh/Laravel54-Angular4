@@ -11,6 +11,8 @@ use App\Interfaces\IValidate;
 use App\Common\DateTimeHelper;
 use App\Common\AuthHelper;
 use Route;
+use DB;
+use League\Flysystem\Exception;
 
 class CostOtherController extends Controller implements ICrud, IValidate
 {
@@ -25,7 +27,7 @@ class CostOtherController extends Controller implements ICrud, IValidate
         , TruckRepositoryInterface $truckRepo)
     {
         $this->costOtherRepo = $costOtherRepo;
-        $this->truckRepo    = $truckRepo;
+        $this->truckRepo     = $truckRepo;
 
         $jwt_data = AuthHelper::getCurrentUser();
         if ($jwt_data['status']) {
@@ -117,7 +119,7 @@ class CostOtherController extends Controller implements ICrud, IValidate
 
         return [
             'cost_others' => $all,
-            'trucks'     => $trucks
+            'trucks'      => $trucks
         ];
     }
 
@@ -132,36 +134,125 @@ class CostOtherController extends Controller implements ICrud, IValidate
 
     public function createOne($data)
     {
-        $one = [
-            'code'        => $this->costOtherRepo->generateCode('COSTOIL'),
-            'name'        => $data['name'],
-            'description' => $data['description'],
-            'active'      => true
-        ];
+        try {
+            DB::beginTransaction();
 
-        return $this->costOtherRepo->create($one) ? true : false;
+            $i_one = [
+                'code'      => $this->costOtherRepo->generateCode('COSTOTHER'),
+                'type'      => 'OTHER',
+                'vat'       => 0,
+                'after_vat' => $data['after_vat'],
+
+                'fuel_id'       => null,
+                'quantum_liter' => null,
+                'refuel_date'   => null,
+
+                'unit_price_park_id' => null,
+                'checkin_date'       => null,
+                'checkout_date'      => null,
+                'total_day'          => null,
+
+                'note'         => $data['note'],
+                'created_by'   => $this->user->id,
+                'updated_by'   => 0,
+                'created_date' => DateTimeHelper::toStringDateTimeClientForDB($data['created_date']),
+                'updated_date' => null,
+                'active'       => true,
+                'truck_id'     => $data['truck_id'],
+                'invoice_id'   => 0
+            ];
+
+            $one = $this->costOtherRepo->create($i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function updateOne($data)
     {
-        $one = $this->costOtherRepo->find($data['id']);
+        try {
+            DB::beginTransaction();
 
-        $input = [
-            'name'        => $data['name'],
-            'description' => $data['description']
-        ];
+            $one = $this->costOtherRepo->find($data['id']);
 
-        return $this->costOtherRepo->update($one, $input) ? true : false;
+            $i_one = [
+                'type'      => 'OTHER',
+                'vat'       => 0,
+                'after_vat' => $data['after_vat'],
+
+                'fuel_id'       => null,
+                'quantum_liter' => null,
+                'refuel_date'   => null,
+
+                'note'         => $data['note'],
+                'updated_by'   => $this->user->id,
+                'updated_date' => DateTimeHelper::toStringDateTimeClientForDB($data['created_date']),
+                'active'       => true,
+                'truck_id'     => $data['truck_id']
+            ];
+
+            $one = $this->costOtherRepo->update($one, $i_one);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deactivateOne($id)
     {
-        return $this->costOtherRepo->deactivate($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->costOtherRepo->deactivate($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function deleteOne($id)
     {
-        return $this->costOtherRepo->destroy($id) ? true : false;
+        try {
+            DB::beginTransaction();
+
+            $one = $this->costOtherRepo->destroy($id);
+
+            if (!$one) {
+                DB::rollback();
+                return false;
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function searchOne($filter)

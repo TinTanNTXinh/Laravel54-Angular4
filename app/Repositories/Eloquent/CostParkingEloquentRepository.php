@@ -2,10 +2,10 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Repositories\CostParkRepositoryInterface;
+use App\Repositories\CostParkingRepositoryInterface;
 use App\Cost;
 
-class CostParkEloquentRepository extends EloquentBaseRepository implements CostParkRepositoryInterface
+class CostParkingEloquentRepository extends EloquentBaseRepository implements CostParkingRepositoryInterface
 {
     /** ===== INIT MODEL ===== */
     public function setModel()

@@ -171,14 +171,14 @@ Route::group(['prefix' => 'v1'], function () {
             Route::delete('/{id}', 'CostLubeController@deleteDeleteOne');
         });
 
-        Route::group(['middleware' => 'cost-park', 'prefix' => 'cost-parks'], function () {
-            Route::get('/', 'CostParkController@getReadAll');
-            Route::get('/search', 'CostParkController@getSearchOne');
-            Route::get('/{id}', 'CostParkController@getReadOne');
-            Route::post('/', 'CostParkController@postCreateOne');
-            Route::put('/', 'CostParkController@putUpdateOne');
-            Route::patch('/', 'CostParkController@patchDeactivateOne');
-            Route::delete('/{id}', 'CostParkController@deleteDeleteOne');
+        Route::group(['middleware' => 'cost-parking', 'prefix' => 'cost-parkings'], function () {
+            Route::get('/', 'CostParkingController@getReadAll');
+            Route::get('/search', 'CostParkingController@getSearchOne');
+            Route::get('/{id}', 'CostParkingController@getReadOne');
+            Route::post('/', 'CostParkingController@postCreateOne');
+            Route::put('/', 'CostParkingController@putUpdateOne');
+            Route::patch('/', 'CostParkingController@patchDeactivateOne');
+            Route::delete('/{id}', 'CostParkingController@deleteDeleteOne');
         });
 
         Route::group(['middleware' => 'cost-other', 'prefix' => 'cost-others'], function () {
@@ -237,8 +237,6 @@ Route::group(['prefix' => 'v1'], function () {
             // TruckType
 
             // DriverTruck
-
-            // UnitPricePark
 
             // Unit
 

@@ -40,7 +40,6 @@ class DatabaseSeeder extends Seeder
             // $this->call(DriversTableSeeder::class);
             // $this->call(DriverTrucksTableSeeder::class);
             // $this->call(CostsTableSeeder::class);
-            $this->call(UnitPriceParksTableSeeder::class);
 
             # Nhóm sản phẩm
             $this->call(ProductTypesTableSeeder::class);
@@ -99,7 +98,6 @@ class DatabaseSeeder extends Seeder
             $this->call(DriversTableSeeder::class);
             $this->call(DriverTrucksTableSeeder::class);
             $this->call(CostsTableSeeder::class);
-            $this->call(UnitPriceParksTableSeeder::class);
 
             # Nhóm sản phẩm
             $this->call(ProductTypesTableSeeder::class);

@@ -4,7 +4,6 @@ import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
-import {ArrayHelperService} from '../../services/helpers/array.helper';
 
 @Component({
     selector: 'app-cost-other',
@@ -48,8 +47,7 @@ export class CostOtherComponent implements OnInit
     constructor(private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
-        , private domHelperService: DomHelperService
-        , private arrayHelperService: ArrayHelperService) {
+        , private domHelperService: DomHelperService) {
     }
 
     ngOnInit(): void {
@@ -59,11 +57,18 @@ export class CostOtherComponent implements OnInit
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
         this.header = {
-            name: {
-                title: 'Tên'
+            truck_area_code_number_plate: {
+                title: 'Xe',
+                data_type: 'TEXT',
             },
-            description: {
-                title: 'Mô tả'
+            fc_after_vat: {
+                title: 'Tổng chi phí',
+                data_type: 'NUMBER',
+                prop_name: 'after_vat'
+            },
+            note: {
+                title: 'Ghi chú',
+                data_type: 'TEXT'
             }
         };
 
@@ -93,8 +98,6 @@ export class CostOtherComponent implements OnInit
     reloadData(arr_data: any[]): void {
         this.cost_others = [];
         this.trucks = arr_data['trucks'];
-
-        this.trucks = this.arrayHelperService.setAreaCodeNumberPlate(this.trucks);
     }
 
     refreshData(): void {
@@ -115,8 +118,10 @@ export class CostOtherComponent implements OnInit
 
     clearOne(): void {
         this.cost_other = {
-            name: '',
-            description: ''
+            created_date: '',
+            after_vat: 0,
+            note: '',
+            truck_id: ''
         };
     }
 
@@ -207,17 +212,17 @@ export class CostOtherComponent implements OnInit
 
     actionCrud(obj: any): void {
         switch (obj.mode) {
-            case 'add':
+            case 'ADD':
                 this.clearOne();
                 this.displayEditBtn(false);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'edit':
+            case 'EDIT':
                 this.loadOne(obj.data.id);
                 this.displayEditBtn(true);
                 this.domHelperService.showTab('menu2');
                 break;
-            case 'delete':
+            case 'DELETE':
                 this.fillDataModal(obj.data.id);
                 break;
             default:

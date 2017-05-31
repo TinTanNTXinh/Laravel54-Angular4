@@ -4,19 +4,18 @@ import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
-import {ArrayHelperService} from '../../services/helpers/array.helper';
 
 @Component({
-    selector: 'app-cost-park',
-    templateUrl: './cost-park.component.html',
+    selector: 'app-cost-parking',
+    templateUrl: './cost-parking.component.html',
     styles: []
 })
-export class CostParkComponent implements OnInit
+export class CostParkingComponent implements OnInit
     , ICommon, ICrud, IDatePicker, ISearch {
 
     /** ===== MY VARIABLES ===== **/
-    public cost_parks: any[] = [];
-    public cost_park: any;
+    public cost_parkings: any[] = [];
+    public cost_parking: any;
     public trucks: any[] = [];
 
     public checkin_date: Date = new Date();
@@ -50,13 +49,12 @@ export class CostParkComponent implements OnInit
     constructor(private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
-        , private domHelperService: DomHelperService
-        , private arrayHelperService: ArrayHelperService) {
+        , private domHelperService: DomHelperService) {
     }
 
     ngOnInit(): void {
         this.title = 'Chi phí đậu bãi';
-        this.prefix_url = 'cost-parks';
+        this.prefix_url = 'cost-parkings';
         this.range_date = this.dateHelperService.range_date;
         this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.timepickerSettings = this.dateHelperService.timepickerSettings;
@@ -93,10 +91,8 @@ export class CostParkComponent implements OnInit
     }
 
     reloadData(arr_data: any[]): void {
-        this.cost_parks = [];
+        this.cost_parkings = [];
         this.trucks = arr_data['trucks'];
-
-        this.trucks = this.arrayHelperService.setAreaCodeNumberPlate(this.trucks);
     }
 
     refreshData(): void {
@@ -112,11 +108,11 @@ export class CostParkComponent implements OnInit
 
     /** ===== ICRUD ===== **/
     loadOne(id: number): void {
-        this.cost_park = this.cost_parks.find(o => o.id == id);
+        this.cost_parking = this.cost_parkings.find(o => o.id == id);
     }
 
     clearOne(): void {
-        this.cost_park = {
+        this.cost_parking = {
             name: '',
             description: ''
         };
@@ -125,7 +121,7 @@ export class CostParkComponent implements OnInit
     addOne(): void {
         if (!this.validateOne()) return;
 
-        this.httpClientService.post(this.prefix_url, {"cost_park": this.cost_park}).subscribe(
+        this.httpClientService.post(this.prefix_url, {"cost_parking": this.cost_parking}).subscribe(
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();
@@ -142,7 +138,7 @@ export class CostParkComponent implements OnInit
     updateOne(): void {
         if (!this.validateOne()) return;
 
-        this.httpClientService.put(this.prefix_url, {"cost_park": this.cost_park}).subscribe(
+        this.httpClientService.put(this.prefix_url, {"cost_parking": this.cost_parking}).subscribe(
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();
@@ -189,9 +185,9 @@ export class CostParkComponent implements OnInit
 
     validateOne(): boolean {
         let flag: boolean = true;
-        if (this.cost_park.name == '') {
+        if (this.cost_parking.truck_id == 0) {
             flag = false;
-            this.toastrHelperService.showToastr('warning', `Tên ${this.title} không được để trống!`);
+            this.toastrHelperService.showToastr('warning', `Xe ${this.title} không được để trống!`);
         }
         return flag;
     }
@@ -279,7 +275,7 @@ export class CostParkComponent implements OnInit
     }
 
     reloadDataSearch(arr_data: any[]): void {
-        this.cost_parks = arr_data['cost_parks'];
+        this.cost_parkings = arr_data['cost_parkings'];
     }
 
     clearSearch(): void {

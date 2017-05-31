@@ -22,13 +22,16 @@ class TruckTypesTableSeeder extends Seeder
             0, 8, 5
         ];
 
+        $array_prices = [50000, 40000, 30000];
+
         foreach ($array_name as $key => $name) {
             \App\TruckType::create([
-                'code'        => $this->generateCode(\App\TruckType::class, 'TRUCKTYPE'),
-                'name'        => $name,
-                'weight'      => $array_weight[$key],
-                'description' => '',
-                'active'      => true
+                'code'            => $this->generateCode(\App\TruckType::class, 'TRUCKTYPE'),
+                'name'            => $name,
+                'weight'          => $array_weight[$key],
+                'unit_price_park' => $array_prices[$key],
+                'description'     => '',
+                'active'          => true
             ]);
         }
     }
