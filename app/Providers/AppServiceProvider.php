@@ -98,10 +98,10 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\Eloquent\CostLubeEloquentRepository'
         );
 
-        // CostPark
+        // CostParking
         $this->app->bind(
-            'App\Repositories\CostParkRepositoryInterface',
-            'App\Repositories\Eloquent\CostParkEloquentRepository'
+            'App\Repositories\CostParkingRepositoryInterface',
+            'App\Repositories\Eloquent\CostParkingEloquentRepository'
         );
 
         // CostOther

@@ -84,7 +84,7 @@
                     </div>
                     <div class="panel-body">
                       <spinner-fb [isLoading]="isLoading"></spinner-fb>
-                      <xdatatable [body]="cost_parks" [header]="header"
+                      <xdatatable [body]="cost_parkings" [header]="header"
                                   (onClicked)="actionCrud($event)"></xdatatable>
                     </div>
                   </div>
@@ -106,7 +106,7 @@
                                 <xautocomplete [data]="trucks"
                                                [name]="'area_code_number_plate'"
                                                [model_name]="'id'"
-                                               [(value)]="cost_park.truck_id">
+                                               [(value)]="cost_parking.truck_id">
                                 </xautocomplete>
                               </div>
                             </div>
@@ -114,13 +114,14 @@
                               <div class="col-md-6">
                                 <label>Loại xe</label>
                                 <input type="text" class="form-control"
-                                       [ngModel]="cost_park.truck_type_name" name="name"
+                                       [ngModel]="cost_parking.truck_type_name" name="truck_type_name"
                                        [readonly]="true">
                               </div>
                               <div class="col-md-6">
                                 <label>Đơn giá</label>
-                                <currency [ngModel]="cost_park.unit_price" name="unit_price"
-                                          [readonly]="true">
+                                <currency [numberData]="cost_parking.unit_price"
+                                          [readonly]="true"
+                                          [ngModel]="cost_parking.unit_price" name="unit_price">
                                 </currency>
                               </div>
                             </div>
@@ -130,7 +131,7 @@
                                 <datetime [timepicker]="false"
                                           [datepicker]="datepickerSettings"
                                           [(ngModel)]="checkin_date"
-                                          name="refuel_date">
+                                          name="checkin_date">
                                 </datetime>
                               </div>
                               <div class="col-md-6">
@@ -138,7 +139,7 @@
                                 <datetime [timepicker]="timepickerSettings"
                                           [datepicker]="false"
                                           [(ngModel)]="checkin_time"
-                                          name="refuel_time">
+                                          name="checkin_time">
                                 </datetime>
                               </div>
                             </div>
@@ -148,7 +149,7 @@
                                 <datetime [timepicker]="false"
                                           [datepicker]="datepickerSettings"
                                           [(ngModel)]="checkout_date"
-                                          name="refuel_date">
+                                          name="checkout_date">
                                 </datetime>
                               </div>
                               <div class="col-md-6">
@@ -156,7 +157,7 @@
                                 <datetime [timepicker]="timepickerSettings"
                                           [datepicker]="false"
                                           [(ngModel)]="checkout_time"
-                                          name="refuel_time">
+                                          name="checkout_time">
                                 </datetime>
                               </div>
                             </div>
@@ -164,21 +165,22 @@
                               <div class="col-md-6">
                                 <label>Số ngày đậu</label>
                                 <input type="text" class="form-control"
-                                       [ngModel]="cost_park.total_day" name="name"
+                                       [ngModel]="cost_parking.total_day" name="total_day"
                                        [readonly]="true">
                               </div>
                               <div class="col-md-6">
                                 <label>Số giờ đậu</label>
                                 <input type="text" class="form-control"
-                                       [ngModel]="cost_park.total_hour" name="name"
+                                       [ngModel]="cost_parking.total_hour" name="total_hour"
                                        [readonly]="true">
                               </div>
                             </div>
                             <div class="row">
                               <div class="col-md-6">
                                 <label>Tổng chi phí</label>
-                                <currency [ngModel]="cost_park.after_vat" name="after_vat"
-                                          [readonly]="true">
+                                <currency [numberData]="cost_parking.after_vat"
+                                          [readonly]="true"
+                                          [ngModel]="cost_parking.after_vat" name="after_vat">
                                 </currency>
                               </div>
                               <div class="col-md-6"></div>
@@ -186,7 +188,7 @@
                             <div class="row">
                               <div class="col-md-12">
                                 <label>Ghi chú</label>
-                                <textarea [(ngModel)]="cost_park.note" name="note" cols="30" rows="3" class="form-control"></textarea>
+                                <textarea [(ngModel)]="cost_parking.note" name="note" cols="30" rows="3" class="form-control"></textarea>
                               </div>
                             </div>
                           </div>

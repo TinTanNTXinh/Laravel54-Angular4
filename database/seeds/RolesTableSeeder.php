@@ -27,7 +27,7 @@ class RolesTableSeeder extends Seeder
             'InvoiceGarage', // 18
             'CostOil', // 13
             'CostLube', // 14
-            'CostPark', // 15
+            'CostParking', // 15
             'CostOther', // 16
             'Postage', // 6
             'Oil', // 11

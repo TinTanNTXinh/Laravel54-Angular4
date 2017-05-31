@@ -113,8 +113,16 @@ export class CostParkingComponent implements OnInit
 
     clearOne(): void {
         this.cost_parking = {
-            name: '',
-            description: ''
+            checkin_date: '',
+            checkout_date: '',
+            total_day: 0,
+            after_vat: 0,
+            note: '',
+            truck_id: 0,
+
+            total_hour: 0,
+            truck_type_name: '',
+            unit_price: 0,
         };
     }
 
